@@ -1,4 +1,4 @@
-# vuetest
+# Web Site Laboratory Work
 
 This template should help get you started developing with Vue 3 in Vite.
 
