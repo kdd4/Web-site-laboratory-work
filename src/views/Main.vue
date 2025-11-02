@@ -20,7 +20,7 @@ main h2 {
 }
 
 .myPhoto {
-	width: 30%;
+	width: 20em;
 	padding: 0em 3em 0em 3em;
 
 	transition: all 0.5s ease 0s;

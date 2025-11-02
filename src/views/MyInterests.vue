@@ -75,6 +75,7 @@ const lists = ref([
 
 <style scoped>
 main {
+	--nav_color_bg: #aaaaaa;
 	--nav_color: black;
 	--nav_button_color: gainsboro;
 	--nav_button_text_color: black;
@@ -106,7 +107,7 @@ main {
 
 	list-style: none;
 
-	background-color: var(--nav_color);
+	background-color: var(--nav_color_bg);
 
 	padding: 0.2em 0em 0.2em 0em;
 }

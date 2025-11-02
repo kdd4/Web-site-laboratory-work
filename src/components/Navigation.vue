@@ -13,6 +13,8 @@ const navigation_buttons = ref([
 ])
 
 const route = useRoute()
+
+// route.path
 </script>
 
 <template>

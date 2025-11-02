@@ -16,6 +16,7 @@
 <style scoped>
 main {
 	display: flex;
+	align-items: center;
 	justify-content: space-evenly;
 }
 
@@ -25,8 +26,8 @@ main {
 	max-width: 600px;
 	min-width: 10em;
 
-	margin: 20px auto;
-	padding: 20px;
+	margin: 1em 0;
+	padding: 2em;
 	text-align: justify;
 	background: #f9f9f9;
 	line-height: 1.6;
@@ -38,7 +39,7 @@ main {
 
 	height: 100%;
 	width: 30%;
-	padding: 20px;
+	padding: 1em;
 }
 
 @media (max-width: 600px) {
