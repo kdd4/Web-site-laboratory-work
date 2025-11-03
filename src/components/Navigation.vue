@@ -2,19 +2,23 @@
 import { RouterLink, useRoute } from 'vue-router'
 import { ref } from 'vue'
 
-const navigation_buttons = ref([
-	{ route: '/', text: 'Главная' },
-	{ route: '/aboutme', text: 'Обо мне' },
-	{ route: '/myinterests', text: 'Мои интересы' },
-	{ route: '/study', text: 'Учеба' },
-	{ route: '/photoalbum', text: 'Фотоальбом' },
-	{ route: '/contact', text: 'Контакт' },
-	{ route: '/test', text: 'Тест по дисциплине' },
-])
-
 const route = useRoute()
 
-// route.path
+function currentPage() {
+	return this.route == route.path
+}
+
+const navigation_buttons = ref([
+	{ route: '/', text: 'Главная', currentPage },
+	{ route: '/aboutme', text: 'Обо мне', currentPage },
+	{ route: '/myinterests', text: 'Мои интересы', currentPage },
+	{ route: '/study', text: 'Учеба', currentPage },
+	{ route: '/photoalbum', text: 'Фотоальбом', currentPage },
+	{ route: '/contact', text: 'Контакт', currentPage },
+	{ route: '/test', text: 'Тест по дисциплине', currentPage },
+])
+
+route.path
 </script>
 
 <template>
@@ -26,7 +30,9 @@ const route = useRoute()
 		<h1>LW1</h1>
 		<ul id="nav-buttons">
 			<li v-for="button in navigation_buttons">
-				<RouterLink :to="button.route">{{ button.text }}</RouterLink>
+				<RouterLink :to="button.route" :class="{ CurrentPage: button.currentPage() }">
+					{{ button.text }}
+				</RouterLink>
 			</li>
 		</ul>
 	</header>
@@ -109,7 +115,7 @@ header h1:hover {
 	transform: scale(1.05);
 }
 
-.CurrentPage {
+#nav-buttons a.CurrentPage {
 	border: 0.2em solid green;
 }
 
