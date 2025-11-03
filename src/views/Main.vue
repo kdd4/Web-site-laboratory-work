@@ -2,13 +2,14 @@
 
 <template>
 	<main>
-		<h2>Камышов<br />Даниил<br />Денисович</h2>
+		<h2 class="text-3xl font-bold underline">Камышов<br />Даниил<br />Денисович</h2>
 		<img class="myPhoto" src="/src/assets/images/me.jpg" alt="Моя фотография" />
 		<h2>ИС/б-23-2-о<br />Лаборатороная работа №1</h2>
 	</main>
 </template>
 
 <style scoped>
+@import 'tailwindcss';
 main {
 	display: flex;
 	justify-content: center;
