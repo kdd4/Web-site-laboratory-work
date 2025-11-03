@@ -9,7 +9,6 @@
 </template>
 
 <style scoped>
-@import 'tailwindcss';
 main {
 	display: flex;
 	justify-content: center;
