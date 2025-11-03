@@ -69,7 +69,7 @@ header h1 {
 
 	color: white;
 
-	transition: all 1s ease 0s;
+	transition: all 1s linear(0, 0.4 25%, 1) 0s;
 }
 
 header h1:hover {
