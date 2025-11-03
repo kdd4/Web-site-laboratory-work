@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const fotosRows = ref([
 	[
@@ -25,7 +25,7 @@ const fotosRows = ref([
 		{ title: 'me 14', src: '/src/assets/images/me.jpg' },
 		{ title: 'me 15', src: '/src/assets/images/me.jpg' },
 	],
-])
+]);
 </script>
 
 <template>

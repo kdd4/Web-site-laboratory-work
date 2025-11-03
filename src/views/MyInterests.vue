@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const lists = ref([
 	{
@@ -46,7 +46,7 @@ const lists = ref([
 			'Акудама Драйв',
 		],
 	},
-])
+]);
 </script>
 
 <template>

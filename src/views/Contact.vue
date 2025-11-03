@@ -1,59 +1,59 @@
 <script setup>
-import { ref, watch, watchEffect } from 'vue'
+import { ref, watch, watchEffect } from 'vue';
 
-const showError = ref(false)
-const allowSubmit = ref(false)
+const showError = ref(false);
+const allowSubmit = ref(false);
 
 // form fields
-const fio = ref('')
-const gender = ref('')
-const age = ref('')
-const email = ref('')
-const number = ref('')
+const fio = ref('');
+const gender = ref('');
+const age = ref('');
+const email = ref('');
+const number = ref('');
 
 // Error on screen
-const fioWrong = ref(false)
-const genderWrong = ref(false)
-const ageWrong = ref(false)
-const emailWrong = ref(false)
-const numberWrong = ref(false)
+const fioWrong = ref(false);
+const genderWrong = ref(false);
+const ageWrong = ref(false);
+const emailWrong = ref(false);
+const numberWrong = ref(false);
 
 // Error for checking
-const IsFIOWrong = ref(true)
-const IsGenderWrong = ref(true)
-const IsAgeWrong = ref(true)
-const IsEmailWrong = ref(true)
-const IsNumberWrong = ref(true)
+const IsFIOWrong = ref(true);
+const IsGenderWrong = ref(true);
+const IsAgeWrong = ref(true);
+const IsEmailWrong = ref(true);
+const IsNumberWrong = ref(true);
 
 function checkFIO() {
-	let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/
+	let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/;
 
-	fioWrong.value = !fio_re.test(fio.value) // Update on screen
-	IsFIOWrong.value = fioWrong.value // Update for checking
+	fioWrong.value = !fio_re.test(fio.value); // Update on screen
+	IsFIOWrong.value = fioWrong.value; // Update for checking
 }
 
 function checkGender() {
-	genderWrong.value = !gender.value // Update on screen
-	IsGenderWrong.value = genderWrong.value // Update for checking
+	genderWrong.value = !gender.value; // Update on screen
+	IsGenderWrong.value = genderWrong.value; // Update for checking
 }
 
 function checkAge() {
-	ageWrong.value = !age.value // Update on screen
-	IsAgeWrong.value = ageWrong.value // Update for checking
+	ageWrong.value = !age.value; // Update on screen
+	IsAgeWrong.value = ageWrong.value; // Update for checking
 }
 
 function checkEmail() {
-	let email_re = /^\w+@\w+.\w{2,}$/
+	let email_re = /^\w+@\w+.\w{2,}$/;
 
-	emailWrong.value = !email_re.test(email.value) // Update on screen
-	IsEmailWrong.value = emailWrong.value // Update for checking
+	emailWrong.value = !email_re.test(email.value); // Update on screen
+	IsEmailWrong.value = emailWrong.value; // Update for checking
 }
 
 function checkNumber() {
-	let number_re = /^\+7|3\d{8,10}$/
+	let number_re = /^\+7|3\d{8,10}$/;
 
-	numberWrong.value = !number_re.test(number.value) // Update on screen
-	IsNumberWrong.value = numberWrong.value // Update for checking
+	numberWrong.value = !number_re.test(number.value); // Update on screen
+	IsNumberWrong.value = numberWrong.value; // Update for checking
 }
 
 function updateAllowSubmit() {
@@ -63,21 +63,21 @@ function updateAllowSubmit() {
 		IsAgeWrong.value ||
 		IsEmailWrong.value ||
 		IsNumberWrong.value
-	)
+	);
 }
 
 function updateShowError() {
 	showError.value =
-		fioWrong.value || genderWrong.value || ageWrong.value || emailWrong.value || numberWrong.value
+		fioWrong.value || genderWrong.value || ageWrong.value || emailWrong.value || numberWrong.value;
 }
 
-watch(fio, checkFIO)
-watch(gender, checkGender)
-watch(age, checkAge)
-watch(email, checkEmail)
-watch(number, checkNumber)
-watchEffect(updateAllowSubmit)
-watchEffect(updateShowError)
+watch(fio, checkFIO);
+watch(gender, checkGender);
+watch(age, checkAge);
+watch(email, checkEmail);
+watch(number, checkNumber);
+watchEffect(updateAllowSubmit);
+watchEffect(updateShowError);
 </script>
 
 <template>

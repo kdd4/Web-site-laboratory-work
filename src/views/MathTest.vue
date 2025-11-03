@@ -1,9 +1,9 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref } from 'vue';
 
-const showError = ref(false)
-const showGood = ref(false)
-const showBad = ref(false)
+const showError = ref(false);
+const showGood = ref(false);
+const showBad = ref(false);
 
 const messages = ref([
 	{
@@ -21,65 +21,65 @@ const messages = ref([
 		text: 'Есть ошибки',
 		show: showBad,
 	},
-])
+]);
 
 // Current answers
-const answer1 = ref('')
-const answer2 = ref('')
-const answer3 = ref('')
+const answer1 = ref('');
+const answer2 = ref('');
+const answer3 = ref('');
 
 // Show error
-const showWrongAnswer1 = ref(false)
-const showWrongAnswer2 = ref(false)
-const showWrongAnswer3 = ref(false)
+const showWrongAnswer1 = ref(false);
+const showWrongAnswer2 = ref(false);
+const showWrongAnswer3 = ref(false);
 
 // right answers
 const rightAnswers = {
 	answer1: 2.7,
 	answer2: 'r2 sin tetta',
 	answer3: 'var1',
-}
+};
 
 // Is answers has wrong value
-const wrongAnswer1 = computed(() => !answer1.value || isNaN(parseFloat(answer1.value)))
-const wrongAnswer2 = computed(() => !answer2.value)
-const wrongAnswer3 = computed(() => !answer3.value)
+const wrongAnswer1 = computed(() => !answer1.value || isNaN(parseFloat(answer1.value)));
+const wrongAnswer2 = computed(() => !answer2.value);
+const wrongAnswer3 = computed(() => !answer3.value);
 
 // Is correct current answer
 const correctAnswer1 = computed(
 	() => !wrongAnswer1.value && Math.abs(answer1.value - rightAnswers.answer1) <= 0.1,
-)
-const correctAnswer2 = computed(() => !wrongAnswer2.value && answer2.value == rightAnswers.answer2)
-const correctAnswer3 = computed(() => !wrongAnswer3.value && answer3.value == rightAnswers.answer3)
+);
+const correctAnswer2 = computed(() => !wrongAnswer2.value && answer2.value == rightAnswers.answer2);
+const correctAnswer3 = computed(() => !wrongAnswer3.value && answer3.value == rightAnswers.answer3);
 
 // Result of test
-const wrongAnswers = computed(() => wrongAnswer1.value || wrongAnswer2.value || wrongAnswer3.value)
+const wrongAnswers = computed(() => wrongAnswer1.value || wrongAnswer2.value || wrongAnswer3.value);
 const correctAnswers = computed(
 	() => correctAnswer1.value && correctAnswer2.value && correctAnswer3.value,
-)
+);
 
 function checkTest(event) {
-	showWrongAnswer1.value = wrongAnswer1.value
-	showWrongAnswer2.value = wrongAnswer2.value
-	showWrongAnswer3.value = wrongAnswer3.value
+	showWrongAnswer1.value = wrongAnswer1.value;
+	showWrongAnswer2.value = wrongAnswer2.value;
+	showWrongAnswer3.value = wrongAnswer3.value;
 
-	showError.value = wrongAnswers.value
-	showGood.value = correctAnswers.value && !wrongAnswers.value
-	showBad.value = !correctAnswers.value && !wrongAnswers.value
+	showError.value = wrongAnswers.value;
+	showGood.value = correctAnswers.value && !wrongAnswers.value;
+	showBad.value = !correctAnswers.value && !wrongAnswers.value;
 }
 
 function resetTest(event) {
-	showError.value = false
-	showGood.value = false
-	showBad.value = false
+	showError.value = false;
+	showGood.value = false;
+	showBad.value = false;
 
-	showWrongAnswer1.value = false
-	showWrongAnswer2.value = false
-	showWrongAnswer3.value = false
+	showWrongAnswer1.value = false;
+	showWrongAnswer2.value = false;
+	showWrongAnswer3.value = false;
 
-	answer1.value = ''
-	answer2.value = ''
-	answer3.value = ''
+	answer1.value = '';
+	answer2.value = '';
+	answer3.value = '';
 }
 </script>
 

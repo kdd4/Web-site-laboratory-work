@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const hUniversity = ref('ФГАОУ Севастопольский государственный университет')
-const hFaculty = ref('ВШИ "СПИ". Факультет информационных технологий')
+const hUniversity = ref('ФГАОУ Севастопольский государственный университет');
+const hFaculty = ref('ВШИ "СПИ". Факультет информационных технологий');
 
 const tableHead = ref([
 	[{ text: 'ПЛАН УЧЕБНОГО ПРОЦЕССА', colspan: 9 }],
@@ -20,9 +20,9 @@ const tableHead = ref([
 		{ text: 'Пр' },
 		{ text: 'СРС' },
 	],
-])
+]);
 
-let id = 1
+let id = 1;
 
 const tableBody = ref([
 	{
@@ -95,7 +95,7 @@ const tableBody = ref([
 		faculty: 'ИС',
 		hours: [216, 104, 52, 35, 17, 112],
 	},
-])
+]);
 </script>
 
 <template>
