@@ -102,7 +102,7 @@ const tableBody = ref([
 	<main>
 		<h2>{{ hUniversity }}</h2>
 		<h3>{{ hFaculty }}</h3>
-		<table>
+		<table class="m-1 table-auto">
 			<thead>
 				<tr v-if="tableHead !== undefined" v-for="row in tableHead">
 					<th v-for="elem in row" :rowspan="elem.rowspan" :colspan="elem.colspan">

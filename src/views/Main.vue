@@ -1,38 +1,30 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+
+const headers = ref([
+	{ text: 'Камышов\nДаниил\nДенисович', class: 'order-1' },
+	{ text: 'ИС/б-23-2-о\nЛаборатороная работа №3', class: 'order-3' },
+]);
+
+const flex_col = ref(false);
+
+function pageDirection(event) {
+	flex_col.value = window.innerWidth <= 760; // px
+}
+
+window.addEventListener('resize', pageDirection, { passive: true });
+pageDirection();
+</script>
 
 <template>
-	<main>
-		<h2 class="text-3xl font-bold underline">Камышов<br />Даниил<br />Денисович</h2>
-		<img class="myPhoto" src="/src/assets/images/me.jpg" alt="Моя фотография" />
-		<h2>ИС/б-23-2-о<br />Лаборатороная работа №1</h2>
+	<main :class="{ 'flex-col': flex_col }" class="flex w-auto items-center justify-center">
+		<h2 v-for="elem in headers" class="text-center text-2xl font-bold" :class="elem.class">
+			<pre>{{ elem.text }}</pre>
+		</h2>
+		<img
+			class="order-2 mx-3 w-70 transition-all duration-500 ease-in-out hover:rotate-x-45 hover:rotate-y-45"
+			src="/src/assets/images/me.jpg"
+			alt="Моя фотография"
+		/>
 	</main>
 </template>
-
-<style scoped>
-main {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-main h2 {
-	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-
-.myPhoto {
-	width: 20em;
-	padding: 0em 3em 0em 3em;
-
-	transition: all 0.5s ease 0s;
-}
-
-.myPhoto:hover {
-	transform: rotateY(45deg) rotateX(-45deg) scale(0.8);
-}
-
-@media (max-width: 600px) {
-	main {
-		flex-direction: column;
-	}
-}
-</style>

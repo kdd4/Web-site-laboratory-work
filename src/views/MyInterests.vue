@@ -50,21 +50,24 @@ const lists = ref([
 </script>
 
 <template>
-	<main>
-		<div class="info">
-			<h2>Мои интересы</h2>
-			<div v-for="block in lists" :id="block.id" class="textblock">
-				<h3 v-if="block.head !== undefined">{{ block.head }}</h3>
-				<p v-if="block.text !== undefined">{{ block.text }}</p>
-				<ul v-if="block.list !== undefined">
-					<li v-for="elem in block.list">{{ elem }}</li>
+	<main class="flex">
+		<div class="flex grow-3 flex-col items-stretch">
+			<h2 class="mb-10 text-center text-2xl font-bold">Мои интересы</h2>
+			<div v-for="block in lists" :id="block.id" class="mx-3 mb-4 rounded-lg bg-neutral-300 p-3">
+				<h3 v-if="block.head !== undefined" class="mb-3 text-xl font-bold">{{ block.head }}</h3>
+				<p v-if="block.text !== undefined" class="mb-2 text-base/relaxed">{{ block.text }}</p>
+				<ul v-if="block.list !== undefined" class="list-inside list-disc">
+					<li v-for="elem in block.list" class="text-base/loose">{{ elem }}</li>
 				</ul>
 			</div>
 		</div>
-		<div class="navigation">
-			<ul>
+		<div class="min-w-14 grow-2">
+			<ul class="sticky top-1 space-y-2.5 rounded-l-lg bg-neutral-300 p-3">
 				<li v-for="list in lists">
-					<a :href="'#' + list.id">
+					<a
+						:href="'#' + list.id"
+						class="rounded-md border border-neutral-400 bg-neutral-200 p-0.5 whitespace-nowrap"
+					>
 						{{ list.head }}
 					</a>
 				</li>
@@ -72,78 +75,3 @@ const lists = ref([
 		</div>
 	</main>
 </template>
-
-<style scoped>
-main {
-	--nav_color_bg: #aaaaaa;
-	--nav_color: black;
-	--nav_button_color: gainsboro;
-	--nav_button_text_color: black;
-}
-
-main {
-	display: flex;
-	flex-direction: row;
-}
-
-.info {
-	flex-grow: 3;
-
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-.navigation {
-	flex-grow: 2;
-	min-width: 14em;
-	max-width: 16em;
-	margin: 1em 0em 1em 1em;
-}
-
-.navigation ul {
-	position: sticky;
-	top: 1em;
-
-	list-style: none;
-
-	background-color: var(--nav_color_bg);
-
-	padding: 0.2em 0em 0.2em 0em;
-}
-
-.navigation li {
-	margin: 1em;
-}
-
-.navigation li a {
-	text-decoration: none;
-
-	color: var(--nav_color);
-	background-color: var(--nav_button_color);
-	border-radius: 5%;
-	text-align: center;
-
-	white-space: nowrap;
-	padding: 0.2em;
-}
-
-.textblock {
-	font-size: large;
-
-	width: 90%;
-	min-width: 10em;
-
-	margin: 20px auto;
-	padding: 20px;
-	text-align: justify;
-	background: #f9f9f9;
-	line-height: 1.6;
-}
-
-@media (max-width: 700px) {
-	.navigation {
-		display: none;
-	}
-}
-</style>

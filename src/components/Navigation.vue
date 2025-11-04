@@ -56,11 +56,15 @@ checkBurgerMenu();
 			:class="{ hidden: isBurgerMenu && !isBurgerMenuOpened, 'flex-col': isBurgerMenu }"
 			class="my-2.5 flex grow list-none flex-wrap items-center justify-evenly"
 		>
-			<li v-for="button in navigation_buttons" class="mx-0.5 my-1 p-0.5 text-white">
+			<li
+				v-for="button in navigation_buttons"
+				:class="{ 'my-0.5': isBurgerMenu }"
+				class="mx-0.5 my-1 p-0.5 text-white"
+			>
 				<RouterLink
 					:to="button.route"
-					:class="{ 'border-emerald-700': button.currentPage() }"
-					class="rounded-md border-4 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-500 ease-in-out hover:bg-neutral-500"
+					:class="{ 'border-4': button.currentPage() }"
+					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-300 hover:bg-neutral-500"
 				>
 					{{ button.text }}
 				</RouterLink>
