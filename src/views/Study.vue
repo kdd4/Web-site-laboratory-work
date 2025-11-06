@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 
+const cellClasses = ref('border md:p-0.5 border-gray-600');
+
 const hUniversity = ref('ФГАОУ Севастопольский государственный университет');
 const hFaculty = ref('ВШИ "СПИ". Факультет информационных технологий');
 
@@ -99,73 +101,39 @@ const tableBody = ref([
 </script>
 
 <template>
-	<main>
-		<h2>{{ hUniversity }}</h2>
-		<h3>{{ hFaculty }}</h3>
-		<table class="m-1 table-auto">
+	<main class="flex flex-col items-center">
+		<h2 class="text-center text-xl font-bold not-md:text-lg">{{ hUniversity }}</h2>
+		<h3 class="mb-5 text-center text-lg not-md:text-base">{{ hFaculty }}</h3>
+		<table class="m-1 table-auto border-collapse not-md:text-sm">
 			<thead>
 				<tr v-if="tableHead !== undefined" v-for="row in tableHead">
-					<th v-for="elem in row" :rowspan="elem.rowspan" :colspan="elem.colspan">
+					<th
+						:class="cellClasses"
+						v-for="elem in row"
+						:rowspan="elem.rowspan"
+						:colspan="elem.colspan"
+					>
 						{{ elem.text }}
 					</th>
 				</tr>
 			</thead>
 			<tbody v-if="tableBody !== undefined">
 				<tr v-for="elem in tableBody">
-					<td>{{ elem.number }}</td>
-					<td class="discipline">
+					<td :class="cellClasses" class="text-center">{{ elem.number }}</td>
+					<td :class="cellClasses">
 						{{ elem.discipline }}
-						<RouterLink v-if="elem.anchor !== undefined" :to="elem.anchor.route">
+						<RouterLink
+							class="mx-1 rounded-md bg-amber-500"
+							v-if="elem.anchor !== undefined"
+							:to="elem.anchor.route"
+						>
 							{{ elem.anchor.text }}
 						</RouterLink>
 					</td>
-					<td>{{ elem.faculty }}</td>
-					<td v-for="hour in elem.hours">{{ hour }}</td>
+					<td :class="cellClasses" class="text-center">{{ elem.faculty }}</td>
+					<td :class="cellClasses" class="text-right" v-for="hour in elem.hours">{{ hour }}</td>
 				</tr>
 			</tbody>
 		</table>
 	</main>
 </template>
-
-<style scoped>
-main {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-table {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	border-collapse: collapse;
-}
-
-td a {
-	margin: 0em 1em 0em 1em;
-	padding: 0em 0.2em 0em 0.2em;
-	background-color: goldenrod;
-	border-radius: 10%;
-	text-decoration: none;
-	color: black;
-}
-
-table th,
-table td {
-	border: 1px solid black;
-}
-
-.discipline {
-	padding-right: 1em;
-}
-
-table td:nth-child(1) {
-	text-align: center;
-}
-
-table td:nth-child(3) {
-	text-align: center;
-}
-
-table td:nth-child(n + 4) {
-	text-align: right;
-}
-</style>

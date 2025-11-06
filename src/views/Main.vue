@@ -5,19 +5,10 @@ const headers = ref([
 	{ text: 'Камышов\nДаниил\nДенисович', class: 'order-1' },
 	{ text: 'ИС/б-23-2-о\nЛаборатороная работа №3', class: 'order-3' },
 ]);
-
-const flex_col = ref(false);
-
-function pageDirection(event) {
-	flex_col.value = window.innerWidth <= 760; // px
-}
-
-window.addEventListener('resize', pageDirection, { passive: true });
-pageDirection();
 </script>
 
 <template>
-	<main :class="{ 'flex-col': flex_col }" class="flex w-auto items-center justify-center">
+	<main class="flex w-auto flex-col items-center justify-center md:flex-row">
 		<h2 v-for="elem in headers" class="text-center text-2xl font-bold" :class="elem.class">
 			<pre>{{ elem.text }}</pre>
 		</h2>

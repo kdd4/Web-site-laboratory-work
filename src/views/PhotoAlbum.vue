@@ -29,53 +29,15 @@ const fotosRows = ref([
 </script>
 
 <template>
-	<main>
-		<div v-for="row in fotosRows" class="albumRow">
-			<figure v-for="img in row">
-				<img :src="img.src" :alt="img.title" />
-				<figcaption>{{ img.title }}</figcaption>
+	<main class="flex flex-col justify-center">
+		<div
+			class="flex items-center justify-evenly not-md:flex-col even:**:even:**:first:rotate-180 **:nth-[3n+1]:**:first:rotate-180 nth-[n+3]:**:nth-[2n+2]:**:first:rotate-180"
+			v-for="row in fotosRows"
+		>
+			<figure class="m-3" v-for="img in row">
+				<img class="w-full max-w-52 p-1" :alt="img.title" :src="img.src" />
+				<figcaption class="text-center text-sm">{{ img.title }}</figcaption>
 			</figure>
 		</div>
 	</main>
 </template>
-
-<style scoped>
-main {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.albumRow {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-}
-
-figure img {
-	width: 100%;
-	max-width: 13em;
-}
-
-figcaption {
-	text-align: center;
-}
-
-.albumRow figure:nth-child(3n + 1) img {
-	rotate: 180deg;
-}
-
-.albumRow:nth-child(even) figure:nth-child(3n + 2) img {
-	rotate: 90deg;
-}
-
-.albumRow:nth-child(odd) figure:nth-child(3n + 2) img {
-	rotate: -90deg;
-}
-
-@media (max-width: 500px) {
-	.albumRow {
-		flex-wrap: wrap;
-	}
-}
-</style>

@@ -52,7 +52,6 @@ checkBurgerMenu();
 			LW3
 		</h1>
 		<ul
-			id="nav-buttons"
 			:class="{ hidden: isBurgerMenu && !isBurgerMenuOpened, 'flex-col': isBurgerMenu }"
 			class="my-2.5 flex grow list-none flex-wrap items-center justify-evenly"
 		>
@@ -64,7 +63,7 @@ checkBurgerMenu();
 				<RouterLink
 					:to="button.route"
 					:class="{ 'border-4': button.currentPage() }"
-					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-300 hover:bg-neutral-500"
+					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear hover:bg-neutral-500"
 				>
 					{{ button.text }}
 				</RouterLink>

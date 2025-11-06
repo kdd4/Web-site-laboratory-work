@@ -53,7 +53,7 @@ const lists = ref([
 	<main class="flex">
 		<div class="flex grow-3 flex-col items-stretch">
 			<h2 class="mb-10 text-center text-2xl font-bold">Мои интересы</h2>
-			<div v-for="block in lists" :id="block.id" class="mx-3 mb-4 rounded-lg bg-neutral-300 p-3">
+			<div v-for="block in lists" :id="block.id" class="mx-3 mb-4 rounded-lg bg-neutral-300 p-5">
 				<h3 v-if="block.head !== undefined" class="mb-3 text-xl font-bold">{{ block.head }}</h3>
 				<p v-if="block.text !== undefined" class="mb-2 text-base/relaxed">{{ block.text }}</p>
 				<ul v-if="block.list !== undefined" class="list-inside list-disc">
@@ -61,8 +61,8 @@ const lists = ref([
 				</ul>
 			</div>
 		</div>
-		<div class="min-w-14 grow-2">
-			<ul class="sticky top-1 space-y-2.5 rounded-l-lg bg-neutral-300 p-3">
+		<div class="max-w-70 min-w-50 grow-2 not-sm:hidden">
+			<ul class="sticky top-2 space-y-2.5 rounded-l-lg bg-neutral-300 p-3">
 				<li v-for="list in lists">
 					<a
 						:href="'#' + list.id"
