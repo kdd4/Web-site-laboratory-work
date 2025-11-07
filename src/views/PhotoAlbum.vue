@@ -31,10 +31,11 @@ const fotosRows = ref([
 <template>
 	<main class="flex flex-col justify-center">
 		<div
+			v-for="(row, ind) in fotosRows"
+			:key="ind"
 			class="flex items-center justify-evenly not-md:flex-col even:**:even:**:first:rotate-180 **:nth-[3n+1]:**:first:rotate-180 nth-[n+3]:**:nth-[2n+2]:**:first:rotate-180"
-			v-for="row in fotosRows"
 		>
-			<figure class="m-3" v-for="img in row">
+			<figure class="m-3" v-for="(img, img_ind) in row" :key="img_ind">
 				<img class="w-full max-w-52 p-1" :alt="img.title" :src="img.src" />
 				<figcaption class="text-center text-sm">{{ img.title }}</figcaption>
 			</figure>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, watchEffect } from 'vue';
+import Form from '@/components/Form.vue';
 
 const showError = ref(false);
 const allowSubmit = ref(false);
@@ -78,113 +79,81 @@ watch(email, checkEmail);
 watch(number, checkNumber);
 watchEffect(updateAllowSubmit);
 watchEffect(updateShowError);
+
+function formSubmit(event) {
+	let form = document.getElementById('form');
+
+	fetch('/api', {
+		method: 'POST',
+		body: new FormData(form),
+	});
+}
+
+const formdata = {
+	allowSubmit: allowSubmit,
+};
+
+const formfields = ref([
+	{
+		label: 'ФИО',
+		type: 'text',
+		name: 'FIO',
+		placeholder: 'Введите ФИО',
+		var_ref: fio,
+		wrongValue_ref: fioWrong,
+	},
+	{
+		label: 'Пол',
+		type: 'radio',
+		name: 'gender',
+		options: [
+			{ text: 'M', value: 'Male' },
+			{ text: 'Ж', value: 'Female' },
+		],
+		var_ref: gender,
+		wrongValue_ref: genderWrong,
+	},
+	{
+		label: 'Возраст',
+		type: 'select',
+		name: 'age',
+		options: [
+			{ value: '', text: 'Выберите', disabled: true },
+			{ value: 'less16', text: 'До 16', disabled: false },
+			{ value: '16-18', text: '16-18', disabled: false },
+			{ value: 'more18', text: 'Старше 18', disabled: false },
+		],
+		var_ref: age,
+		wrongValue_ref: ageWrong,
+	},
+	{
+		label: 'E-mail',
+		type: 'text',
+		name: 'email',
+		placeholder: 'Введите E-mail',
+		var_ref: email,
+		wrongValue_ref: emailWrong,
+	},
+	{
+		label: 'Номер',
+		type: 'text',
+		name: 'number',
+		placeholder: 'Введите номер',
+		var_ref: number,
+		wrongValue_ref: numberWrong,
+	},
+]);
 </script>
 
 <template>
-	<main>
-		<form
-			id="contactForm"
-			action="mailto:daniilkamyshov2004@yandex.ru"
-			method="Post"
-			enctype="text/plain"
+	<main class="flex flex-col items-center justify-center space-y-3">
+		<h2 class="text-center text-2xl not-md:text-xl">Контакт</h2>
+		<Form id="form" :fields="formfields" :formdata="formdata" @submit="formSubmit" />
+		<div
+			:class="{ hidden: !showError }"
+			class="rounded-sm border-2 border-red-500/30 bg-red-400 p-0.5 text-center"
 		>
-			<div id="inputFIO" :class="{ wrongValue: fioWrong }">
-				<label>ФИО:</label>
-				<input type="text" name="FIO" placeholder="Введите ФИО" v-model.trim.lazy="fio" />
-			</div>
-			<div id="inputGender" :class="{ wrongValue: genderWrong }">
-				<label>Пол:</label>
-				<label class="radioLabel">М</label>
-				<input type="radio" name="gender" value="Male" v-model.lazy="gender" />
-				<label class="radioLabel">Ж</label>
-				<input type="radio" name="gender" value="Female" v-model.lazy="gender" />
-			</div>
-			<div id="inputAge" :class="{ wrongValue: ageWrong }">
-				<label>Возраст:</label>
-				<select name="age" v-model.lazy="age">
-					<option disabled value="">Выберите</option>
-					<option value="less16">До 16</option>
-					<option value="16-18">16-18</option>
-					<option value="more18">Старше 18</option>
-				</select>
-			</div>
-			<div id="inputEmail" :class="{ wrongValue: emailWrong }">
-				<label>E-mail:</label>
-				<input type="email" name="email" placeholder="Введите E-mail" v-model.trim.lazy="email" />
-			</div>
-			<div id="inputNumber" :class="{ wrongValue: numberWrong }">
-				<label>Номер:</label>
-				<input
-					type="text"
-					name="number"
-					placeholder="Введите номер телефона"
-					v-model.trim.lazy="number"
-				/>
-			</div>
-			<input :disabled="!allowSubmit" type="submit" />
-		</form>
-		<div id="errorDiv" :class="{ invisible: !showError }">
 			<p>Неправильно введены данные</p>
 		</div>
 	</main>
 </template>
-
-<style scoped>
-main {
-	--form_color: gainsboro;
-	--nav_button_text_color: black;
-	--error_color: #cc3333;
-}
-
-.invisible {
-	display: none;
-}
-
-main {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	align-items: center;
-}
-
-form {
-	display: flex;
-	flex-direction: column;
-	justify-content: left;
-
-	padding: 1em;
-	background-color: var(--form_color);
-	border-radius: 5%;
-}
-
-form div {
-	margin: 0.5em;
-	padding: 2px;
-}
-
-.radioLabel {
-	padding-left: 1em;
-}
-
-div label:nth-child(1) {
-	padding: 0;
-}
-
-input[type='submit'] {
-	margin: 1em 0em 0em 0em;
-	align-self: center;
-}
-
-.wrongValue {
-	border-radius: 5%;
-	padding: 2px;
-	background-color: var(--error_color);
-}
-
-#errorDiv {
-	padding: 0.1em 1em 0.1em 1em;
-	margin: 1em;
-	background-color: var(--error_color);
-	border-radius: 5%;
-}
-</style>

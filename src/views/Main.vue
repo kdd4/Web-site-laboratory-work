@@ -9,7 +9,12 @@ const headers = ref([
 
 <template>
 	<main class="flex w-auto flex-col items-center justify-center md:flex-row">
-		<h2 v-for="elem in headers" class="text-center text-2xl font-bold" :class="elem.class">
+		<h2
+			v-for="(elem, ind) in headers"
+			:key="ind"
+			class="text-center text-2xl font-bold"
+			:class="elem.class"
+		>
 			<pre>{{ elem.text }}</pre>
 		</h2>
 		<img

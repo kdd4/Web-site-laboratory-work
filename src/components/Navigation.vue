@@ -56,7 +56,8 @@ checkBurgerMenu();
 			class="my-2.5 flex grow list-none flex-wrap items-center justify-evenly"
 		>
 			<li
-				v-for="button in navigation_buttons"
+				v-for="(button, ind) in navigation_buttons"
+				:key="ind"
 				:class="{ 'my-0.5': isBurgerMenu }"
 				class="mx-0.5 my-1 p-0.5 text-white"
 			>

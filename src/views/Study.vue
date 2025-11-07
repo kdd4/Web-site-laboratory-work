@@ -24,17 +24,13 @@ const tableHead = ref([
 	],
 ]);
 
-let id = 1;
-
 const tableBody = ref([
 	{
-		number: id++,
 		discipline: 'Экология',
 		faculty: 'БЖ',
 		hours: [54, 27, 18, 0, 9, 27],
 	},
 	{
-		number: id++,
 		discipline: 'Высшая математика',
 		anchor: {
 			text: 'Тест',
@@ -44,55 +40,46 @@ const tableBody = ref([
 		hours: [540, 282, 141, 0, 141, 258],
 	},
 	{
-		number: id++,
 		discipline: 'Русский язык и культура речи',
 		faculty: 'НГиГ',
 		hours: [108, 54, 18, 0, 36, 54],
 	},
 	{
-		number: id++,
 		discipline: 'Основы дискретной математики',
 		faculty: 'ИС',
 		hours: [216, 139, 87, 0, 52, 77],
 	},
 	{
-		number: id++,
 		discipline: 'Основы программирования и алгоритмические языки',
 		faculty: 'ИС',
 		hours: [405, 210, 105, 87, 18, 195],
 	},
 	{
-		number: id++,
 		discipline: 'Основы экологии',
 		faculty: 'ПЭОП',
 		hours: [54, 27, 18, 0, 9, 27],
 	},
 	{
-		number: id++,
 		discipline: 'Теория вероятностей и математическая статистика',
 		faculty: 'ИС',
 		hours: [162, 72, 54, 18, 0, 90],
 	},
 	{
-		number: id++,
 		discipline: 'Физика',
 		faculty: 'Физики',
 		hours: [324, 194, 106, 88, 0, 130],
 	},
 	{
-		number: id++,
 		discipline: 'Основы электротехники и электроники',
 		faculty: 'ИС',
 		hours: [108, 72, 36, 18, 18, 36],
 	},
 	{
-		number: id++,
 		discipline: 'Численные методы в информатике',
 		faculty: 'ИС',
 		hours: [189, 89, 36, 36, 17, 100],
 	},
 	{
-		number: id++,
 		discipline: 'Методы исследования операций',
 		faculty: 'ИС',
 		hours: [216, 104, 52, 35, 17, 112],
@@ -106,20 +93,21 @@ const tableBody = ref([
 		<h3 class="mb-5 text-center text-lg not-md:text-base">{{ hFaculty }}</h3>
 		<table class="m-1 table-auto border-collapse not-md:text-sm">
 			<thead>
-				<tr v-if="tableHead !== undefined" v-for="row in tableHead">
+				<tr v-if="tableHead !== undefined" v-for="(row, ind) in tableHead" :key="ind">
 					<th
-						:class="cellClasses"
-						v-for="elem in row"
+						v-for="(elem, el_ind) in row"
+						:key="el_ind"
 						:rowspan="elem.rowspan"
 						:colspan="elem.colspan"
+						:class="cellClasses"
 					>
 						{{ elem.text }}
 					</th>
 				</tr>
 			</thead>
 			<tbody v-if="tableBody !== undefined">
-				<tr v-for="elem in tableBody">
-					<td :class="cellClasses" class="text-center">{{ elem.number }}</td>
+				<tr v-for="(elem, el_ind) in tableBody" :key="el_ind">
+					<td :class="cellClasses" class="text-center">{{ el_ind + 1 }}</td>
 					<td :class="cellClasses">
 						{{ elem.discipline }}
 						<RouterLink
@@ -131,7 +119,14 @@ const tableBody = ref([
 						</RouterLink>
 					</td>
 					<td :class="cellClasses" class="text-center">{{ elem.faculty }}</td>
-					<td :class="cellClasses" class="text-right" v-for="hour in elem.hours">{{ hour }}</td>
+					<td
+						v-for="(hour, hour_ind) in elem.hours"
+						:key="hour_ind"
+						:class="cellClasses"
+						class="text-right"
+					>
+						{{ hour }}
+					</td>
 				</tr>
 			</tbody>
 		</table>
