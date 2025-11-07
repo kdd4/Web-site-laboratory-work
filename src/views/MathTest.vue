@@ -8,23 +8,18 @@ const showBad = ref(false);
 
 const messages = ref([
 	{
-		id: 'errorValues',
 		text: 'Ответ(ы) не выбраны или введены не в правильном формате',
 		show: showError,
 		good: false,
 	},
 	{
-		id: 'testGoodResult',
 		text: 'Всё верно',
 		show: showGood,
-		class: 'rounded-sm border-2 border-green-500/30 bg-green-400 p-0.5 text-center',
 		good: true,
 	},
 	{
-		id: 'testBadResult',
 		text: 'Есть ошибки',
 		show: showBad,
-		class: 'rounded-sm border-2 border-red-500/30 bg-red-400 p-0.5 text-center',
 		good: false,
 	},
 ]);
@@ -134,14 +129,13 @@ const formfields = ref([
 </script>
 
 <template>
-	<main class="flex flex-col items-center space-y-4">
-		<h2 class="text-center text-2xl not-md:text-xl">Тест по высшей математике</h2>
+	<main class="flex flex-col items-center space-y-3">
+		<h2 class="mb-8 text-center text-2xl not-md:text-xl">Тест по высшей математике</h2>
 		<Form :fields="formfields" :formdata="formdata" @submit="checkTest" @reset="resetTest" />
 		<div
 			v-for="message in messages"
-			:id="message.id"
+			v-show="message.show"
 			:class="{
-				invisible: !message.show,
 				'border-green-500/30 bg-green-400': message.good,
 				'border-red-500/30 bg-red-400': !message.good,
 			}"

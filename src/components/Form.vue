@@ -1,12 +1,12 @@
 <script setup>
-import { ref, toValue } from 'vue';
+import { toValue } from 'vue';
 
 const { fields = [], formdata = {} } = defineProps({
 	fields: Object,
 	formdata: Object,
 });
 
-const { submit = true, allowSubmit = true, reset = false } = formdata;
+const { allowSubmit = true, reset = false } = formdata;
 
 defineEmits(['submit', 'reset']);
 </script>
@@ -41,6 +41,7 @@ defineEmits(['submit', 'reset']);
 					:class="{ 'bg-red-400': field.wrongValue_ref }"
 					class="w-full rounded-sm border border-neutral-400 bg-neutral-400/30"
 				/>
+
 				<div
 					v-if="field.type == 'radio'"
 					:class="{ 'bg-red-400': field.wrongValue_ref }"
@@ -69,7 +70,7 @@ defineEmits(['submit', 'reset']);
 						v-if="field.options !== undefined"
 						v-for="(option, sel_ind) in field.options"
 						:key="sel_ind"
-						:disabled="field.disabled"
+						:disabled="option.disabled"
 						:value="option.value"
 					>
 						{{ option.text }}
@@ -79,7 +80,6 @@ defineEmits(['submit', 'reset']);
 		</div>
 		<div class="flex items-baseline justify-evenly">
 			<input
-				v-if="submit"
 				:disabled="!toValue(allowSubmit)"
 				type="submit"
 				:class="{

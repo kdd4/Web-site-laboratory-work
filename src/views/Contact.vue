@@ -147,10 +147,10 @@ const formfields = ref([
 
 <template>
 	<main class="flex flex-col items-center justify-center space-y-3">
-		<h2 class="text-center text-2xl not-md:text-xl">Контакт</h2>
+		<h2 class="mb-8 text-center text-2xl not-md:text-xl">Контакт</h2>
 		<Form id="form" :fields="formfields" :formdata="formdata" @submit="formSubmit" />
 		<div
-			:class="{ hidden: !showError }"
+			v-show="showError"
 			class="rounded-sm border-2 border-red-500/30 bg-red-400 p-0.5 text-center"
 		>
 			<p>Неправильно введены данные</p>
