@@ -15,6 +15,7 @@ const lists = ref([
 			'Автомобили и как они работают',
 			'и т.д.',
 		],
+		opened: ref(false),
 	},
 	{
 		id: 'myhobby',
@@ -24,11 +25,13 @@ const lists = ref([
 			'Программирование шахмат (скорее как способ улучшить умения проектировать программы)',
 			'Сборка кубика-рубика',
 		],
+		opened: ref(false),
 	},
 	{
 		id: 'favoutitefilms',
 		head: 'Мои любимые фильмы',
 		list: ['Первому игроку приготовиться', 'Притяжение', 'Игра энедера'],
+		opened: ref(false),
 	},
 	{
 		id: 'favoutiteanime',
@@ -45,6 +48,7 @@ const lists = ref([
 			'Дом теней',
 			'Акудама Драйв',
 		],
+		opened: ref(false),
 	},
 ]);
 </script>
@@ -58,10 +62,14 @@ const lists = ref([
 				:key="ind"
 				:id="block.id"
 				class="mx-3 mb-4 rounded-lg bg-neutral-300 p-5"
+				@click="block.opened = !block.opened"
 			>
 				<h3 v-if="block.head !== undefined" class="mb-3 text-xl font-bold">{{ block.head }}</h3>
-				<p v-if="block.text !== undefined" class="mb-2 text-base/relaxed">{{ block.text }}</p>
-				<ul v-if="block.list !== undefined" class="list-inside list-disc">
+				<p v-if="block.text !== undefined" v-show="block.opened" class="mb-2 text-base/relaxed">
+					{{ block.text }}
+				</p>
+				<p v-if="!block.opened" class="text-center select-none">&#9660;</p>
+				<ul v-if="block.list !== undefined" v-show="block.opened" class="list-inside list-disc">
 					<li v-for="elem in block.list" class="text-base/loose">{{ elem }}</li>
 				</ul>
 			</div>

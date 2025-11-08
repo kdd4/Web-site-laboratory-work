@@ -28,6 +28,41 @@ function checkBurgerMenu(event) {
 
 window.addEventListener('resize', checkBurgerMenu, { passive: true });
 checkBurgerMenu();
+
+const time = ref({
+	sec: 0,
+	min: 0,
+	hour: 0,
+	month: '',
+	year: 2025,
+});
+
+function updateTime() {
+	let now = new Date(Date.now());
+
+	const months = [
+		'Январь',
+		'Февраль',
+		'Март',
+		'Апрель',
+		'Май',
+		'Июнь',
+		'Июль',
+		'Август',
+		'Сентябрь',
+		'Октябрь',
+		'Ноябрь',
+		'Декабрь',
+	];
+
+	time.value.sec = now.getSeconds();
+	time.value.min = now.getMinutes();
+	time.value.hour = now.getHours();
+	time.value.month = months[now.getMonth()];
+	time.value.year = now.getFullYear();
+}
+
+setInterval(updateTime.bind(this), 1000);
 </script>
 
 <template>
@@ -39,20 +74,21 @@ checkBurgerMenu();
 			src="/src/assets/images/menu_button.jpg"
 			alt="menu"
 			class="m-1 max-w-10 rounded-sm transition-all duration-500 ease-in-out"
+			v-if="isBurgerMenu"
 			:class="{
-				hidden: !isBurgerMenu,
 				'm-3 rotate-90 invert': isBurgerMenu && isBurgerMenuOpened,
 			}"
 			@click="isBurgerMenuOpened = !isBurgerMenuOpened"
 		/>
 		<h1
-			:class="{ hidden: isBurgerMenu }"
+			v-if="!isBurgerMenu"
 			class="mx-2 grow-0 font-serif text-3xl font-bold text-white transition-all duration-1000 ease-in-out hover:rotate-30"
 		>
 			LW3
 		</h1>
 		<ul
-			:class="{ hidden: isBurgerMenu && !isBurgerMenuOpened, 'flex-col': isBurgerMenu }"
+			v-if="!isBurgerMenu || isBurgerMenuOpened"
+			:class="{ 'flex-col': isBurgerMenu }"
 			class="my-2.5 flex grow list-none flex-wrap items-center justify-evenly"
 		>
 			<li
@@ -70,5 +106,8 @@ checkBurgerMenu();
 				</RouterLink>
 			</li>
 		</ul>
+		<div v-if="!isBurgerMenu" class="p-1 font-serif whitespace-break-spaces text-white">
+			{{ time.hour }}:{{ time.min }}:{{ time.sec }} {{ time.month }} {{ time.year }}
+		</div>
 	</header>
 </template>

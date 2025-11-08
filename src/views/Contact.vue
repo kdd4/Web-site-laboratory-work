@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, watchEffect } from 'vue';
 import Form from '@/components/Form.vue';
+import Calendar from '@/components/Calendar.vue';
 
 const showError = ref(false);
 const allowSubmit = ref(false);
@@ -155,5 +156,6 @@ const formfields = ref([
 		>
 			<p>Неправильно введены данные</p>
 		</div>
+		<Calendar />
 	</main>
 </template>
