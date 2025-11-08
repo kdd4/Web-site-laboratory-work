@@ -1,14 +1,46 @@
 <script setup>
-import { toValue } from 'vue';
+import { ref, toValue, triggerRef, watch, watchEffect } from 'vue';
+import Calendar from '@/components/Calendar.vue';
 
 const { fields = [], formdata = {} } = defineProps({
-	fields: Object,
+	fields: Array,
 	formdata: Object,
 });
 
 const { allowSubmit = true, reset = false } = formdata;
 
 defineEmits(['submit', 'reset']);
+
+const showCalendar = ref(false);
+const dateCalendar = ref(new Date(Date.now()));
+let watchCalendar = null;
+
+function useCalendar(field) {
+	if (watchCalendar) {
+		watchCalendar.stop();
+		watchCalendar = null;
+	}
+
+	if (showCalendar.value) {
+		showCalendar.value = false;
+		return;
+	}
+
+	dateCalendar.value = field.var_ref;
+	watchCalendar = watchEffect(() => {
+		field.var_ref = dateCalendar.value;
+	});
+	showCalendar.value = true;
+}
+
+function closeCalendar() {
+	if (watchCalendar) {
+		watchCalendar.stop();
+		watchCalendar = null;
+	}
+
+	showCalendar.value = false;
+}
 </script>
 
 <template>
@@ -76,6 +108,18 @@ defineEmits(['submit', 'reset']);
 						{{ option.text }}
 					</option>
 				</select>
+
+				<div
+					v-if="field.type == 'date'"
+					:class="{ 'bg-red-400': field.wrongValue_ref }"
+					class="w-full rounded-sm border border-neutral-400 bg-neutral-400/30 text-center"
+					@click="useCalendar(field)"
+				>
+					<input type="hidden" v-model="field.var_ref" />
+					{{ (field.var_ref.getDate() + '').padStart(2, '0') }}.{{
+						(field.var_ref.getMonth() + 1 + '').padStart(2, '0')
+					}}.{{ field.var_ref.getFullYear() }}
+				</div>
 			</div>
 		</div>
 		<div class="flex items-baseline justify-evenly">
@@ -95,4 +139,5 @@ defineEmits(['submit', 'reset']);
 			/>
 		</div>
 	</form>
+	<Calendar :show="showCalendar" v-model="dateCalendar" @selectDate="closeCalendar" />
 </template>

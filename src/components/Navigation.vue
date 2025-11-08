@@ -63,6 +63,7 @@ function updateTime() {
 }
 
 setInterval(updateTime.bind(this), 1000);
+updateTime();
 </script>
 
 <template>

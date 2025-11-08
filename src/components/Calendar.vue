@@ -1,16 +1,15 @@
 <script setup>
-import { ref, toValue, watch, watchEffect } from 'vue';
+import { ref, toValue, triggerRef, onMounted, watchEffect } from 'vue';
 
 const { show = ref(true) } = defineProps({
-	show: Object,
+	show: Boolean,
 });
 
 const date = defineModel({
-	type: Object,
 	default: new Date(Date.now()),
 });
 
-defineEmits(['selectDate']);
+const emit = defineEmits(['selectDate']);
 
 const day_in_week = 7;
 const week_cnt = 6;
@@ -36,12 +35,11 @@ function updateWeeks() {
 	let copyDate = new Date(date.value.getTime());
 
 	copyDate.setDate(1);
-	let dayOfWeek = copyDate.getDay();
+	let dayOfWeek = ((copyDate.getDay() + 6) % 7) + 1;
 
 	copyDate.setMonth((copyDate.getMonth() + 1) % 12);
 	copyDate.setDate(0);
 	let daysInMonth = copyDate.getDate();
-	console.log(copyDate);
 
 	// fill array with 0
 	weeks.value.fill(0);
@@ -54,7 +52,6 @@ function updateWeeks() {
 watchEffect(updateWeeks);
 
 function addMonth(val) {
-	console.log('111');
 	let month = date.value.getMonth() + val;
 
 	let year = date.value.getFullYear();
@@ -66,7 +63,14 @@ function addMonth(val) {
 	month = (month + 12) % 12;
 	date.value.setMonth(month);
 
-	updateWeeks();
+	triggerRef(date); // it's necessary, because of deep of Date type
+}
+
+function addYear(val) {
+	let year = date.value.getFullYear() + val;
+	date.value.setFullYear(year);
+
+	triggerRef(date); // it's necessary, because of deep of Date type
 }
 
 function getDate(day, week) {
@@ -76,7 +80,11 @@ function getDate(day, week) {
 function setDate(day, week) {
 	let cur_date = getDate(day, week);
 
-	if (cur_date) date.value.setDate(cur_date);
+	if (!cur_date) return;
+
+	date.value.setDate(cur_date);
+
+	triggerRef(date); // it's necessary, because of deep of Date type
 }
 </script>
 
@@ -84,13 +92,14 @@ function setDate(day, week) {
 	<div
 		v-if="toValue(show)"
 		class="max-w-2xl space-y-3 rounded-sm border border-neutral-400/30 bg-neutral-300 p-2"
+		v-bind="$attrs"
 	>
 		<div class="flex justify-between">
 			<div>{{ months[date.getMonth()] }} {{ date.getFullYear() }}</div>
 			<div class="flex space-x-2 select-none">
 				<div @click="addMonth(-1)" class="p-0.5">&lt;</div>
-				<div @click="addMonth(-1)" class="rotate-90 p-0.5">&gt;</div>
-				<div @click="addMonth(+1)" class="rotate-90 p-0.5">&lt;</div>
+				<div @click="addYear(-1)" class="rotate-90 p-0.5">&gt;</div>
+				<div @click="addYear(+1)" class="rotate-90 p-0.5">&lt;</div>
 				<div @click="addMonth(1)" class="p-0.5">&gt;</div>
 			</div>
 		</div>
@@ -99,7 +108,7 @@ function setDate(day, week) {
 				<div
 					v-for="(day, ind) in day_of_week"
 					:key="ind"
-					class="mb-1 w-full rounded-lg bg-neutral-400/40 p-0.5 text-center select-none"
+					class="mb-1 w-full rounded-lg bg-neutral-400/30 p-0.5 text-center select-none"
 				>
 					{{ day }}
 				</div>
@@ -110,10 +119,14 @@ function setDate(day, week) {
 					v-for="day in 7"
 					:key="day"
 					:class="{
-						'bg-neutral-400/80': getDate(day, week) == date.getDate(),
+						'bg-neutral-400/90': getDate(day, week) == date.getDate(),
 					}"
-					class="w-full rounded-lg bg-neutral-400/40 p-0.5 text-center select-none"
+					class="w-full rounded-lg bg-neutral-400/30 p-0.5 text-center select-none"
 					@click="setDate(day, week)"
+					@dblclick="
+						setDate(day, week);
+						emit('selectDate', date);
+					"
 				>
 					{{ getDate(day, week) || '' }}
 				</div>

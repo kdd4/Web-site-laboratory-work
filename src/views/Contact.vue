@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, watchEffect } from 'vue';
 import Form from '@/components/Form.vue';
-import Calendar from '@/components/Calendar.vue';
 
 const showError = ref(false);
 const allowSubmit = ref(false);
@@ -12,6 +11,7 @@ const gender = ref('');
 const age = ref('');
 const email = ref('');
 const number = ref('');
+const birthday = ref(new Date(Date.now()));
 
 // Error on screen
 const fioWrong = ref(false);
@@ -19,6 +19,7 @@ const genderWrong = ref(false);
 const ageWrong = ref(false);
 const emailWrong = ref(false);
 const numberWrong = ref(false);
+const birthdayWrong = ref(false);
 
 // Error for checking
 const IsFIOWrong = ref(true);
@@ -26,6 +27,7 @@ const IsGenderWrong = ref(true);
 const IsAgeWrong = ref(true);
 const IsEmailWrong = ref(true);
 const IsNumberWrong = ref(true);
+const IsBirthdayWrong = ref(true);
 
 function checkFIO() {
 	let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/;
@@ -56,6 +58,11 @@ function checkNumber() {
 
 	numberWrong.value = !number_re.test(number.value); // Update on screen
 	IsNumberWrong.value = numberWrong.value; // Update for checking
+}
+
+function checkBirthday() {
+	numberWrong.value = false; // Update on screen
+	IsNumberWrong.value = false; // Update for checking
 }
 
 function updateAllowSubmit() {
@@ -143,6 +150,20 @@ const formfields = ref([
 		var_ref: number,
 		wrongValue_ref: numberWrong,
 	},
+	{
+		label: 'День рождения',
+		type: 'date',
+		name: 'birthday',
+		var_ref: birthday,
+		wrongValue_ref: birthdayWrong,
+	},
+	{
+		label: 'День рождения2',
+		type: 'date',
+		name: 'birthday2',
+		var_ref: ref(new Date(Date.now())),
+		wrongValue_ref: ref(false),
+	},
 ]);
 </script>
 
@@ -156,6 +177,5 @@ const formfields = ref([
 		>
 			<p>Неправильно введены данные</p>
 		</div>
-		<Calendar />
 	</main>
 </template>
