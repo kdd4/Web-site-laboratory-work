@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toValue, triggerRef, watch, watchEffect } from 'vue';
+import { ref, shallowRef, toRef, toValue, triggerRef, watch, watchEffect } from 'vue';
 import Calendar from '@/components/Calendar.vue';
 
 const { fields = [], formdata = {} } = defineProps({
@@ -26,10 +26,8 @@ function useCalendar(field) {
 		return;
 	}
 
-	dateCalendar.value = field.var_ref;
-	watchCalendar = watchEffect(() => {
-		field.var_ref = dateCalendar.value;
-	});
+	watchCalendar = watch(dateCalendar, () => (field.var_ref = dateCalendar.value));
+
 	showCalendar.value = true;
 }
 
@@ -70,13 +68,20 @@ function closeCalendar() {
 					:name="field.name"
 					:placeholder="field.placeholder"
 					v-model.trim.lazy="field.var_ref"
-					:class="{ 'bg-red-400': field.wrongValue_ref }"
-					class="w-full rounded-sm border border-neutral-400 bg-neutral-400/30"
+					:class="{
+						'bg-neutral-400/30': !field.wrongValue_ref && !field.correctValue_ref,
+						'bg-green-400': field.correctValue_ref && !field.wrongValue_ref,
+						'bg-red-400': field.wrongValue_ref,
+					}"
+					class="w-full rounded-sm border border-neutral-400"
 				/>
 
 				<div
 					v-if="field.type == 'radio'"
-					:class="{ 'bg-red-400': field.wrongValue_ref }"
+					:class="{
+						'bg-green-400': field.correctValue_ref && !field.wrongValue_ref,
+						'bg-red-400': field.wrongValue_ref,
+					}"
 					class="flex w-full justify-evenly space-x-3 rounded-sm"
 				>
 					<div v-for="(option, opt_ind) in field.options" :key="opt_ind">
@@ -95,8 +100,12 @@ function closeCalendar() {
 					v-if="field.type == 'select'"
 					:name="field.name"
 					v-model="field.var_ref"
-					:class="{ 'bg-red-400': field.wrongValue_ref }"
-					class="rounded-sm border border-neutral-400 bg-neutral-400/30"
+					:class="{
+						'bg-neutral-400/30': !field.wrongValue_ref && !field.correctValue_ref,
+						'bg-red-400': field.wrongValue_ref,
+						'bg-green-400': field.correctValue_ref && !field.wrongValue_ref,
+					}"
+					class="rounded-sm border border-neutral-400"
 				>
 					<option
 						v-if="field.options !== undefined"
@@ -111,11 +120,15 @@ function closeCalendar() {
 
 				<div
 					v-if="field.type == 'date'"
-					:class="{ 'bg-red-400': field.wrongValue_ref }"
-					class="w-full rounded-sm border border-neutral-400 bg-neutral-400/30 text-center"
+					:class="{
+						'bg-neutral-400/30': !field.wrongValue_ref && !field.correctValue_ref,
+						'bg-red-400': field.wrongValue_ref,
+						'bg-green-400': field.correctValue_ref && !field.wrongValue_ref,
+					}"
+					class="w-full rounded-sm border border-neutral-400 text-center"
 					@click="useCalendar(field)"
 				>
-					<input type="hidden" v-model="field.var_ref" />
+					<input type="hidden" :name="field.name" v-model="field.var_ref" />
 					{{ (field.var_ref.getDate() + '').padStart(2, '0') }}.{{
 						(field.var_ref.getMonth() + 1 + '').padStart(2, '0')
 					}}.{{ field.var_ref.getFullYear() }}
@@ -139,5 +152,10 @@ function closeCalendar() {
 			/>
 		</div>
 	</form>
-	<Calendar :show="showCalendar" v-model="dateCalendar" @selectDate="closeCalendar" />
+	<Calendar
+		:show="showCalendar"
+		v-model="dateCalendar"
+		@updateDate="dateCalendar = new Date(dateCalendar)"
+		@selectDate="closeCalendar"
+	/>
 </template>

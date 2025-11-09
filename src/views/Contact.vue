@@ -13,7 +13,7 @@ const email = ref('');
 const number = ref('');
 const birthday = ref(new Date(Date.now()));
 
-// Error on screen
+// Show error on field
 const fioWrong = ref(false);
 const genderWrong = ref(false);
 const ageWrong = ref(false);
@@ -21,7 +21,15 @@ const emailWrong = ref(false);
 const numberWrong = ref(false);
 const birthdayWrong = ref(false);
 
-// Error for checking
+// Show correct on field
+const fioCorrect = ref(false);
+const genderCorrect = ref(false);
+const ageCorrect = ref(false);
+const emailCorrect = ref(false);
+const numberCorrect = ref(false);
+const birthdayCorrect = ref(false);
+
+// Error state for allowing submit
 const IsFIOWrong = ref(true);
 const IsGenderWrong = ref(true);
 const IsAgeWrong = ref(true);
@@ -32,37 +40,63 @@ const IsBirthdayWrong = ref(true);
 function checkFIO() {
 	let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/;
 
-	fioWrong.value = !fio_re.test(fio.value); // Update on screen
-	IsFIOWrong.value = fioWrong.value; // Update for checking
+	// Update on field
+	fioWrong.value = !fio_re.test(fio.value);
+	fioCorrect.value = !fioWrong.value;
+
+	// Update error state for allowing submit
+	IsFIOWrong.value = fioWrong.value;
 }
 
 function checkGender() {
-	genderWrong.value = !gender.value; // Update on screen
-	IsGenderWrong.value = genderWrong.value; // Update for checking
+	// Update on field
+	genderWrong.value = !gender.value;
+	genderCorrect.value = !genderWrong.value;
+
+	// Update error state for allowing submit
+	IsGenderWrong.value = genderWrong.value;
 }
 
 function checkAge() {
-	ageWrong.value = !age.value; // Update on screen
-	IsAgeWrong.value = ageWrong.value; // Update for checking
+	// Update on field
+	ageWrong.value = !age.value;
+	ageCorrect.value = !ageWrong.value;
+
+	// Update error state for allowing submit
+	IsAgeWrong.value = ageWrong.value;
 }
 
 function checkEmail() {
 	let email_re = /^\w+@\w+.\w{2,}$/;
 
-	emailWrong.value = !email_re.test(email.value); // Update on screen
-	IsEmailWrong.value = emailWrong.value; // Update for checking
+	// Update on field
+	emailWrong.value = !email_re.test(email.value);
+	emailCorrect.value = !emailWrong.value;
+
+	// Update error state for allowing submit
+	IsEmailWrong.value = emailWrong.value;
 }
 
 function checkNumber() {
 	let number_re = /^\+7|3\d{8,10}$/;
 
-	numberWrong.value = !number_re.test(number.value); // Update on screen
-	IsNumberWrong.value = numberWrong.value; // Update for checking
+	// Update on field
+	numberWrong.value = !number_re.test(number.value);
+	numberCorrect.value = !numberWrong.value;
+
+	// Update error state for allowing submit
+	IsNumberWrong.value = numberWrong.value;
 }
 
 function checkBirthday() {
-	numberWrong.value = false; // Update on screen
-	IsNumberWrong.value = false; // Update for checking
+	console.log('CHECK BIRTHDAY');
+
+	// Update on field
+	birthdayWrong.value = birthday.value.getTime() > Date.now();
+	birthdayCorrect.value = !birthdayWrong.value;
+
+	// Update error state for allowing submit
+	IsBirthdayWrong.value = birthdayWrong.value;
 }
 
 function updateAllowSubmit() {
@@ -71,13 +105,19 @@ function updateAllowSubmit() {
 		IsGenderWrong.value ||
 		IsAgeWrong.value ||
 		IsEmailWrong.value ||
-		IsNumberWrong.value
+		IsNumberWrong.value ||
+		IsBirthdayWrong.value
 	);
 }
 
 function updateShowError() {
 	showError.value =
-		fioWrong.value || genderWrong.value || ageWrong.value || emailWrong.value || numberWrong.value;
+		fioWrong.value ||
+		genderWrong.value ||
+		ageWrong.value ||
+		emailWrong.value ||
+		numberWrong.value ||
+		birthdayWrong.value;
 }
 
 watch(fio, checkFIO);
@@ -85,6 +125,7 @@ watch(gender, checkGender);
 watch(age, checkAge);
 watch(email, checkEmail);
 watch(number, checkNumber);
+watch(birthday, checkBirthday, { deep: true });
 watchEffect(updateAllowSubmit);
 watchEffect(updateShowError);
 
@@ -109,6 +150,7 @@ const formfields = ref([
 		placeholder: 'Введите ФИО',
 		var_ref: fio,
 		wrongValue_ref: fioWrong,
+		correctValue_ref: fioCorrect,
 	},
 	{
 		label: 'Пол',
@@ -120,6 +162,7 @@ const formfields = ref([
 		],
 		var_ref: gender,
 		wrongValue_ref: genderWrong,
+		correctValue_ref: genderCorrect,
 	},
 	{
 		label: 'Возраст',
@@ -133,6 +176,7 @@ const formfields = ref([
 		],
 		var_ref: age,
 		wrongValue_ref: ageWrong,
+		correctValue_ref: ageCorrect,
 	},
 	{
 		label: 'E-mail',
@@ -141,6 +185,7 @@ const formfields = ref([
 		placeholder: 'Введите E-mail',
 		var_ref: email,
 		wrongValue_ref: emailWrong,
+		correctValue_ref: emailCorrect,
 	},
 	{
 		label: 'Номер',
@@ -149,6 +194,7 @@ const formfields = ref([
 		placeholder: 'Введите номер',
 		var_ref: number,
 		wrongValue_ref: numberWrong,
+		correctValue_ref: numberCorrect,
 	},
 	{
 		label: 'День рождения',
@@ -156,13 +202,7 @@ const formfields = ref([
 		name: 'birthday',
 		var_ref: birthday,
 		wrongValue_ref: birthdayWrong,
-	},
-	{
-		label: 'День рождения2',
-		type: 'date',
-		name: 'birthday2',
-		var_ref: ref(new Date(Date.now())),
-		wrongValue_ref: ref(false),
+		correctValue_ref: birthdayCorrect,
 	},
 ]);
 </script>

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router';
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 const route = useRoute();
 
@@ -30,9 +30,9 @@ window.addEventListener('resize', checkBurgerMenu, { passive: true });
 checkBurgerMenu();
 
 const time = ref({
-	sec: 0,
-	min: 0,
-	hour: 0,
+	sec: '',
+	min: '',
+	hour: '',
 	month: '',
 	year: 2025,
 });
@@ -55,15 +55,23 @@ function updateTime() {
 		'Декабрь',
 	];
 
-	time.value.sec = now.getSeconds();
-	time.value.min = now.getMinutes();
-	time.value.hour = now.getHours();
-	time.value.month = months[now.getMonth()];
+	time.value.sec = (now.getSeconds() + '').padStart(2, '0');
+	time.value.min = (now.getMinutes() + '').padStart(2, '0');
+	time.value.hour = (now.getHours() + '').padStart(2, '0');
+	time.value.month = (months[now.getMonth()] + '').padStart(2, '0');
 	time.value.year = now.getFullYear();
 }
-
-setInterval(updateTime.bind(this), 1000);
 updateTime();
+
+let timerId;
+
+onMounted(() => {
+	timerId = setInterval(updateTime.bind(this), 1000);
+});
+
+onBeforeUnmount(() => {
+	clearInterval(timerId);
+});
 </script>
 
 <template>
@@ -100,8 +108,11 @@ updateTime();
 			>
 				<RouterLink
 					:to="button.route"
-					:class="{ 'border-4': button.currentPage() }"
-					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear hover:bg-neutral-500"
+					:class="{
+						'border-4': button.currentPage(),
+						'hover:bg-neutral-500': !button.currentPage(),
+					}"
+					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear"
 				>
 					{{ button.text }}
 				</RouterLink>

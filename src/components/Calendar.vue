@@ -9,7 +9,7 @@ const date = defineModel({
 	default: new Date(Date.now()),
 });
 
-const emit = defineEmits(['selectDate']);
+const emit = defineEmits(['updateDate', 'selectDate']);
 
 const day_in_week = 7;
 const week_cnt = 6;
@@ -64,6 +64,7 @@ function addMonth(val) {
 	date.value.setMonth(month);
 
 	triggerRef(date); // it's necessary, because of deep of Date type
+	emit('updateDate');
 }
 
 function addYear(val) {
@@ -71,6 +72,7 @@ function addYear(val) {
 	date.value.setFullYear(year);
 
 	triggerRef(date); // it's necessary, because of deep of Date type
+	emit('updateDate');
 }
 
 function getDate(day, week) {
@@ -85,6 +87,7 @@ function setDate(day, week) {
 	date.value.setDate(cur_date);
 
 	triggerRef(date); // it's necessary, because of deep of Date type
+	emit('updateDate');
 }
 </script>
 
@@ -113,10 +116,10 @@ function setDate(day, week) {
 					{{ day }}
 				</div>
 			</div>
-			<div v-for="week in day_in_week" :key="week" class="flex space-x-2">
+			<div v-for="week in week_cnt" :key="week" class="flex space-x-2">
 				<div
 					v-if="getDate(1, week) || getDate(7, week)"
-					v-for="day in 7"
+					v-for="day in day_in_week"
 					:key="day"
 					:class="{
 						'bg-neutral-400/90': getDate(day, week) == date.getDate(),
@@ -125,7 +128,7 @@ function setDate(day, week) {
 					@click="setDate(day, week)"
 					@dblclick="
 						setDate(day, week);
-						emit('selectDate', date);
+						emit('selectDate');
 					"
 				>
 					{{ getDate(day, week) || '' }}
