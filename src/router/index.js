@@ -38,6 +38,11 @@ const router = createRouter({
 			name: 'MathTest',
 			component: () => import('@/views/MathTest.vue'),
 		},
+		{
+			path: '/history',
+			name: 'History',
+			component: () => import('@/views/History.vue'),
+		},
 	],
 });
 

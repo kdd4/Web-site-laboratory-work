@@ -138,9 +138,9 @@ function formSubmit(event) {
 	});
 }
 
-const formdata = {
+const formdata = ref({
 	allowSubmit: allowSubmit,
-};
+});
 
 const formfields = ref([
 	{
@@ -209,7 +209,7 @@ const formfields = ref([
 
 <template>
 	<main class="flex flex-col items-center justify-center space-y-3">
-		<h2 class="mb-8 text-center text-2xl not-md:text-xl">Контакт</h2>
+		<h2 class="mb-8 text-center text-2xl font-bold not-md:text-xl">Контакт</h2>
 		<Form id="form" :fields="formfields" :formdata="formdata" @submit="formSubmit" />
 		<div
 			v-show="showError"

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue';
 
 const route = useRoute();
 
@@ -16,6 +16,7 @@ const navigation_buttons = ref([
 	{ route: '/photoalbum', text: 'Фотоальбом', currentPage: isCurrentPage },
 	{ route: '/contact', text: 'Контакт', currentPage: isCurrentPage },
 	{ route: '/test', text: 'Тест по дисциплине', currentPage: isCurrentPage },
+	{ route: '/history', text: 'История просмотра', currentPage: isCurrentPage },
 ]);
 
 const isBurgerMenu = ref(false);
@@ -23,7 +24,7 @@ const isBurgerMenuOpened = ref(false);
 
 function checkBurgerMenu(event) {
 	isBurgerMenuOpened.value = false;
-	isBurgerMenu.value = window.innerWidth <= 600; // px
+	isBurgerMenu.value = window.innerWidth <= 650; // px
 }
 
 window.addEventListener('resize', checkBurgerMenu, { passive: true });
@@ -58,7 +59,7 @@ function updateTime() {
 	time.value.sec = (now.getSeconds() + '').padStart(2, '0');
 	time.value.min = (now.getMinutes() + '').padStart(2, '0');
 	time.value.hour = (now.getHours() + '').padStart(2, '0');
-	time.value.month = (months[now.getMonth()] + '').padStart(2, '0');
+	time.value.month = months[now.getMonth()];
 	time.value.year = now.getFullYear();
 }
 updateTime();
@@ -91,7 +92,7 @@ onBeforeUnmount(() => {
 		/>
 		<h1
 			v-if="!isBurgerMenu"
-			class="mx-2 grow-0 font-serif text-3xl font-bold text-white transition-all duration-1000 ease-in-out hover:rotate-30"
+			class="mx-2 grow-0 font-serif text-3xl font-bold text-white transition-all duration-1000 ease-in-out select-none hover:rotate-30"
 		>
 			LW3
 		</h1>
@@ -112,13 +113,13 @@ onBeforeUnmount(() => {
 						'border-4': button.currentPage(),
 						'hover:bg-neutral-500': !button.currentPage(),
 					}"
-					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear"
+					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none"
 				>
 					{{ button.text }}
 				</RouterLink>
 			</li>
 		</ul>
-		<div v-if="!isBurgerMenu" class="p-1 font-serif whitespace-break-spaces text-white">
+		<div v-if="!isBurgerMenu" class="mr-1 p-1 font-serif whitespace-break-spaces text-white">
 			{{ time.hour }}:{{ time.min }}:{{ time.sec }} {{ time.month }} {{ time.year }}
 		</div>
 	</header>

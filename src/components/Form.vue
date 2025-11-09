@@ -37,13 +37,13 @@ function closeCalendar() {
 		watchCalendar = null;
 	}
 
-	showCalendar.value = false;
+	if (showCalendar.value) showCalendar.value = false;
 }
 </script>
 
 <template>
 	<form
-		class="flex flex-col space-y-3 rounded-lg border-2 border-neutral-400/30 bg-neutral-300 p-2"
+		class="flex flex-col space-y-3 rounded-lg border-2 border-neutral-400/30 bg-neutral-300 p-2 py-3"
 		action=""
 		method="Post"
 		enctype="text/plain"
@@ -59,7 +59,7 @@ function closeCalendar() {
 			<h3 v-if="field.header !== undefined">{{ field.header }}</h3>
 			<p v-if="field.text !== undefined" class="mb-3">{{ field.text }}</p>
 			<div class="flex">
-				<label v-if="field.label !== undefined" class="mr-1 whitespace-nowrap"
+				<label v-if="field.label !== undefined" class="mr-1 whitespace-nowrap select-none"
 					>{{ field.label }}:</label
 				>
 				<input
@@ -74,6 +74,7 @@ function closeCalendar() {
 						'bg-red-400': field.wrongValue_ref,
 					}"
 					class="w-full rounded-sm border border-neutral-400"
+					@click="closeCalendar"
 				/>
 
 				<div
@@ -85,13 +86,18 @@ function closeCalendar() {
 					class="flex w-full justify-evenly space-x-3 rounded-sm"
 				>
 					<div v-for="(option, opt_ind) in field.options" :key="opt_ind">
-						<label v-if="option.text !== undefined" v-html="option.text"></label>
+						<label
+							v-if="option.text !== undefined"
+							v-html="option.text"
+							class="select-none"
+						></label>
 						<input
 							type="radio"
 							:name="field.name"
 							:value="option.value"
 							v-model="field.var_ref"
 							class="accent-purple-500"
+							@click="closeCalendar"
 						/>
 					</div>
 				</div>
@@ -113,6 +119,7 @@ function closeCalendar() {
 						:key="sel_ind"
 						:disabled="option.disabled"
 						:value="option.value"
+						@click="closeCalendar"
 					>
 						{{ option.text }}
 					</option>
