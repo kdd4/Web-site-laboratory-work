@@ -1,9 +1,11 @@
 <script setup>
-import { ref, toValue, triggerRef, onMounted, watchEffect } from 'vue';
+import { ref, toValue, triggerRef, watchEffect } from 'vue';
 
 const { show = ref(true) } = defineProps({
 	show: Boolean,
 });
+
+//show.value = true;
 
 const date = defineModel({
 	default: new Date(Date.now()),

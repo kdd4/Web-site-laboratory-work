@@ -92,8 +92,8 @@ const formfields = ref([
 		type: 'text',
 		name: 'question1',
 		placeholder: 'Введите ответ',
-		var_ref: answer1,
-		wrongValue_ref: showWrongAnswer1,
+		fieldValue: answer1,
+		hasError: showWrongAnswer1,
 	},
 	{
 		header: '2-й вопрос',
@@ -104,8 +104,8 @@ const formfields = ref([
 			{ text: 'r<sup>2</sup>sin &#952;', value: 'r2 sin tetta' },
 			{ text: 'r<sup>2</sup>cos &#952;', value: 'r2 cos tetta' },
 		],
-		var_ref: answer2,
-		wrongValue_ref: showWrongAnswer2,
+		fieldValue: answer2,
+		hasError: showWrongAnswer2,
 	},
 	{
 		header: '3-й вопрос',
@@ -122,8 +122,8 @@ const formfields = ref([
 			},
 			{ value: 'var3', text: 'Транспонировать матрицу', disabled: false },
 		],
-		var_ref: answer3,
-		wrongValue_ref: showWrongAnswer3,
+		fieldValue: answer3,
+		hasError: showWrongAnswer3,
 	},
 ]);
 </script>

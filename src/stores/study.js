@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 export const useStudyStore = defineStore('study', () => {
 	const hUniversity = ref('ФГАОУ Севастопольский государственный университет');
-	const hFaculty = ref('ВШИ "СПИ". Факультет информационных технологий');
+	const hFaculty = ref('ВТШ "СПИ". Факультет информационных технологий');
 
 	const tableHead = ref([
 		[{ text: 'ПЛАН УЧЕБНОГО ПРОЦЕССА', colspan: 9 }],
