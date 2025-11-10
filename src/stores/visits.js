@@ -1,4 +1,4 @@
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useVisitsStore = defineStore('visits', () => {
@@ -6,11 +6,11 @@ export const useVisitsStore = defineStore('visits', () => {
 	const visitsSession = ref({});
 
 	function loadVisits() {
-		let json_visits = document.cookie.match(/visits=(.+?)(?:;|$)/)[1];
-
-		if (!json_visits) return;
-
 		try {
+			let json_visits = document.cookie.match(/visits=(.+?)(?:;|$)/)[1];
+
+			if (!json_visits) return;
+
 			visits.value = JSON.parse(decodeURIComponent(json_visits));
 		} catch (error) {
 			console.warn('Visits in cookie getting error');
@@ -87,5 +87,5 @@ export const useVisitsStore = defineStore('visits', () => {
 	loadVisits();
 	loadVisitsSession();
 
-	return { visitPage, visits, visitsSession, getVisits, getVisitsSession };
+	return { visitPage, getVisits, getVisitsSession };
 });

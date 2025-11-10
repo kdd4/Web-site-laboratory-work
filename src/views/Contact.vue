@@ -89,8 +89,6 @@ function checkNumber() {
 }
 
 function checkBirthday() {
-	console.log('CHECK BIRTHDAY');
-
 	// Update on field
 	birthdayWrong.value = birthday.value.getTime() > Date.now();
 	birthdayCorrect.value = !birthdayWrong.value;
@@ -138,9 +136,9 @@ function formSubmit(event) {
 	});
 }
 
-const formdata = ref({
+const formdata = {
 	allowSubmit: allowSubmit,
-});
+};
 
 const formfields = ref([
 	{

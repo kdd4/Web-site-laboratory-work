@@ -17,5 +17,3 @@ watch(route, () => visitsStore.visitPage(route.path));
 
 	<RouterView />
 </template>
-
-<style scoped></style>

@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { useMainStore } from '@/stores/main';
+import { storeToRefs } from 'pinia';
 
-const headers = ref([
-	{ text: 'Камышов\nДаниил\nДенисович', class: 'order-1' },
-	{ text: 'ИС/б-23-2-о\nЛаборатороная работа №3', class: 'order-3' },
-]);
+const mainStore = useMainStore();
+const { headers } = storeToRefs(mainStore);
 </script>
 
 <template>

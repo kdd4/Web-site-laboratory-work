@@ -1,23 +1,12 @@
 <script setup>
-import { RouterLink, useRoute } from 'vue-router';
-import { ref, onMounted, onBeforeUnmount, watchEffect } from 'vue';
+import { RouterLink } from 'vue-router';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-const route = useRoute();
+import { usePagesStore } from '@/stores/pages';
+import { storeToRefs } from 'pinia';
 
-function isCurrentPage() {
-	return this.route == route.path;
-}
-
-const navigation_buttons = ref([
-	{ route: '/', text: 'Главная', currentPage: isCurrentPage },
-	{ route: '/aboutme', text: 'Обо мне', currentPage: isCurrentPage },
-	{ route: '/myinterests', text: 'Мои интересы', currentPage: isCurrentPage },
-	{ route: '/study', text: 'Учеба', currentPage: isCurrentPage },
-	{ route: '/photoalbum', text: 'Фотоальбом', currentPage: isCurrentPage },
-	{ route: '/contact', text: 'Контакт', currentPage: isCurrentPage },
-	{ route: '/test', text: 'Тест по дисциплине', currentPage: isCurrentPage },
-	{ route: '/history', text: 'История просмотра', currentPage: isCurrentPage },
-]);
+const pagesStore = usePagesStore();
+const { pages: navigation_buttons } = storeToRefs(pagesStore);
 
 const isBurgerMenu = ref(false);
 const isBurgerMenuOpened = ref(false);
@@ -110,8 +99,8 @@ onBeforeUnmount(() => {
 				<RouterLink
 					:to="button.route"
 					:class="{
-						'border-4': button.currentPage(),
-						'hover:bg-neutral-500': !button.currentPage(),
+						'border-4': button.isCurrentPage(),
+						'hover:bg-neutral-500': !button.isCurrentPage(),
 					}"
 					class="rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none"
 				>
