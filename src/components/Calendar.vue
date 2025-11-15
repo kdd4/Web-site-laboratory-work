@@ -5,8 +5,6 @@ const { show = ref(true) } = defineProps({
 	show: Boolean,
 });
 
-//show.value = true;
-
 const date = defineModel({
 	default: new Date(Date.now()),
 });
