@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 
 export const useContactStore = defineStore('contact', () => {
+	const showError = ref(false);
+	const allowSubmit = ref(false);
+
+	const formdata = ref({
+		allowSubmit: allowSubmit,
+	});
+
 	const fields = ref({
 		fio: {
 			label: 'ФИО',
@@ -66,5 +73,79 @@ export const useContactStore = defineStore('contact', () => {
 		},
 	});
 
-	return { fields };
+	function checkFIO() {
+		let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/;
+
+		fields.value.fio.hasError = !fio_re.test(fields.value.fio.fieldValue);
+		fields.value.fio.isCorrect = !fields.value.fio.hasError;
+	}
+
+	function checkGender() {
+		fields.value.gender.hasError = !fields.value.gender.fieldValue;
+		fields.value.gender.isCorrect = !fields.value.gender.hasError;
+	}
+
+	function checkAge() {
+		fields.value.age.hasError = !fields.value.age.fieldValue;
+		fields.value.age.isCorrect = !fields.value.age.hasError;
+	}
+
+	function checkEmail() {
+		let email_re = /^\w+@\w+.\w{2,}$/;
+
+		fields.value.email.hasError = !email_re.test(fields.value.email.fieldValue);
+		fields.value.email.isCorrect = !fields.value.email.hasError;
+	}
+
+	function checkNumber() {
+		let number_re = /^\+7|3\d{8,10}$/;
+
+		fields.value.number.hasError = !number_re.test(fields.value.number.fieldValue);
+		fields.value.number.isCorrect = !fields.value.number.hasError;
+	}
+
+	function checkBirthday() {
+		fields.value.birthday.hasError = fields.value.birthday.fieldValue.getTime() > Date.now();
+		fields.value.birthday.isCorrect = !fields.value.birthday.hasError;
+	}
+
+	function updateAllowSubmit() {
+		allowSubmit.value =
+			fields.value.fio.isCorrect &&
+			fields.value.gender.isCorrect &&
+			fields.value.age.isCorrect &&
+			fields.value.email.isCorrect &&
+			fields.value.number.isCorrect &&
+			fields.value.birthday.isCorrect;
+	}
+
+	function updateShowError() {
+		showError.value =
+			fields.value.fio.hasError ||
+			fields.value.gender.hasError ||
+			fields.value.age.hasError ||
+			fields.value.email.hasError ||
+			fields.value.number.hasError ||
+			fields.value.birthday.hasError;
+	}
+
+	watch(() => fields.value.fio.fieldValue, checkFIO);
+	watch(() => fields.value.gender.fieldValue, checkGender);
+	watch(() => fields.value.age.fieldValue, checkAge);
+	watch(() => fields.value.email.fieldValue, checkEmail);
+	watch(() => fields.value.number.fieldValue, checkNumber);
+	watch(() => fields.value.birthday.fieldValue, checkBirthday);
+	watchEffect(updateAllowSubmit);
+	watchEffect(updateShowError);
+
+	function formSubmit() {
+		let form = document.getElementById('form');
+
+		fetch('/api', {
+			method: 'POST',
+			body: new FormData(form),
+		});
+	}
+
+	return { fields, showError, formdata, formSubmit };
 });

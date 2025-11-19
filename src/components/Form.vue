@@ -1,13 +1,13 @@
 <script setup>
-import { ref, toValue, watch } from 'vue';
+import { ref, toValue, watch, toRefs } from 'vue';
 import Calendar from '@/components/Calendar.vue';
 
-const { fields = [], formdata = {} } = defineProps({
+const { fields = [], formdata = ref({}) } = defineProps({
 	fields: Object,
 	formdata: Object,
 });
 
-const { allowSubmit = true, reset = false } = formdata;
+const { allowSubmit = ref(true), reset = ref(false) } = toRefs(formdata);
 
 defineEmits(['submit', 'reset']);
 
