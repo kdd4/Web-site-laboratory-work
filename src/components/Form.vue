@@ -39,6 +39,11 @@ function closeCalendar() {
 
 	if (showCalendar.value) showCalendar.value = false;
 }
+
+const calendarDate = ref({
+	show: showCalendar,
+	date: dateCalendar,
+});
 </script>
 
 <template>
@@ -164,10 +169,5 @@ function closeCalendar() {
 			/>
 		</div>
 	</form>
-	<Calendar
-		:show="showCalendar"
-		v-model="dateCalendar"
-		@updateDate="dateCalendar = new Date(dateCalendar)"
-		@selectDate="closeCalendar"
-	/>
+	<Calendar :calendarDate="calendarDate" @selectDate="closeCalendar" />
 </template>

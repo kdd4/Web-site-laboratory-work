@@ -1,15 +1,13 @@
 <script setup>
-import { ref, toValue, triggerRef, watchEffect } from 'vue';
+import { ref, toRefs, toValue, watchEffect } from 'vue';
 
-const { show = ref(true) } = defineProps({
-	show: Boolean,
+const { calendarDate = {} } = defineProps({
+	calendarDate: Object,
 });
 
-const date = defineModel({
-	default: new Date(Date.now()),
-});
+const { show = ref(true), date = ref(new Date(Date.now())) } = toRefs(calendarDate);
 
-const emit = defineEmits(['updateDate', 'selectDate']);
+const emit = defineEmits(['selectDate']);
 
 const day_in_week = 7;
 const week_cnt = 6;
@@ -52,27 +50,29 @@ function updateWeeks() {
 watchEffect(updateWeeks);
 
 function addMonth(val) {
-	let month = date.value.getMonth() + val;
+	let new_date = new Date(date.value);
 
-	let year = date.value.getFullYear();
+	let month = new_date.getMonth() + val;
+
+	let year = new_date.getFullYear();
 	if (month > 11) {
-		date.value.setFullYear(year + 1);
+		new_date.setFullYear(year + 1);
 	} else if (month < 0) {
-		date.value.setFullYear(year - 1);
+		new_date.setFullYear(year - 1);
 	}
 	month = (month + 12) % 12;
-	date.value.setMonth(month);
+	new_date.setMonth(month);
 
-	triggerRef(date); // it's necessary, because of deep of Date type
-	emit('updateDate');
+	date.value = new_date;
 }
 
 function addYear(val) {
-	let year = date.value.getFullYear() + val;
-	date.value.setFullYear(year);
+	let new_date = new Date(date.value);
 
-	triggerRef(date); // it's necessary, because of deep of Date type
-	emit('updateDate');
+	let year = new_date.getFullYear() + val;
+	new_date.setFullYear(year);
+
+	date.value = new_date;
 }
 
 function getDate(day, week) {
@@ -84,10 +84,10 @@ function setDate(day, week) {
 
 	if (!cur_date) return;
 
-	date.value.setDate(cur_date);
+	let new_date = new Date(date.value);
+	new_date.setDate(cur_date);
 
-	triggerRef(date); // it's necessary, because of deep of Date type
-	emit('updateDate');
+	date.value = new_date;
 }
 </script>
 
