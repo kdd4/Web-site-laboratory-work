@@ -1,12 +1,9 @@
 <script setup>
-import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useStudyStore } from '@/stores/study';
 
 const studyStore = useStudyStore();
-const { hUniversity, hFaculty, tableHead, tableBody } = storeToRefs(studyStore);
-
-const cellClasses = ref('border md:p-0.5 border-gray-600');
+const { hUniversity, hFaculty, tableHead, tableBody, cellClasses } = storeToRefs(studyStore);
 </script>
 
 <template>

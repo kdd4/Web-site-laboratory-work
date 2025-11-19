@@ -1,33 +1,20 @@
 <script setup>
-import { ref, toRefs, toValue, watchEffect } from 'vue';
+import { useCalendarStore } from '@/stores/calendar';
+import { storeToRefs } from 'pinia';
+import { watchEffect, toRefs } from 'vue';
+
+const calendarStore = useCalendarStore();
+
+const { weeks } = storeToRefs(calendarStore);
+const { day_in_week, week_cnt, day_of_week, months, getDate } = calendarStore;
 
 const { calendarDate = {} } = defineProps({
 	calendarDate: Object,
 });
 
-const { show = ref(true), date = ref(new Date(Date.now())) } = toRefs(calendarDate);
-
 const emit = defineEmits(['selectDate']);
 
-const day_in_week = 7;
-const week_cnt = 6;
-const day_of_week = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-const months = [
-	'Январь',
-	'Февраль',
-	'Март',
-	'Апрель',
-	'Май',
-	'Июнь',
-	'Июль',
-	'Август',
-	'Сентябрь',
-	'Октябрь',
-	'Ноябрь',
-	'Декабрь',
-];
-
-const weeks = ref(new Array(day_in_week * week_cnt));
+const { show = ref(true), date = ref(new Date(Date.now())) } = toRefs(calendarDate);
 
 function updateWeeks() {
 	let copyDate = new Date(date.value.getTime());
@@ -46,8 +33,6 @@ function updateWeeks() {
 		weeks.value[day - 1 + dayOfWeek] = day + 1;
 	}
 }
-
-watchEffect(updateWeeks);
 
 function addMonth(val) {
 	let new_date = new Date(date.value);
@@ -75,10 +60,6 @@ function addYear(val) {
 	date.value = new_date;
 }
 
-function getDate(day, week) {
-	return weeks.value[day - 1 + (week - 1) * day_in_week];
-}
-
 function setDate(day, week) {
 	let cur_date = getDate(day, week);
 
@@ -89,11 +70,15 @@ function setDate(day, week) {
 
 	date.value = new_date;
 }
+
+watchEffect(updateWeeks);
+
+console.log(date);
 </script>
 
 <template>
 	<div
-		v-if="toValue(show)"
+		v-if="show"
 		class="max-w-2xl space-y-3 rounded-sm border border-neutral-400/30 bg-neutral-300 p-2"
 		v-bind="$attrs"
 	>
@@ -102,7 +87,7 @@ function setDate(day, week) {
 			<div class="flex space-x-2 select-none">
 				<div @click="addMonth(-1)" class="p-0.5">&lt;</div>
 				<div @click="addYear(-1)" class="rotate-90 p-0.5">&gt;</div>
-				<div @click="addYear(+1)" class="rotate-90 p-0.5">&lt;</div>
+				<div @click="addYear(1)" class="rotate-90 p-0.5">&lt;</div>
 				<div @click="addMonth(1)" class="p-0.5">&gt;</div>
 			</div>
 		</div>

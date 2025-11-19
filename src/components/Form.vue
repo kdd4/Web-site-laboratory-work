@@ -1,6 +1,8 @@
 <script setup>
 import { ref, toValue, watch, toRefs } from 'vue';
 import Calendar from '@/components/Calendar.vue';
+import { useFormCalendar } from '@/stores/formCalendar';
+import { storeToRefs } from 'pinia';
 
 const { fields = [], formdata = ref({}) } = defineProps({
 	fields: Object,
@@ -11,39 +13,10 @@ const { allowSubmit = ref(true), reset = ref(false) } = toRefs(formdata);
 
 defineEmits(['submit', 'reset']);
 
-const showCalendar = ref(false);
-const dateCalendar = ref(new Date(Date.now()));
-let watchCalendar = null;
+const formCalendarState = useFormCalendar();
 
-function useCalendar(field) {
-	if (watchCalendar) {
-		watchCalendar.stop();
-		watchCalendar = null;
-	}
-
-	if (showCalendar.value) {
-		showCalendar.value = false;
-		return;
-	}
-
-	watchCalendar = watch(dateCalendar, () => (field.fieldValue = dateCalendar.value));
-
-	showCalendar.value = true;
-}
-
-function closeCalendar() {
-	if (watchCalendar) {
-		watchCalendar.stop();
-		watchCalendar = null;
-	}
-
-	if (showCalendar.value) showCalendar.value = false;
-}
-
-const calendarDate = ref({
-	show: showCalendar,
-	date: dateCalendar,
-});
+const { calendarDate } = storeToRefs(formCalendarState);
+const { useCalendar, closeCalendar } = formCalendarState;
 </script>
 
 <template>
@@ -142,7 +115,7 @@ const calendarDate = ref({
 						'bg-red-400': field.hasError,
 						'bg-green-400': field.isCorrect && !field.hasError,
 					}"
-					class="w-full rounded-sm border border-neutral-400 text-center"
+					class="w-full rounded-sm border border-neutral-400 text-center select-none"
 					@click="useCalendar(field)"
 				>
 					<input type="hidden" :name="field.name" v-model="field.fieldValue" />

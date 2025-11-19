@@ -48,7 +48,7 @@ const wrongAnswer3 = computed(() => !answer3.value);
 
 // Is correct current answer
 const correctAnswer1 = computed(
-	() => !wrongAnswer1.value && Math.abs(answer1.value - rightAnswers.answer1) <= 0.1,
+	() => !wrongAnswer1.value && Math.abs(answer1.value - rightAnswers.answer1) < 0.01,
 );
 const correctAnswer2 = computed(() => !wrongAnswer2.value && answer2.value == rightAnswers.answer2);
 const correctAnswer3 = computed(() => !wrongAnswer3.value && answer3.value == rightAnswers.answer3);

@@ -84,5 +84,8 @@ export const useStudyStore = defineStore('study', () => {
 			hours: [216, 104, 52, 35, 17, 112],
 		},
 	]);
-	return { hUniversity, hFaculty, tableHead, tableBody };
+
+	const cellClasses = ref('border md:p-0.5 border-gray-600');
+
+	return { hUniversity, hFaculty, tableHead, tableBody, cellClasses };
 });
