@@ -1,8 +1,7 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
+import { computed } from 'vue';
 import { useVisitsStore } from '@/stores/visits';
 import { usePagesStore } from '@/stores/pages';
-import { computed } from 'vue';
-import { storeToRefs } from 'pinia';
 
 export const useHistoryStore = defineStore('history', () => {
 	const visitStore = useVisitsStore();

@@ -1,8 +1,8 @@
 <script setup>
+import { storeToRefs } from 'pinia';
 import { ref, toValue, toRefs } from 'vue';
 import Calendar from '@/components/CalendarBlock.vue';
 import { useFormCalendar } from '@/stores/formCalendar';
-import { storeToRefs } from 'pinia';
 
 const { fields = ref([]), formdata = ref({}) } = defineProps({
 	fields: Object,
@@ -13,10 +13,10 @@ const { allowSubmit = ref(true), reset = ref(false) } = toRefs(formdata);
 
 defineEmits(['submit', 'reset']);
 
-const formCalendarState = useFormCalendar();
+const formCalendarStore = useFormCalendar();
 
-const { calendarDate } = storeToRefs(formCalendarState);
-const { useCalendar, closeCalendar } = formCalendarState;
+const { calendarDate } = storeToRefs(formCalendarStore);
+const { useCalendar, closeCalendar } = formCalendarStore;
 </script>
 
 <template>

@@ -82,7 +82,6 @@ export const useMathTestStore = defineStore('mathTest', () => {
 				let value = field.fieldValue - 0;
 
 				wrong ||= isNaN(value);
-
 				correctAnswers &&= Math.abs(field.rightAnswer - value) < 0.01;
 			} else {
 				correctAnswers &&= field.rightAnswer == field.fieldValue;

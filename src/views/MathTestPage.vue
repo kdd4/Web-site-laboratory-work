@@ -1,12 +1,12 @@
 <script setup>
-import Form from '@/components/FormBlock.vue';
-import { useMathTestStore } from '@/stores/mathTest';
 import { storeToRefs } from 'pinia';
+import { useMathTestStore } from '@/stores/mathTest';
+import Form from '@/components/FormBlock.vue';
 
-const mathTestState = useMathTestStore();
+const mathTestStore = useMathTestStore();
 
-const { formdata, formfields, messages } = storeToRefs(mathTestState);
-const { checkTest, resetTest } = mathTestState;
+const { formdata, formfields, messages } = storeToRefs(mathTestStore);
+const { checkTest, resetTest } = mathTestStore;
 </script>
 
 <template>

@@ -1,67 +1,15 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-
-import { usePagesStore } from '@/stores/pages';
 import { storeToRefs } from 'pinia';
+import { onMounted, onBeforeUnmount } from 'vue';
+import { useNavigationStore } from '@/stores/navigation';
 
-const pagesStore = usePagesStore();
-const { pages: navigation_buttons } = storeToRefs(pagesStore);
+const navigationStore = useNavigationStore();
 
-const isBurgerMenu = ref(false);
-const isBurgerMenuOpened = ref(false);
+const { navigation_buttons, isBurgerMenu, isBurgerMenuOpened, time } = storeToRefs(navigationStore);
+const { runTime, stopTime } = navigationStore;
 
-function checkBurgerMenu() {
-	isBurgerMenuOpened.value = false;
-	isBurgerMenu.value = window.innerWidth <= 650; // px
-}
-
-window.addEventListener('resize', checkBurgerMenu, { passive: true });
-checkBurgerMenu();
-
-const time = ref({
-	sec: '',
-	min: '',
-	hour: '',
-	month: '',
-	year: 2025,
-});
-
-function updateTime() {
-	let now = new Date(Date.now());
-
-	const months = [
-		'Январь',
-		'Февраль',
-		'Март',
-		'Апрель',
-		'Май',
-		'Июнь',
-		'Июль',
-		'Август',
-		'Сентябрь',
-		'Октябрь',
-		'Ноябрь',
-		'Декабрь',
-	];
-
-	time.value.sec = (now.getSeconds() + '').padStart(2, '0');
-	time.value.min = (now.getMinutes() + '').padStart(2, '0');
-	time.value.hour = (now.getHours() + '').padStart(2, '0');
-	time.value.month = months[now.getMonth()];
-	time.value.year = now.getFullYear();
-}
-updateTime();
-
-let timerId;
-
-onMounted(() => {
-	timerId = setInterval(updateTime.bind(this), 1000);
-});
-
-onBeforeUnmount(() => {
-	clearInterval(timerId);
-});
+onMounted(runTime);
+onBeforeUnmount(stopTime);
 </script>
 
 <template>

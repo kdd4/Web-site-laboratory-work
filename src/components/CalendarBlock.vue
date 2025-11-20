@@ -1,12 +1,13 @@
 <script setup>
-import { useCalendarStore } from '@/stores/calendar';
-import { storeToRefs } from 'pinia';
 import { ref, watchEffect, toRefs } from 'vue';
+import { useCalendarStore } from '@/stores/calendar';
+import { useDatesStore } from '@/stores/dates';
 
 const calendarStore = useCalendarStore();
+const datesStore = useDatesStore();
 
-const { weeks } = storeToRefs(calendarStore);
-const { day_in_week, week_cnt, day_of_week, months, getDate } = calendarStore;
+const { updateWeeks, getDate, addMonth, addYear, setDate } = calendarStore;
+const { day_in_week, week_cnt, day_of_week, months } = datesStore;
 
 const { calendarDate = {} } = defineProps({
 	calendarDate: Object,
@@ -16,62 +17,7 @@ const emit = defineEmits(['selectDate']);
 
 const { show = ref(true), date = ref(new Date(Date.now())) } = toRefs(calendarDate);
 
-function updateWeeks() {
-	let copyDate = new Date(date.value.getTime());
-
-	copyDate.setDate(1);
-	let dayOfWeek = ((copyDate.getDay() + 6) % 7) + 1;
-
-	copyDate.setMonth((copyDate.getMonth() + 1) % 12);
-	copyDate.setDate(0);
-	let daysInMonth = copyDate.getDate();
-
-	// fill array with 0
-	weeks.value.fill(0);
-
-	for (let day = 0; day < daysInMonth; day++) {
-		weeks.value[day - 1 + dayOfWeek] = day + 1;
-	}
-}
-
-function addMonth(val) {
-	let new_date = new Date(date.value);
-
-	let month = new_date.getMonth() + val;
-
-	let year = new_date.getFullYear();
-	if (month > 11) {
-		new_date.setFullYear(year + 1);
-	} else if (month < 0) {
-		new_date.setFullYear(year - 1);
-	}
-	month = (month + 12) % 12;
-	new_date.setMonth(month);
-
-	date.value = new_date;
-}
-
-function addYear(val) {
-	let new_date = new Date(date.value);
-
-	let year = new_date.getFullYear() + val;
-	new_date.setFullYear(year);
-
-	date.value = new_date;
-}
-
-function setDate(day, week) {
-	let cur_date = getDate(day, week);
-
-	if (!cur_date) return;
-
-	let new_date = new Date(date.value);
-	new_date.setDate(cur_date);
-
-	date.value = new_date;
-}
-
-watchEffect(updateWeeks);
+watchEffect(() => updateWeeks(date.value));
 </script>
 
 <template>
@@ -83,10 +29,10 @@ watchEffect(updateWeeks);
 		<div class="flex justify-between">
 			<div>{{ months[date.getMonth()] }} {{ date.getFullYear() }}</div>
 			<div class="flex space-x-2 select-none">
-				<div @click="addMonth(-1)" class="p-0.5">&lt;</div>
-				<div @click="addYear(-1)" class="rotate-90 p-0.5">&gt;</div>
-				<div @click="addYear(1)" class="rotate-90 p-0.5">&lt;</div>
-				<div @click="addMonth(1)" class="p-0.5">&gt;</div>
+				<div @click="date = addMonth(date, -1)" class="p-0.5">&lt;</div>
+				<div @click="date = addYear(date, -1)" class="rotate-90 p-0.5">&gt;</div>
+				<div @click="date = addYear(date, 1)" class="rotate-90 p-0.5">&lt;</div>
+				<div @click="date = addMonth(date, 1)" class="p-0.5">&gt;</div>
 			</div>
 		</div>
 		<div class="space-y-2">
@@ -108,11 +54,8 @@ watchEffect(updateWeeks);
 							'bg-neutral-400/90': getDate(day, week) == date.getDate(),
 						}"
 						class="w-full rounded-lg bg-neutral-400/30 p-0.5 text-center select-none"
-						@click="setDate(day, week)"
-						@dblclick="
-							setDate(day, week);
-							emit('selectDate');
-						"
+						@click="date = setDate(date, day, week)"
+						@dblclick="emit('selectDate')"
 					>
 						{{ getDate(day, week) || '' }}
 					</div>

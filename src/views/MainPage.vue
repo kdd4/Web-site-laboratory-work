@@ -1,6 +1,6 @@
 <script setup>
-import { useMainStore } from '@/stores/main';
 import { storeToRefs } from 'pinia';
+import { useMainStore } from '@/stores/main';
 
 const mainStore = useMainStore();
 const { headers } = storeToRefs(mainStore);

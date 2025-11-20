@@ -52,5 +52,6 @@ export const useMyInterestsStore = defineStore('myInterests', () => {
 			opened: false,
 		},
 	]);
+
 	return { blocks };
 });

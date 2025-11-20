@@ -1,6 +1,6 @@
 <script setup>
-import { useHistoryStore } from '@/stores/history';
 import { storeToRefs } from 'pinia';
+import { useHistoryStore } from '@/stores/history';
 
 const historyStore = useHistoryStore();
 const { visitsTable } = storeToRefs(historyStore);

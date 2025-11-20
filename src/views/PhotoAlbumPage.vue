@@ -1,6 +1,6 @@
 <script setup>
-import { usePhotoAlbumStore } from '@/stores/photoAlbum';
 import { storeToRefs } from 'pinia';
+import { usePhotoAlbumStore } from '@/stores/photoAlbum';
 
 const photoAlbumStore = usePhotoAlbumStore();
 const { hideImg, showImg } = photoAlbumStore;

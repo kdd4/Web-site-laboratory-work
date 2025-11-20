@@ -1,6 +1,6 @@
 <script setup>
-import { useMyInterestsStore } from '@/stores/myInterests';
 import { storeToRefs } from 'pinia';
+import { useMyInterestsStore } from '@/stores/myInterests';
 
 const myInterestsStore = useMyInterestsStore();
 const { blocks } = storeToRefs(myInterestsStore);

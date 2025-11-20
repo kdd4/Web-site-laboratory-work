@@ -1,7 +1,7 @@
 <script setup>
-import Form from '@/components/FormBlock.vue';
-import { useContactStore } from '@/stores/contact';
 import { storeToRefs } from 'pinia';
+import { useContactStore } from '@/stores/contact';
+import Form from '@/components/FormBlock.vue';
 
 const contactStore = useContactStore();
 
