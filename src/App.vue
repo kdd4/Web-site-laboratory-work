@@ -3,7 +3,7 @@ import { useRoute, RouterView } from 'vue-router';
 import { watch } from 'vue';
 
 import { useVisitsStore } from './stores/visits';
-import Navigation from './components/Navigation.vue';
+import Navigation from './components/NavigationBlock.vue';
 
 const route = useRoute();
 

@@ -12,17 +12,19 @@ const { hUniversity, hFaculty, tableHead, tableBody, cellClasses } = storeToRefs
 		<h3 class="mb-5 text-center text-lg not-md:text-base">{{ hFaculty }}</h3>
 		<table class="m-1 table-auto border-collapse not-md:text-sm">
 			<thead>
-				<tr v-if="tableHead !== undefined" v-for="(row, ind) in tableHead" :key="ind">
-					<th
-						v-for="(elem, el_ind) in row"
-						:key="el_ind"
-						:rowspan="elem.rowspan"
-						:colspan="elem.colspan"
-						:class="cellClasses"
-					>
-						{{ elem.text }}
-					</th>
-				</tr>
+				<div v-if="tableHead !== undefined" class="contents">
+					<tr v-for="(row, ind) in tableHead" :key="ind">
+						<th
+							v-for="(elem, el_ind) in row"
+							:key="el_ind"
+							:rowspan="elem.rowspan"
+							:colspan="elem.colspan"
+							:class="cellClasses"
+						>
+							{{ elem.text }}
+						</th>
+					</tr>
+				</div>
 			</thead>
 			<tbody v-if="tableBody !== undefined">
 				<tr v-for="(elem, el_ind) in tableBody" :key="el_ind">

@@ -23,7 +23,7 @@ const { blocks } = storeToRefs(myInterestsStore);
 				</p>
 				<p v-if="!block.opened" class="text-center select-none">&#9660;</p>
 				<ul v-if="block.list !== undefined" v-show="block.opened" class="list-inside list-disc">
-					<li v-for="elem in block.list" class="text-base/loose">{{ elem }}</li>
+					<li v-for="(elem, ind) in block.list" :key="ind" class="text-base/loose">{{ elem }}</li>
 				</ul>
 			</div>
 		</div>

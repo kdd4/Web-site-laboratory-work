@@ -1,10 +1,10 @@
 <script setup>
-import { ref, toValue, watch, toRefs } from 'vue';
-import Calendar from '@/components/Calendar.vue';
+import { ref, toValue, toRefs } from 'vue';
+import Calendar from '@/components/CalendarBlock.vue';
 import { useFormCalendar } from '@/stores/formCalendar';
 import { storeToRefs } from 'pinia';
 
-const { fields = [], formdata = ref({}) } = defineProps({
+const { fields = ref([]), formdata = ref({}) } = defineProps({
 	fields: Object,
 	formdata: Object,
 });
@@ -85,7 +85,7 @@ const { useCalendar, closeCalendar } = formCalendarState;
 
 				<!--Type select-->
 				<select
-					v-if="field.type == 'select'"
+					v-if="field.type == 'select' && field.options !== undefined"
 					:name="field.name"
 					v-model="field.fieldValue"
 					:class="{
@@ -97,7 +97,6 @@ const { useCalendar, closeCalendar } = formCalendarState;
 					@click="closeCalendar"
 				>
 					<option
-						v-if="field.options !== undefined"
 						v-for="(option, sel_ind) in field.options"
 						:key="sel_ind"
 						:disabled="option.disabled"

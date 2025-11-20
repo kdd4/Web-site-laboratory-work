@@ -1,5 +1,5 @@
 <script setup>
-import Form from '@/components/Form.vue';
+import Form from '@/components/FormBlock.vue';
 import { useContactStore } from '@/stores/contact';
 import { storeToRefs } from 'pinia';
 

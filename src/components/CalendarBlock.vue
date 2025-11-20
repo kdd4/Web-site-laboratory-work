@@ -1,7 +1,7 @@
 <script setup>
 import { useCalendarStore } from '@/stores/calendar';
 import { storeToRefs } from 'pinia';
-import { watchEffect, toRefs } from 'vue';
+import { ref, watchEffect, toRefs } from 'vue';
 
 const calendarStore = useCalendarStore();
 
@@ -72,8 +72,6 @@ function setDate(day, week) {
 }
 
 watchEffect(updateWeeks);
-
-console.log(date);
 </script>
 
 <template>
@@ -101,22 +99,23 @@ console.log(date);
 					{{ day }}
 				</div>
 			</div>
-			<div v-for="week in week_cnt" :key="week" class="flex space-x-2">
-				<div
-					v-if="getDate(1, week) || getDate(7, week)"
-					v-for="day in day_in_week"
-					:key="day"
-					:class="{
-						'bg-neutral-400/90': getDate(day, week) == date.getDate(),
-					}"
-					class="w-full rounded-lg bg-neutral-400/30 p-0.5 text-center select-none"
-					@click="setDate(day, week)"
-					@dblclick="
-						setDate(day, week);
-						emit('selectDate');
-					"
-				>
-					{{ getDate(day, week) || '' }}
+			<div v-for="week in week_cnt" :key="week" class="flex">
+				<div v-if="getDate(1, week) || getDate(7, week)" class="contents space-x-2">
+					<div
+						v-for="day in day_in_week"
+						:key="day"
+						:class="{
+							'bg-neutral-400/90': getDate(day, week) == date.getDate(),
+						}"
+						class="w-full rounded-lg bg-neutral-400/30 p-0.5 text-center select-none"
+						@click="setDate(day, week)"
+						@dblclick="
+							setDate(day, week);
+							emit('selectDate');
+						"
+					>
+						{{ getDate(day, week) || '' }}
+					</div>
 				</div>
 			</div>
 		</div>

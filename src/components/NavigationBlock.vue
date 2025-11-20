@@ -11,7 +11,7 @@ const { pages: navigation_buttons } = storeToRefs(pagesStore);
 const isBurgerMenu = ref(false);
 const isBurgerMenuOpened = ref(false);
 
-function checkBurgerMenu(event) {
+function checkBurgerMenu() {
 	isBurgerMenuOpened.value = false;
 	isBurgerMenu.value = window.innerWidth <= 650; // px
 }

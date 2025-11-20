@@ -6,42 +6,42 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'Main',
-			component: () => import('@/views/Main.vue'),
+			component: () => import('@/views/MainPage.vue'),
 		},
 		{
 			path: '/aboutme',
 			name: 'AboutMe',
-			component: () => import('@/views/AboutMe.vue'),
+			component: () => import('@/views/AboutMePage.vue'),
 		},
 		{
 			path: '/myinterests',
 			name: 'MyInterests',
-			component: () => import('@/views/MyInterests.vue'),
+			component: () => import('@/views/MyInterestsPage.vue'),
 		},
 		{
 			path: '/study',
 			name: 'Study',
-			component: () => import('@/views/Study.vue'),
+			component: () => import('@/views/StudyPage.vue'),
 		},
 		{
 			path: '/photoalbum',
 			name: 'PhotoAlbum',
-			component: () => import('@/views/PhotoAlbum.vue'),
+			component: () => import('@/views/PhotoAlbumPage.vue'),
 		},
 		{
 			path: '/contact',
 			name: 'Contact',
-			component: () => import('@/views/Contact.vue'),
+			component: () => import('@/views/ContactPage.vue'),
 		},
 		{
 			path: '/test',
 			name: 'MathTest',
-			component: () => import('@/views/MathTest.vue'),
+			component: () => import('@/views/MathTestPage.vue'),
 		},
 		{
 			path: '/history',
 			name: 'History',
-			component: () => import('@/views/History.vue'),
+			component: () => import('@/views/HistoryPage.vue'),
 		},
 	],
 });
