@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 export const useVisitsStore = defineStore('visits', () => {
 	const visits = ref({});
@@ -64,8 +64,6 @@ export const useVisitsStore = defineStore('visits', () => {
 
 		visits.value[route] = visitCnt + 1;
 		visitsSession.value[route] = sessionVisitCnt + 1;
-
-		saveVisits();
 	}
 
 	function getVisits(route) {
@@ -86,6 +84,10 @@ export const useVisitsStore = defineStore('visits', () => {
 
 	loadVisits();
 	loadVisitsSession();
+
+	// .value нужен, так как на реактивных объектах
+	// автоматчески устанавливаются глубокие наблюдатели
+	watch([visits.value, visitsSession.value], saveVisits);
 
 	return { visitPage, getVisits, getVisitsSession };
 });

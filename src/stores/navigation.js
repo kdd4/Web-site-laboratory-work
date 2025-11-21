@@ -26,7 +26,7 @@ export const useNavigationStore = defineStore('navigation', () => {
 		min: '',
 		hour: '',
 		month: '',
-		year: 2025,
+		year: 0,
 	});
 
 	function updateTime() {
