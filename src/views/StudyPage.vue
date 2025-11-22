@@ -20,6 +20,7 @@ const { hUniversity, hFaculty, tableHead, tableBody, cellClasses } = storeToRefs
 							:rowspan="elem.rowspan"
 							:colspan="elem.colspan"
 							:class="cellClasses"
+							class="align-middle"
 						>
 							{{ elem.text }}
 						</th>
