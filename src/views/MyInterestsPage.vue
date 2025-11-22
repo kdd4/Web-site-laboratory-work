@@ -31,7 +31,7 @@ const { blocks } = storeToRefs(myInterestsStore);
 			<ul class="sticky top-2 space-y-2.5 rounded-l-lg bg-neutral-300 p-3">
 				<li v-for="(list, ind) in blocks" :key="ind">
 					<a
-						:href="'#' + list.id"
+						:href="`#${list.id}`"
 						class="rounded-md border border-neutral-400 bg-neutral-200 p-0.5 whitespace-nowrap"
 					>
 						{{ list.head }}

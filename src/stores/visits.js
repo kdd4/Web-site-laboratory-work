@@ -7,7 +7,8 @@ export const useVisitsStore = defineStore('visits', () => {
 
 	function loadVisits() {
 		try {
-			let json_visits = document.cookie.match(/visits=(.+?)(?:;|$)/)[1];
+			const match = document.cookie.match(/visits=(?<json>.+?)(?:;|$)/);
+			let json_visits = match.groups.json;
 
 			if (!json_visits) return;
 
@@ -55,27 +56,27 @@ export const useVisitsStore = defineStore('visits', () => {
 		}
 	}
 
-	function visitPage(route) {
-		let visitCnt = visits.value[route];
-		let sessionVisitCnt = visitsSession.value[route];
+	function visitPage(name) {
+		let visitCnt = visits.value[name];
+		let sessionVisitCnt = visitsSession.value[name];
 
 		if (visitCnt === undefined) visitCnt = 0;
 		if (sessionVisitCnt === undefined) sessionVisitCnt = 0;
 
-		visits.value[route] = visitCnt + 1;
-		visitsSession.value[route] = sessionVisitCnt + 1;
+		visits.value[name] = visitCnt + 1;
+		visitsSession.value[name] = sessionVisitCnt + 1;
 	}
 
-	function getVisits(route) {
-		let visitCnt = visits.value[route];
+	function getVisits(name) {
+		let visitCnt = visits.value[name];
 
 		if (visitCnt === undefined) visitCnt = 0;
 
 		return visitCnt;
 	}
 
-	function getVisitsSession(route) {
-		let sessionVisitCnt = visitsSession.value[route];
+	function getVisitsSession(name) {
+		let sessionVisitCnt = visitsSession.value[name];
 
 		if (sessionVisitCnt === undefined) sessionVisitCnt = 0;
 

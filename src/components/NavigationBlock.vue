@@ -45,7 +45,7 @@ onBeforeUnmount(stopTime);
 				class="mx-0.5 my-1 p-0.5 text-white"
 			>
 				<RouterLink
-					:to="button.route"
+					:to="{ name: button.name }"
 					:class="{
 						'border-4': button.isCurrentPage(),
 						'hover:bg-neutral-500': !button.isCurrentPage(),

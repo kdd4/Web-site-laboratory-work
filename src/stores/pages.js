@@ -6,18 +6,18 @@ export const usePagesStore = defineStore('pages', () => {
 	const route = useRoute();
 
 	function isCurrentPage() {
-		return this.route === route.path;
+		return this.name === route.name;
 	}
 
 	const pages = ref([
-		{ route: '/', text: 'Главная', isCurrentPage },
-		{ route: '/aboutme', text: 'Обо мне', isCurrentPage },
-		{ route: '/myinterests', text: 'Мои интересы', isCurrentPage },
-		{ route: '/study', text: 'Учеба', isCurrentPage },
-		{ route: '/photoalbum', text: 'Фотоальбом', isCurrentPage },
-		{ route: '/contact', text: 'Контакт', isCurrentPage },
-		{ route: '/test', text: 'Тест по дисциплине', isCurrentPage },
-		{ route: '/history', text: 'История просмотра', isCurrentPage },
+		{ name: 'Main', text: 'Главная', isCurrentPage },
+		{ name: 'AboutMe', text: 'Обо мне', isCurrentPage },
+		{ name: 'MyInterests', text: 'Мои интересы', isCurrentPage },
+		{ name: 'Study', text: 'Учеба', isCurrentPage },
+		{ name: 'PhotoAlbum', text: 'Фотоальбом', isCurrentPage },
+		{ name: 'Contact', text: 'Контакт', isCurrentPage },
+		{ name: 'MathTest', text: 'Тест по дисциплине', isCurrentPage },
+		{ name: 'History', text: 'История просмотра', isCurrentPage },
 	]);
 
 	return { pages };

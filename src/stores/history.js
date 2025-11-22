@@ -21,8 +21,8 @@ export const useHistoryStore = defineStore('history', () => {
 			table.push({
 				elements: [
 					page.text,
-					visitStore.getVisits(page.route),
-					visitStore.getVisitsSession(page.route),
+					visitStore.getVisits(page.name),
+					visitStore.getVisitsSession(page.name),
 				],
 				style: 'nth-[n+1]:text-center',
 			});

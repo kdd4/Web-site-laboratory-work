@@ -9,7 +9,7 @@ const route = useRoute();
 
 let visitsStore = useVisitsStore();
 
-watch(route, () => visitsStore.visitPage(route.path));
+watch(route, () => visitsStore.visitPage(route.name));
 </script>
 
 <template>
