@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 export const useFormCalendar = defineStore('formCalendar', () => {
 	const showCalendar = ref(false);
@@ -36,6 +37,9 @@ export const useFormCalendar = defineStore('formCalendar', () => {
 		show: showCalendar,
 		date: dateCalendar,
 	});
+
+	let route = useRoute();
+	watch(route, closeCalendar);
 
 	return { calendarDate, useCalendar, closeCalendar };
 });
