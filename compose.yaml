@@ -1,29 +1,26 @@
 services:
     frontend:
         container_name: frontend
-        build:
-            context: .
-            dockerfile: Dockerfile
+        build: ./frontend
         ports:
-            - "80:8080"
+            - "80:80"
+        networks:
+            - network
+        depends_on:
+            - backend
         develop:
             watch:
                 - path: ./frontend
                   action: rebuild
 
-    frontend-dev:
-        container_name: frontend
-        build:
-            context: .
-            dockerfile: Dockerfile.dev
-        ports:
-            - "80:5173"
-        develop:
-            watch:
-                - path: ./frontend
-                  ignore: src/**
-                  target: /app
-                  action: rebuild
-                - path: ./frontend/src
-                  target: /app/src
-                  action: sync
+    backend:
+        container_name: backend
+        build: ./backend
+        volumes:
+            - ./backend/src:/var/www/html
+        networks:
+            - network
+
+networks:
+    network:
+        driver: bridge

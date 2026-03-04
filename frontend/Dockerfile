@@ -5,11 +5,11 @@ FROM node:${NODE_VERSION} AS builder
 
 WORKDIR /app
 
-COPY frontend/package.json frontend/package-lock.json ./
+COPY package.json package-lock.json ./
 
 RUN --mount=type=cache,target=/root/.npm npm clean-install
 
-COPY frontend .
+COPY . .
 
 RUN npm run build
 
