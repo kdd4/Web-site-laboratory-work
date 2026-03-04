@@ -4,27 +4,27 @@ import { ref } from 'vue';
 export const usePhotoAlbumStore = defineStore('photoAlbum', () => {
 	const fotosRows = ref([
 		[
-			{ title: 'me 1', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 2', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 3', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 4', src: '/src/assets/images/me.jpg' },
+			{ title: 'me 1', src: 'me.jpg' },
+			{ title: 'me 2', src: 'me.jpg' },
+			{ title: 'me 3', src: 'me.jpg' },
+			{ title: 'me 4', src: 'me.jpg' },
 		],
 		[
-			{ title: 'me 5', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 6', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 7', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 8', src: '/src/assets/images/me.jpg' },
+			{ title: 'me 5', src: 'me.jpg' },
+			{ title: 'me 6', src: 'me.jpg' },
+			{ title: 'me 7', src: 'me.jpg' },
+			{ title: 'me 8', src: 'me.jpg' },
 		],
 		[
-			{ title: 'not me 9', src: '/src/assets/images/menu_button.jpg' },
-			{ title: 'me 10', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 11', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 12', src: '/src/assets/images/me.jpg' },
+			{ title: 'not me 9', src: 'menu_button.jpg' },
+			{ title: 'me 10', src: 'me.jpg' },
+			{ title: 'me 11', src: 'me.jpg' },
+			{ title: 'me 12', src: 'me.jpg' },
 		],
 		[
-			{ title: 'me 13', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 14', src: '/src/assets/images/me.jpg' },
-			{ title: 'me 15', src: '/src/assets/images/me.jpg' },
+			{ title: 'me 13', src: 'me.jpg' },
+			{ title: 'me 14', src: 'me.jpg' },
+			{ title: 'me 15', src: 'me.jpg' },
 		],
 	]);
 
@@ -39,6 +39,17 @@ export const usePhotoAlbumStore = defineStore('photoAlbum', () => {
 	function hideImg() {
 		fullscreenImgShow.value = false;
 	}
+
+	// it is using of vite's dinamic urls
+	function updateSrc() {
+		fotosRows.value = fotosRows.value.map((arr) =>
+			arr.map((img) => {
+				img.src = new URL(`../assets/images/${img.src}`, import.meta.url).href;
+				return img;
+			}),
+		);
+	}
+	updateSrc();
 
 	return { fotosRows, fullscreenImgShow, fullscreenImgSrc, showImg, hideImg };
 });
