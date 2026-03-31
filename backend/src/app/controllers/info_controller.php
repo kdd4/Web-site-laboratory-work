@@ -1,11 +1,11 @@
 <?
-class PageController extends Core\Controller {
+class InfoController extends Core\Controller {
     function __construct()
     {
         parent::__construct();
     }
 
     function index() {
-        phpinfo();
+        $this->view->render("", "", $this->model);
     }
 }

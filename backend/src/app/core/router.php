@@ -5,15 +5,15 @@ class Router
 {
     static function route()
     {
-        $controller_name = $_REQUEST["controller"] ? $_REQUEST["controller"] : "page";
-        $action_name = $_REQUEST['action'] ? $_REQUEST['action'] : "index";
+        $controller_name = isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : "page";
+        $action_name = isset($_REQUEST['action']) ? $_REQUEST['action'] : "index";
 
         $controller_file = "app/controllers/".$controller_name.'_controller.php';
         $model_file = "app/models/".$controller_name.'_model.php';
 
         // Loading controller
         if(!file_exists($controller_file)){
-            die "Error: Controller file $controller_file not exists";
+            die("Error: Controller file $controller_file not exists");
         }
 
         include $controller_file;
@@ -23,7 +23,7 @@ class Router
 
         // Loading model
         if(!file_exists($model_file)) {
-            die "Error: Model file $model_file not exists";
+            die("Error: Model file $model_file not exists");
         }
 
         include $model_file;
@@ -34,7 +34,7 @@ class Router
         $controller->model = $model;
 
         if(!method_exists($controller, $action_name)) {
-            die "Error: Method $action_name not found in controller $controller_class_name";
+            die("Error: Method $action_name not found in controller $controller_class_name");
         }
 
         $controller->$action_name();

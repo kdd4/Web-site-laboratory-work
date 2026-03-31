@@ -1,7 +1,7 @@
 services:
-  nginx:
-    container_name: nginx
-    build: ./nginx
+  frontend:
+    container_name: frontend
+    build: ./frontend
     ports:
       - "80:80"
     networks:
@@ -10,19 +10,20 @@ services:
       - backend
     develop:
       watch:
-        - path: ./nginx
+        - path: ./frontend
           action: rebuild
 
   backend:
     container_name: backend
-    build: .
+    build: ./backend
+    volumes:
+      - ./backend/src:/var/www/html
     networks:
       - network
     develop:
       watch:
-        - path: ./Dockerfile
-          action: rebuild
-        - path: ./frontend
+        - path: ./backend
+          ignore: ./backend/src/**
           action: rebuild
 
 networks:

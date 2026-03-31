@@ -1,11 +1,12 @@
 <?
 spl_autoload_register(function ($class_name) {
-    $regexp = '/^(.*)\\(.*)/$';
-    
+    $regexp = '/^(.*)\\\\(.*)$/';
+
     if (!preg_match($regexp, $class_name, $matches)) return;
 
-    $path = lcfirst($matches[1]);
-    $name = lcfirst($matches[2]);
+    $base_path = '.' . DIRECTORY_SEPARATOR . 'app'. DIRECTORY_SEPARATOR;
+    $path = $base_path . lcfirst($matches[1]);
+    $name = lcfirst($matches[2]) . '.php';
 
     $full_name = $path . DIRECTORY_SEPARATOR . $name;
 
@@ -14,4 +15,4 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-$router = new Core\Router();
+Core\Router::route();
