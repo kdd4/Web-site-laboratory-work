@@ -1,4 +1,6 @@
 <?
+namespace Core;
+
 class Model
 {
     public $validator;
