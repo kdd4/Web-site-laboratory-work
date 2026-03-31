@@ -1,4 +1,0 @@
-ARG PHP_VERSION=8.5-fpm-alpine
-
-FROM php:${PHP_VERSION}
-
