@@ -20,6 +20,11 @@ services:
             - ./backend/src:/var/www/html
         networks:
             - network
+        develop:
+            watch:
+                - path: ./backend
+                  ignore: ./backend/src/**
+                  action: rebuild
 
 networks:
     network:

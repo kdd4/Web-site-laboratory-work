@@ -1,4 +1,4 @@
-ARG NODE_VERSION=24-alpine
+ARG NODE_VERSION=25-alpine
 ARG NGINX_VERSION=1.29-alpine
 
 FROM node:${NODE_VERSION} AS builder
