@@ -1,4 +1,4 @@
 <?
-$json_data = json_encode($content_view);
+$jsonData = json_encode($data);
 
-echo $json_data;
+echo $jsonData;

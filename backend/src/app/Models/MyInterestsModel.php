@@ -1,5 +1,9 @@
 <?
-class MyInterestsModel extends Core\Model {
+namespace Models;
+
+use \Core\Model;
+
+class MyInterestsModel extends Model {
     
     public $interests = [
 		[

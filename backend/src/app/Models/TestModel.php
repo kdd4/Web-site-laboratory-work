@@ -1,5 +1,9 @@
 <?
-class TestModel extends Core\Model {
+namespace Models;
+
+use \Core\Model;
+
+class TestModel extends Model {
     public function __construct()
     {
         parent::__construct();

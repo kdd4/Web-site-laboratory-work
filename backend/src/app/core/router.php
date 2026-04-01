@@ -5,39 +5,27 @@ class Router
 {
     public static function route()
     {
-        $controller_name = $_REQUEST["controller"] ?? "page";
-        $action_name = $_REQUEST['action'] ?? "index";
+        $controllerName = $_REQUEST["controller"] ?? "page";
+        $actionName = $_REQUEST['action'] ?? "index";
 
-        $controller_file = "app/controllers/".$controller_name.'_controller.php';
-        $model_file = "app/models/".$controller_name.'_model.php';
+        $splitedControllerName = preg_split('/-/', $controllerName);
 
-        // Loading controller
-        if (!file_exists($controller_file)){
-            die("Error: Controller file $controller_file not exists");
+        if (!$splitedControllerName) {
+            die("Error: split '$controllerName' by '-' error");
         }
 
-        include $controller_file;
+        $upperSplitedControllerName = array_map('ucfirst', $splitedControllerName);
 
-        $controller_class_name = ucfirst($controller_name).'Controller';
-        $controller = new $controller_class_name;
+        $CamelCaseControllerName = implode('', $upperSplitedControllerName);
 
-        // Loading model
-        if (!file_exists($model_file)) {
-            die("Error: Model file $model_file not exists");
+        $controllerClass = 'Controllers\\' . $CamelCaseControllerName . 'Controller';
+        
+        $controller = new $controllerClass;
+
+        if (!method_exists($controller, $actionName)) {
+            die("Error: Method $actionName not found in controller $controllerClass");
         }
 
-        include $model_file;
-
-        $model_class_name = ucfirst($controller_name).'Model';
-        $model = new $model_class_name;
-
-        $controller->model = $model;
-
-        // Action
-        if (!method_exists($controller, $action_name)) {
-            die("Error: Method $action_name not found in controller $controller_class_name");
-        }
-
-        $controller->$action_name();
+        $controller->$actionName();
     }
 }
