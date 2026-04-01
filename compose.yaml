@@ -23,7 +23,7 @@ services:
     develop:
       watch:
         - path: ./backend
-          ignore: ./backend/src/**
+          ignore: src/**
           action: rebuild
 
 networks:

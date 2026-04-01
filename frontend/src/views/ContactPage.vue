@@ -5,7 +5,7 @@ import Form from '@/components/FormBlock.vue';
 
 const contactStore = useContactStore();
 
-const { fields, showError, formdata } = storeToRefs(contactStore);
+const { fields, showError, formdata, errorHTML } = storeToRefs(contactStore);
 const { formSubmit } = contactStore;
 </script>
 
@@ -16,8 +16,7 @@ const { formSubmit } = contactStore;
 		<div
 			v-show="showError"
 			class="rounded-sm border-2 border-red-500/30 bg-red-400 p-0.5 text-center"
-		>
-			<p>Неправильно введены данные</p>
-		</div>
+			v-html="errorHTML"
+		></div>
 	</main>
 </template>

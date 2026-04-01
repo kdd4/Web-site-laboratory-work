@@ -1,2 +1,2 @@
 <?
-phpinfo();
+echo $content_view;

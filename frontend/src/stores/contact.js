@@ -5,6 +5,8 @@ export const useContactStore = defineStore('contact', () => {
 	const showError = ref(false);
 	const allowSubmit = ref(false);
 
+	const errorHTML = ref("");
+
 	const formdata = ref({
 		allowSubmit: allowSubmit,
 	});
@@ -117,6 +119,8 @@ export const useContactStore = defineStore('contact', () => {
 			fields.value.email.isCorrect &&
 			fields.value.number.isCorrect &&
 			fields.value.birthday.isCorrect;
+
+		allowSubmit.value = true; // temporary
 	}
 
 	function updateShowError() {
@@ -138,14 +142,20 @@ export const useContactStore = defineStore('contact', () => {
 	watchEffect(updateAllowSubmit);
 	watchEffect(updateShowError);
 
+
+
 	function formSubmit() {
 		let form = document.getElementById('form');
 
-		fetch('/api', {
+		fetch('/api/contact/form', {
 			method: 'POST',
 			body: new FormData(form),
-		});
+		})
+			.then(response => response.text())
+			.then(response => errorHTML.value = response);
+
+		showError.value = true;
 	}
 
-	return { fields, showError, formdata, formSubmit };
+	return { fields, showError, errorHTML, formdata, formSubmit };
 });

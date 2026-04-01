@@ -6,6 +6,6 @@ class InfoController extends Core\Controller {
     }
 
     function index() {
-        $this->view->render("", "", $this->model);
+        $this->view->render("", $this->model, "info.php");
     }
 }

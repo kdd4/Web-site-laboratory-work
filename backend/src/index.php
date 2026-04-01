@@ -6,7 +6,7 @@ spl_autoload_register(function ($class_name) {
 
     $base_path = '.' . DIRECTORY_SEPARATOR . 'app'. DIRECTORY_SEPARATOR;
     $path = $base_path . lcfirst($matches[1]);
-    $name = lcfirst($matches[2]) . '.php';
+    $name = strtolower($matches[2]) . '.php';
 
     $full_name = $path . DIRECTORY_SEPARATOR . $name;
 

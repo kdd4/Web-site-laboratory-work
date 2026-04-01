@@ -12,7 +12,7 @@ class Router
         $model_file = "app/models/".$controller_name.'_model.php';
 
         // Loading controller
-        if(!file_exists($controller_file)){
+        if (!file_exists($controller_file)){
             die("Error: Controller file $controller_file not exists");
         }
 
@@ -22,7 +22,7 @@ class Router
         $controller = new $controller_class_name;
 
         // Loading model
-        if(!file_exists($model_file)) {
+        if (!file_exists($model_file)) {
             die("Error: Model file $model_file not exists");
         }
 
@@ -33,7 +33,8 @@ class Router
 
         $controller->model = $model;
 
-        if(!method_exists($controller, $action_name)) {
+        // Action
+        if (!method_exists($controller, $action_name)) {
             die("Error: Method $action_name not found in controller $controller_class_name");
         }
 
