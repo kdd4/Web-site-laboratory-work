@@ -4,7 +4,7 @@ import { ref } from 'vue';
 export const useMyInterestsStore = defineStore('myInterests', () => {
 	const blocks = ref([]);
 
-	fetch('/api/myinterests/interests')
+	fetch('/api/my-interests/interests')
 		.then(response => response.json())
 		.then(response => blocks.value = response);
 

@@ -1,5 +1,9 @@
 <?
-class TestController extends Core\Controller {
+namespace Controller;
+
+use Core\Controller;
+
+class TestController extends Controller {
     public function __construct()
     {
         parent::__construct();
@@ -7,7 +11,7 @@ class TestController extends Core\Controller {
 
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render("Wrong method", "", $this->model);
+            $this->view->render('layout.php', ['data' => 'Wrong method']);
             return;
         }
 
@@ -15,6 +19,6 @@ class TestController extends Core\Controller {
             'result' => $this->model->validate($_POST)
         ];
 
-        $this->view->render($result, $this->model, 'json.php');
+        $this->view->render('json.php', ['data' => $result]);
     }
 }

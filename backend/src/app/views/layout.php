@@ -1,2 +1,2 @@
 <?
-echo $content_view;
+echo $data;

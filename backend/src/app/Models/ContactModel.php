@@ -1,5 +1,9 @@
 <?
-class ContactModel extends Core\Model {
+namespace Models;
+
+use Core\Model;
+
+class ContactModel extends Model {
     public function __construct()
     {
         parent::__construct();

@@ -1,18 +1,22 @@
 <?
+//use Core\Router;
+
 spl_autoload_register(function ($class_name) {
     $regexp = '/^(.*)\\\\(.*)$/';
 
     if (!preg_match($regexp, $class_name, $matches)) return;
 
-    $base_path = '.' . DIRECTORY_SEPARATOR . 'app'. DIRECTORY_SEPARATOR;
-    $path = $base_path . lcfirst($matches[1]);
-    $name = strtolower($matches[2]) . '.php';
+    $basePath = '.' . DIRECTORY_SEPARATOR . 'app'. DIRECTORY_SEPARATOR;
+    $path = (string)$basePath . $matches[1];
+    $name = (string)$matches[2] . '.php';
 
-    $full_name = $path . DIRECTORY_SEPARATOR . $name;
+    $fullName = $path . DIRECTORY_SEPARATOR . $name;
 
-    if (file_exists($full_name)) {
-        require_once $full_name;
+    echo $fullName."<br>";
+
+    if (file_exists($fullName)) {
+        require_once $fullName;
     }
 });
 
-Core\Router::route();
+\Core\Router::route();

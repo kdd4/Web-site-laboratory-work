@@ -1,5 +1,9 @@
 <?
-class PhotoAlbumModel extends Core\Model {
+namespace Models;
+
+use Core\Model;
+
+class PhotoAlbumModel extends Model {
     
     public $album = [
         [
