@@ -1,31 +1,31 @@
 services:
-    frontend:
-        container_name: frontend
-        build: ./frontend
-        ports:
-            - "80:80"
-        networks:
-            - network
-        depends_on:
-            - backend
-        develop:
-            watch:
-                - path: ./frontend
-                  action: rebuild
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "80:80"
+    networks:
+      - network
+    depends_on:
+      - backend
+    develop:
+      watch:
+        - path: ./frontend
+          action: rebuild
 
-    backend:
-        container_name: backend
-        build: ./backend
-        volumes:
-            - ./backend/src:/var/www/html
-        networks:
-            - network
-        develop:
-            watch:
-                - path: ./backend
-                  ignore: ./backend/src/**
-                  action: rebuild
+  backend:
+    container_name: backend
+    build: ./backend
+    volumes:
+      - ./backend/src:/var/www/html
+    networks:
+      - network
+    develop:
+      watch:
+        - path: ./backend
+          ignore: src/**
+          action: rebuild
 
 networks:
-    network:
-        driver: bridge
+  network:
+    driver: bridge

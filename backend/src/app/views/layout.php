@@ -1,0 +1,2 @@
+<?
+echo $content_view;

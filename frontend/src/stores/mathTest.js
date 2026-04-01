@@ -17,7 +17,6 @@ export const useMathTestStore = defineStore('mathTest', () => {
 			placeholder: 'Введите ответ',
 			fieldValue: '',
 			hasError: false,
-			rightAnswer: 2.7,
 		},
 		{
 			header: '2-й вопрос',
@@ -30,7 +29,6 @@ export const useMathTestStore = defineStore('mathTest', () => {
 			],
 			fieldValue: '',
 			hasError: false,
-			rightAnswer: 'r2 sin tetta',
 		},
 		{
 			header: '3-й вопрос',
@@ -49,7 +47,6 @@ export const useMathTestStore = defineStore('mathTest', () => {
 			],
 			fieldValue: '',
 			hasError: false,
-			rightAnswer: 'var1',
 		},
 	]);
 
@@ -71,25 +68,27 @@ export const useMathTestStore = defineStore('mathTest', () => {
 		},
 	]);
 
-	function checkTest() {
+	async function checkTest() {
 		let wrongAnswers = false;
-		let correctAnswers = true;
+		let correctAnswers = false;
 
 		for (let field of formfields.value) {
 			let wrong = !field.fieldValue;
 
-			if (!wrong && typeof field.rightAnswer == 'number') {
-				let value = field.fieldValue - 0;
-
-				wrong ||= isNaN(value);
-				correctAnswers &&= Math.abs(field.rightAnswer - value) < 0.01;
-			} else {
-				correctAnswers &&= field.rightAnswer == field.fieldValue;
-			}
-
 			field.hasError = wrong;
 			wrongAnswers ||= wrong;
 		}
+
+        if (!wrongAnswers) {
+            let form = document.getElementById('form');
+
+            let response = await fetch('/api/test/form', {
+                method: 'POST',
+                body: new FormData(form),
+            })
+            let response_json = await response.json();
+            correctAnswers = response_json.result;
+        }
 
 		showError.value = wrongAnswers;
 		showGood.value = correctAnswers && !wrongAnswers;
