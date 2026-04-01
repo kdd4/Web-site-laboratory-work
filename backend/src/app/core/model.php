@@ -5,13 +5,13 @@ class Model
 {
     public $validator;
 
-    function __construct()
+    public function __construct()
     {
         $this->validator = new FormValidation();
     }
     
-    function validate($form)
+    public function validate($form)
     {
-        $this->validator->validate($form);
+        return $this->validator->validate($form);
     }
 }

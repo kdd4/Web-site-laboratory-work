@@ -1,20 +1,20 @@
 <?
 class ContactModel extends Core\Model {
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-        $this->validator->SetRule('FIO', 'isWordCountGreaterOrEqual', 2);
-        $this->validator->SetRule('FIO', 'isWordCountLessOrEqual', 3);
+        $this->validator->setRule('FIO', 'isWordCountGreaterOrEqual', 2);
+        $this->validator->setRule('FIO', 'isWordCountLessOrEqual', 3);
 
-        $this->validator->SetRule('gender', 'isNotEmpty');
+        $this->validator->setRule('gender', 'isNotEmpty');
         
-        $this->validator->SetRule('age', 'isNotEmpty');
+        $this->validator->setRule('age', 'isNotEmpty');
 
-        $this->validator->SetRule('email', 'isEmail');
+        $this->validator->setRule('email', 'isEmail');
 
-        $this->validator->SetRule('number', 'isNumber');
+        $this->validator->setRule('number', 'isNumber');
 
-        $this->validator->SetRule('birthday', 'isNotEmpty');
+        $this->validator->setRule('birthday', 'isNotEmpty');
     }
 }

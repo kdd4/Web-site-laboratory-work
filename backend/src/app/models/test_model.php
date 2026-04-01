@@ -1,20 +1,14 @@
 <?
 class TestModel extends Core\Model {
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
-        /*
-        $this->validator->SetRule('FIO', 'isWordCountGreaterOrEqual', 2);
-        $this->validator->SetRule('FIO', 'isWordCountLessOrEqual', 3);
-
-        $this->validator->SetRule('gender', 'isNotEmpty');
         
-        $this->validator->SetRule('age', 'isNotEmpty');
+        $this->validator->setRule('question1', 'isLess', 2.8);
+        $this->validator->setRule('question1', 'isGreaterOrEqual', 2.7);
 
-        $this->validator->SetRule('email', 'isEmail');
-
-        $this->validator->SetRule('number', 'isNumber');
-
-        $this->validator->SetRule('birthday', 'isNotEmpty');*/
+        $this->validator->setRule('question2', 'isEqual', 'r2 sin tetta');
+        
+        $this->validator->setRule('question3', 'isEqual', 'var1');
     }
 }

@@ -3,10 +3,10 @@ namespace Core;
 
 class Router
 {
-    static function route()
+    public static function route()
     {
-        $controller_name = isset($_REQUEST["controller"]) ? $_REQUEST["controller"] : "page";
-        $action_name = isset($_REQUEST['action']) ? $_REQUEST['action'] : "index";
+        $controller_name = $_REQUEST["controller"] ?? "page";
+        $action_name = $_REQUEST['action'] ?? "index";
 
         $controller_file = "app/controllers/".$controller_name.'_controller.php';
         $model_file = "app/models/".$controller_name.'_model.php';

@@ -76,9 +76,7 @@ export const useContactStore = defineStore('contact', () => {
 	});
 
 	function checkFIO() {
-		let fio_re = /^[а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+ [а-яёА-ЯЁa-zA-Z]+$/;
-
-		fields.value.fio.hasError = !fio_re.test(fields.value.fio.fieldValue);
+		fields.value.fio.hasError = !fields.value.fio.fieldValue;
 		fields.value.fio.isCorrect = !fields.value.fio.hasError;
 	}
 
@@ -93,16 +91,12 @@ export const useContactStore = defineStore('contact', () => {
 	}
 
 	function checkEmail() {
-		let email_re = /^\w+@\w+.\w{2,}$/;
-
-		fields.value.email.hasError = !email_re.test(fields.value.email.fieldValue);
+		fields.value.email.hasError = !fields.value.email.fieldValue;
 		fields.value.email.isCorrect = !fields.value.email.hasError;
 	}
 
 	function checkNumber() {
-		let number_re = /^\+7|3\d{8,10}$/;
-
-		fields.value.number.hasError = !number_re.test(fields.value.number.fieldValue);
+		fields.value.number.hasError = !fields.value.number.fieldValue;
 		fields.value.number.isCorrect = !fields.value.number.hasError;
 	}
 
@@ -119,8 +113,6 @@ export const useContactStore = defineStore('contact', () => {
 			fields.value.email.isCorrect &&
 			fields.value.number.isCorrect &&
 			fields.value.birthday.isCorrect;
-
-		allowSubmit.value = true; // temporary
 	}
 
 	function updateShowError() {
@@ -131,6 +123,8 @@ export const useContactStore = defineStore('contact', () => {
 			fields.value.email.hasError ||
 			fields.value.number.hasError ||
 			fields.value.birthday.hasError;
+
+        errorHTML.value = 'Имеется ошибка'
 	}
 
 	watch(() => fields.value.fio.fieldValue, checkFIO);
@@ -143,7 +137,6 @@ export const useContactStore = defineStore('contact', () => {
 	watchEffect(updateShowError);
 
 
-
 	function formSubmit() {
 		let form = document.getElementById('form');
 
@@ -152,9 +145,12 @@ export const useContactStore = defineStore('contact', () => {
 			body: new FormData(form),
 		})
 			.then(response => response.text())
-			.then(response => errorHTML.value = response);
+			.then(response => {
+                errorHTML.value = response;
+                showError.value = true;
+            });
 
-		showError.value = true;
+		
 	}
 
 	return { fields, showError, errorHTML, formdata, formSubmit };

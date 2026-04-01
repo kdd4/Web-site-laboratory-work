@@ -1,11 +1,11 @@
 <?
 class PhotoAlbumController extends Core\Controller {
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
     }
 
-    function album() {
+    public function album() {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->view->render("Wrong method", "", $this->model);
             return;
