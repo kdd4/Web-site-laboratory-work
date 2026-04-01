@@ -1,7 +1,7 @@
 <?
 namespace Models;
 
-use Core\Model;
+use \Core\Model;
 
 class InfoModel extends Model {
     

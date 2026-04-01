@@ -1,11 +1,10 @@
 <?
-namespace Controller;
+namespace Controllers;
 
-use Core\Controller;
+use \Core\Controller;
 
 class MyInterestsController extends Controller {
-
-
+    
     public function interests() {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->view->render('layout.php', ['data' => 'Wrong method']);

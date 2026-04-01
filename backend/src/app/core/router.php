@@ -19,7 +19,7 @@ class Router
         $CamelCaseControllerName = implode('', $upperSplitedControllerName);
 
         $controllerClass = 'Controllers\\' . $CamelCaseControllerName . 'Controller';
-        echo $controllerClass;
+        
         $controller = new $controllerClass;
 
         if (!method_exists($controller, $actionName)) {

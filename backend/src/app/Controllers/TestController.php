@@ -1,13 +1,9 @@
 <?
-namespace Controller;
+namespace Controllers;
 
-use Core\Controller;
+use \Core\Controller;
 
 class TestController extends Controller {
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

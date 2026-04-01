@@ -1,5 +1,5 @@
 <?
-//use Core\Router;
+use \Core\Router;
 
 spl_autoload_register(function ($class_name) {
     $regexp = '/^(.*)\\\\(.*)$/';
@@ -12,11 +12,9 @@ spl_autoload_register(function ($class_name) {
 
     $fullName = $path . DIRECTORY_SEPARATOR . $name;
 
-    echo $fullName."<br>";
-
     if (file_exists($fullName)) {
         require_once $fullName;
     }
 });
 
-\Core\Router::route();
+Router::route();

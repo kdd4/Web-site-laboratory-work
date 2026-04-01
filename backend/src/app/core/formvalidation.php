@@ -28,10 +28,10 @@ class FormValidation
         $data = trim((string)$data);
 
         $res = preg_split('/\s+/', $data);
-        $word_count = count($res);   
+        $wordsCount = count($res);   
 
-        if ($word_count === $value) {
-            return "Field must have count of words equal {$value} (has {$word_count})";
+        if ($wordsCount === $value) {
+            return "Field must have count of words equal {$value} (has {$wordsCount})";
         }
 
         return null;
@@ -46,10 +46,10 @@ class FormValidation
         $data = trim((string)$data);
 
         $res = preg_split('/\s+/', $data);
-        $word_count = count($res);
+        $wordsCount = count($res);
 
-        if ($word_count > $value) {
-            return "Field must have count of words less or equal {$value} (has {$word_count})";
+        if ($wordsCount > $value) {
+            return "Field must have count of words less or equal {$value} (has {$wordsCount})";
         }
 
         return null;
@@ -64,10 +64,10 @@ class FormValidation
         $data = trim((string)$data);
 
         $res = preg_split('/\s+/', $data);
-        $word_count = count($res);
+        $wordsCount = count($res);
 
-        if ($word_count < $value) {
-            return "Field must have count of words greater or equal {$value} (has {$word_count})";
+        if ($wordsCount < $value) {
+            return "Field must have count of words greater or equal {$value} (has {$wordsCount})";
         }
 
         return null;
@@ -99,10 +99,10 @@ class FormValidation
 
     public function isLess(mixed $data, int|float $value): ?string
     {
-        $integer_error = $this->isInteger($data);
+        $integerError = $this->isInteger($data);
 
-        if ($integer_error !== null) {
-            return $integer_error;
+        if ($integerError !== null) {
+            return $integerError;
         }
 
         if ((float)$data >= $value) {
@@ -114,10 +114,10 @@ class FormValidation
 
     public function isLessOrEqual(mixed $data, int|float $value): ?string
     {
-        $integer_error = $this->isInteger($data);
+        $integerError = $this->isInteger($data);
 
-        if ($integer_error !== null) {
-            return $integer_error;
+        if ($integerError !== null) {
+            return $integerError;
         }
 
         if ((float)$data > $value) {
@@ -129,10 +129,10 @@ class FormValidation
 
     public function isGreater(mixed $data, int|float $value): ?string
     {
-        $integer_error = $this->isInteger($data);
+        $integerError = $this->isInteger($data);
 
-        if ($integer_error !== null) {
-            return $integer_error;
+        if ($integerError !== null) {
+            return $integerError;
         }
 
         if ((float)$data <= $value) {
@@ -144,10 +144,10 @@ class FormValidation
 
     public function isGreaterOrEqual(mixed $data, int|float $value): ?string
     {
-        $integer_error = $this->isInteger($data);
+        $integerError = $this->isInteger($data);
 
-        if ($integer_error !== null) {
-            return $integer_error;
+        if ($integerError !== null) {
+            return $integerError;
         }
 
         if ((float)$data < $value) {
@@ -180,17 +180,17 @@ class FormValidation
 
         $data = trim((string)$data);
 
-        if (!preg_match('/^\+7|3\d{8,10}$/', $data)) {
+        if (!preg_match('/^\+(7|3)\d{8,10}$/', $data)) {
             return 'Value must be a telephone number';
         }
 
         return null;
     }
 
-    public function setRule(string $field_name, string $validator_name, mixed $param = null): void
+    public function setRule(string $fieldName, string $validatorName, mixed $param = null): void
     {
-        $this->rules[$field_name][] = [
-            'validator' => $validator_name,
+        $this->rules[$fieldName][] = [
+            'validator' => $validatorName,
             'param' => $param
         ];
     }
@@ -199,15 +199,15 @@ class FormValidation
     {
         $this->errors = [];
 
-        foreach ($this->rules as $field_name => $field_rules) {
-            $data = $form[$field_name] ?? null;
+        foreach ($this->rules as $fieldName => $fieldRules) {
+            $data = $form[$fieldName] ?? null;
 
-            foreach ($field_rules as $rule) {
+            foreach ($fieldRules as $rule) {
                 $validator = $rule['validator'];
                 $param = $rule['param'];
 
                 if (!method_exists($this, $validator)) {
-                    $this->errors[] = "Unknown validator {$validator} for field {$field_name}";
+                    $this->errors[] = "Unknown validator {$validator} for field {$fieldName}";
                     continue;
                 }
 
@@ -216,7 +216,7 @@ class FormValidation
                 $error = $param === null ? $this->$validator($data) : $this->$validator($data, $param);
 
                 if ($error !== null) {
-                    $this->errors[] = "Field \"{$field_name}\": {$error}";
+                    $this->errors[] = "Field \"{$fieldName}\": {$error}";
                 }
             }
         }

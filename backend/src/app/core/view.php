@@ -3,12 +3,12 @@ namespace Core;
 
 class View
 {
-    public function render($content_view  = 'layout.php', $arguments = [])
+    public function render($contentView  = 'layout.php', $arguments = [])
     {
         foreach ($arguments as $name => $value) {
             $$name = $value;
         }
 
-        include 'app/Views/' . $content_view;
+        include 'app/Views/' . $contentView;
     }
 }

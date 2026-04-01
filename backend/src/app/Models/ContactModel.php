@@ -1,7 +1,7 @@
 <?
 namespace Models;
 
-use Core\Model;
+use \Core\Model;
 
 class ContactModel extends Model {
     public function __construct()
