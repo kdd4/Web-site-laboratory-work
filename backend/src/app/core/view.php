@@ -1,4 +1,4 @@
-<?
+<?php
 namespace Core;
 
 class View
@@ -9,6 +9,6 @@ class View
             $$name = $value;
         }
 
-        include 'app/Views/' . $contentView;
+        include 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . $contentView;
     }
 }

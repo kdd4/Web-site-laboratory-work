@@ -1,4 +1,4 @@
-<?
+<?php
 namespace Core;
 
 class Router
@@ -18,7 +18,7 @@ class Router
 
         $CamelCaseControllerName = implode('', $upperSplitedControllerName);
 
-        $controllerClass = 'Controllers\\' . $CamelCaseControllerName . 'Controller';
+        $controllerClass = "Controllers\\{$CamelCaseControllerName}Controller";
         
         $controller = new $controllerClass;
 
