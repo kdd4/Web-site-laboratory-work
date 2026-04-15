@@ -4,7 +4,7 @@ namespace Core;
 class Controller
 {
     protected $model;
-    protected $view;
+    protected View $view;
     
     public function __construct()
     {

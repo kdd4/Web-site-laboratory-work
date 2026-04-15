@@ -4,10 +4,10 @@ import { storeToRefs } from 'pinia';
 import Form from '@/components/FormBlock.vue';
 import { useGuestBookStore } from '@/stores/guestBook';
 
-const contactStore = useGuestBookStore();
+const guestBookStore = useGuestBookStore();
 
-const { fields, showError, formdata, errorHTML } = storeToRefs(contactStore);
-const { formSubmit } = contactStore;
+const { fields, showError, formdata, errorHTML, feedbackList } = storeToRefs(guestBookStore);
+const { formSubmit } = guestBookStore;
 </script>
 
 <template>
@@ -23,5 +23,21 @@ const { formSubmit } = contactStore;
             }"
 			v-html="errorHTML"
 		></div>
+        <div class="mt-6">
+			<div
+				v-for="(feedback, feedback_ind) in feedbackList"
+				:key="feedback_ind"
+				class="mx-1 flex justify-center"
+				:class="{'font-bold text-center': feedback_ind == 0}"
+			>
+				<div
+					v-for="(elem, elem_ind) in feedback"
+					:key="elem_ind"
+					class="nth-3:w-60 w-30 min-w-25 border border-neutral-400 not-sm:text-sm"
+				>
+					{{ elem }}
+				</div>
+			</div>
+		</div>
 	</main>
 </template>

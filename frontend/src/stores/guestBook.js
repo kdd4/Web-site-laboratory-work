@@ -15,7 +15,7 @@ export const useGuestBookStore = defineStore('guest book', () => {
 		fio: {
 			label: 'ФИО',
 			type: 'text',
-			name: 'FIO',
+			name: 'fio',
 			placeholder: 'Введите ФИО',
 			fieldValue: '',
 			hasError: false,
@@ -40,6 +40,8 @@ export const useGuestBookStore = defineStore('guest book', () => {
 			isCorrect: false,
 		},
 	});
+
+    const feedbackList = ref([]);
 
 	function checkFIO() {
 		fields.value.fio.hasError = !fields.value.fio.fieldValue;
@@ -78,22 +80,41 @@ export const useGuestBookStore = defineStore('guest book', () => {
 	watchEffect(updateAllowSubmit);
 	watchEffect(updateShowError);
 
-	function formSubmit() {
+	async function formSubmit() {
 		let form = document.getElementById('form');
 
-		fetch('/api/guest-book/form', {
+		let response = await fetch('/api/guest-book/form', {
 			method: 'POST',
             headers: {
                 'Accept': 'text/plain'
             },
 			body: new FormData(form),
-		})
-			.then(response => response.text())
-			.then(response => {
-                errorHTML.value = response;
-                showError.value = true;
-            });
+		});
+
+        errorHTML.value = await response.text();
+        showError.value = true;
+
+        await getFeedbackList();
 	}
 
-	return { fields, showError, errorHTML, formdata, formSubmit };
+    async function getFeedbackList() {
+        let response = await fetch('/api/guest-book/feedback', {
+            headers: {
+                'Accept': 'application/json'
+            },
+		});
+
+        let list = await response.json();
+
+        if (!list.length) {
+            feedbackList.value = [];
+            return;
+        }
+
+        feedbackList.value = [['Дата', 'ФИО', 'E-mail', 'Отзыв'], ...list];
+    }
+
+    getFeedbackList();
+
+	return { fields, showError, errorHTML, formdata, feedbackList, formSubmit };
 });
