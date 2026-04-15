@@ -57,6 +57,22 @@ const { useCalendar, closeCalendar } = formCalendarStore;
 					@click="closeCalendar"
 				/>
 
+				<!--Type textarea-->
+				<textarea
+					v-if="field.type == 'textarea'"
+					:name="field.name"
+					:placeholder="field.placeholder"
+					v-model.trim.lazy="field.fieldValue"
+					:class="{
+						'bg-neutral-400/30': !field.hasError && !field.isCorrect,
+						'bg-green-400': field.isCorrect && !field.hasError,
+						'bg-red-400': field.hasError,
+					}"
+					class="w-full rounded-sm border border-neutral-400"
+					@click="closeCalendar"
+				></textarea>
+				
+
 				<!--Type radio-->
 				<div
 					v-if="field.type == 'radio'"

@@ -2,6 +2,7 @@ services:
   frontend:
     container_name: frontend
     build: ./frontend
+    restart: unless-stopped
     ports:
       - "80:80"
     networks:
@@ -16,16 +17,40 @@ services:
   backend:
     container_name: backend
     build: ./backend
+    restart: unless-stopped
     volumes:
       - ./backend/src:/var/www/html
     networks:
       - network
+      - network-db
+    depends_on:
+      - database
     develop:
       watch:
         - path: ./backend
           ignore: src/**
           action: rebuild
 
+  database:
+    container_name: database
+    image: postgres:18-alpine
+    restart: unless-stopped
+    ports:
+      - 5434:5432
+    volumes:
+      - "./database/database.sql:/docker-entrypoint-initdb.d/database.sql"
+    networks:
+      - network-db
+    env_file:
+      - db.env
+    develop:
+      watch:
+        - path: ./database
+          action: sync+restart
+          target: /docker-entrypoint-initdb.d
+
 networks:
   network:
+    driver: bridge
+  network-db:
     driver: bridge
