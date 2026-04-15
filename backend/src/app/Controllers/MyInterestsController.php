@@ -13,6 +13,6 @@ class MyInterestsController extends Controller {
 
         $interests = $this->model->interests;
 
-        $this->view->render('json.php', ['data' => $interests]);
+        $this->view->render(null, ['data' => $interests]);
     }
 }

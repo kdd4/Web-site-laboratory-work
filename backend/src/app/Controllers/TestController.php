@@ -15,6 +15,6 @@ class TestController extends Controller {
             'result' => $this->model->validate($_POST)
         ];
 
-        $this->view->render('json.php', ['data' => $result]);
+        $this->view->render(null, ['data' => $result]);
     }
 }

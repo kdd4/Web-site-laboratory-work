@@ -83,6 +83,9 @@ export const useGuestBookStore = defineStore('guest book', () => {
 
 		fetch('/api/guest-book/form', {
 			method: 'POST',
+            headers: {
+                'Accept': 'text/plain'
+            },
 			body: new FormData(form),
 		})
 			.then(response => response.text())

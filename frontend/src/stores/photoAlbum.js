@@ -4,7 +4,11 @@ import { ref } from 'vue';
 export const usePhotoAlbumStore = defineStore('photoAlbum', () => {
 	const fotosRows = ref([]);
 
-	fetch('/api/photo-album/album')
+	fetch('/api/photo-album/album', {
+        headers: {
+                'Accept': 'application/json'
+            },
+    })
 		.then(response => response.json())
 		.then(response => fotosRows.value = response)
 		.then(updateSrc);

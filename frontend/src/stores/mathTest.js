@@ -84,6 +84,9 @@ export const useMathTestStore = defineStore('mathTest', () => {
 
             let response = await fetch('/api/test/form', {
                 method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
                 body: new FormData(form),
             })
             let response_json = await response.json();

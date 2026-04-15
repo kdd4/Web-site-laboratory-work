@@ -13,6 +13,6 @@ class PhotoAlbumController extends Controller {
 
         $album = $this->model->album;
 
-        $this->view->render('json.php', ['data' => $album]);
+        $this->view->render(null, ['data' => $album]);
     }
 }

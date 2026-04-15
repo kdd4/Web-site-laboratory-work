@@ -15,6 +15,6 @@ class GuestBookController extends Controller {
 
         $data = $this->model->validator->ShowErrors();
 
-        $this->view->render('layout.php', ['data' => $data]);
+        $this->view->render(null, ['data' => $data]);
     }
 }

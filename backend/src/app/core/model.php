@@ -1,14 +1,12 @@
 <?php
 namespace Core;
 
-class Model extends ActiveRecord
+class Model
 {
     public $validator;
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->validator = new FormValidation();
     }
     

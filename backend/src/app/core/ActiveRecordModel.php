@@ -5,7 +5,7 @@ use PDO;
 use PDOException;
 use Exception;
 
-class ActiveRecord {
+class ActiveRecordModel extends Model {
     protected static PDO $pdo;
 
     protected static string $tablename = '';
@@ -14,6 +14,8 @@ class ActiveRecord {
     protected array $data = [];
 
     public function __construct() {
+        parent::__construct();
+
         if (!static::$tablename) return;
 
         static::connectDatabase();
