@@ -2,16 +2,52 @@ import { defineStore } from 'pinia';
 import { ref, watch, watchEffect } from 'vue';
 
 export const useGuestBookStore = defineStore('guest book', () => {
-	const showError = ref(false);
-	const allowSubmit = ref(false);
+	const fileAllowSubmit = ref(false);
+	const fileShowError = ref(false);
+	const fileErrorHTML = ref('');
 
-	const errorHTML = ref("");
-
-	const formdata = ref({
-		allowSubmit: allowSubmit,
+	const fileFormData = ref({
+		allowSubmit: fileAllowSubmit,
 	});
 
-	const fields = ref({
+	const fileFields = ref({
+		file: {
+			label: 'Файл',
+			type: 'file',
+			name: 'feedbackFile',
+			accept: '.inc',
+			change: (l) => (fileAllowSubmit.value = l.length != 0),
+			hasError: false,
+			isCorrect: false,
+		},
+	});
+
+	async function fileSubmit() {
+		let form = document.getElementById('fileForm');
+
+		let response = await fetch('/api/guest-book/file', {
+			method: 'POST',
+			headers: {
+				Accept: 'text/plain',
+			},
+			body: new FormData(form),
+		});
+
+		fileErrorHTML.value = await response.text();
+		fileShowError.value = true;
+
+		await getFeedbackList();
+	}
+
+	const feedbackAllowSubmit = ref(false);
+	const feedbackShowError = ref(false);
+	const feedbackErrorHTML = ref('');
+
+	const feedbackFormData = ref({
+		allowSubmit: feedbackAllowSubmit,
+	});
+
+	const feedbackFields = ref({
 		fio: {
 			label: 'ФИО',
 			type: 'text',
@@ -41,80 +77,102 @@ export const useGuestBookStore = defineStore('guest book', () => {
 		},
 	});
 
-    const feedbackList = ref([]);
-
-	function checkFIO() {
-		fields.value.fio.hasError = !fields.value.fio.fieldValue;
-		fields.value.fio.isCorrect = !fields.value.fio.hasError;
-	}
-
-	function checkEmail() {
-		fields.value.email.hasError = !fields.value.email.fieldValue;
-		fields.value.email.isCorrect = !fields.value.email.hasError;
-	}
-
-	function checkFeedback() {
-		fields.value.feedback.hasError = !fields.value.feedback.fieldValue;
-		fields.value.feedback.isCorrect = !fields.value.feedback.hasError;
-	}
-
-	function updateAllowSubmit() {
-		allowSubmit.value =
-			fields.value.fio.isCorrect &&
-			fields.value.email.isCorrect &&
-			fields.value.feedback.isCorrect;
-	}
-
-	function updateShowError() {
-		showError.value =
-			fields.value.fio.hasError ||
-			fields.value.email.hasError ||
-			fields.value.feedback.hasError;
-
-        errorHTML.value = 'Не заполнено поле';
-	}
-
-	watch(() => fields.value.fio.fieldValue, checkFIO);
-	watch(() => fields.value.email.fieldValue, checkEmail);
-	watch(() => fields.value.feedback.fieldValue, checkFeedback);
-	watchEffect(updateAllowSubmit);
-	watchEffect(updateShowError);
-
-	async function formSubmit() {
-		let form = document.getElementById('form');
+	async function feedbackSubmit() {
+		let form = document.getElementById('feedbackForm');
 
 		let response = await fetch('/api/guest-book/form', {
 			method: 'POST',
-            headers: {
-                'Accept': 'text/plain'
-            },
+			headers: {
+				Accept: 'text/plain',
+			},
 			body: new FormData(form),
 		});
 
-        errorHTML.value = await response.text();
-        showError.value = true;
+		feedbackErrorHTML.value = await response.text();
+		feedbackShowError.value = true;
 
-        await getFeedbackList();
+		await getFeedbackList();
 	}
 
-    async function getFeedbackList() {
-        let response = await fetch('/api/guest-book/feedback', {
-            headers: {
-                'Accept': 'application/json'
-            },
+	function checkFIO() {
+		feedbackFields.value.fio.hasError = !feedbackFields.value.fio.fieldValue;
+		feedbackFields.value.fio.isCorrect = !feedbackFields.value.fio.hasError;
+	}
+
+	function checkEmail() {
+		feedbackFields.value.email.hasError = !feedbackFields.value.email.fieldValue;
+		feedbackFields.value.email.isCorrect = !feedbackFields.value.email.hasError;
+	}
+
+	function checkFeedback() {
+		feedbackFields.value.feedback.hasError = !feedbackFields.value.feedback.fieldValue;
+		feedbackFields.value.feedback.isCorrect = !feedbackFields.value.feedback.hasError;
+	}
+
+	function updateAllowSubmit() {
+		feedbackAllowSubmit.value =
+			feedbackFields.value.fio.isCorrect &&
+			feedbackFields.value.email.isCorrect &&
+			feedbackFields.value.feedback.isCorrect;
+	}
+
+	function updateShowError() {
+		feedbackShowError.value =
+			feedbackFields.value.fio.hasError ||
+			feedbackFields.value.email.hasError ||
+			feedbackFields.value.feedback.hasError;
+
+		feedbackErrorHTML.value = 'Не заполнено поле';
+	}
+
+	watch(() => feedbackFields.value.fio.fieldValue, checkFIO);
+	watch(() => feedbackFields.value.email.fieldValue, checkEmail);
+	watch(() => feedbackFields.value.feedback.fieldValue, checkFeedback);
+	watchEffect(updateAllowSubmit);
+	watchEffect(updateShowError);
+
+	async function getFeedbackList() {
+		let response = await fetch('/api/guest-book/feedback', {
+			headers: {
+				Accept: 'application/json',
+			},
 		});
 
-        let list = await response.json();
+		let list = await response.json();
 
-        if (!list.length) {
-            feedbackList.value = [];
-            return;
-        }
+		if (!list.length) {
+			feedbackList.value = [];
+			return;
+		}
 
-        feedbackList.value = [['Дата', 'ФИО', 'E-mail', 'Отзыв'], ...list];
-    }
+		feedbackList.value = [['Дата', 'ФИО', 'E-mail', 'Отзыв'], ...list];
+	}
 
-    getFeedbackList();
+	getFeedbackList();
 
-	return { fields, showError, errorHTML, formdata, feedbackList, formSubmit };
+	const forms = ref([
+		{
+			id: 'feedbackForm',
+			fields: feedbackFields,
+			formdata: feedbackFormData,
+			showError: feedbackShowError,
+			errorHTML: feedbackErrorHTML,
+			submit: feedbackSubmit,
+		},
+		{
+			id: 'fileForm',
+			fields: fileFields,
+			formdata: fileFormData,
+			showError: fileShowError,
+			errorHTML: fileErrorHTML,
+			submit: fileSubmit,
+		},
+	]);
+
+	const feedbackList = ref([]);
+
+	return {
+		forms,
+		feedbackList,
+	};
 });

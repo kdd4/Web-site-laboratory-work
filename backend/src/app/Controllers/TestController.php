@@ -7,7 +7,7 @@ class TestController extends Controller {
 
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render('layout.php', ['data' => 'Wrong method']);
+            $this->view->render(['data' => 'Wrong method']);
             return;
         }
 
@@ -15,6 +15,6 @@ class TestController extends Controller {
             'result' => $this->model->validate($_POST)
         ];
 
-        $this->view->render(null, ['data' => $result]);
+        $this->view->render(['data' => $result]);
     }
 }

@@ -3,10 +3,10 @@ namespace Core;
 
 class View
 {
-    public function render(?string $contentView = null, array $arguments = [])
+    public function render(array $arguments = [], ?string $contentView = null)
     {
         if (is_null($contentView)) {
-            $acceptHeader = explode(',', $_SERVER['HTTP_ACCEPT']);
+            $acceptHeader = explode(',', $_SERVER['HTTP_ACCEPT'] ?? '');
 
             match(true) {
                 in_array('text/plain', $acceptHeader) => $contentView = 'layout.php',

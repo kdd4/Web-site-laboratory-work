@@ -79,19 +79,19 @@ export const useMathTestStore = defineStore('mathTest', () => {
 			wrongAnswers ||= wrong;
 		}
 
-        if (!wrongAnswers) {
-            let form = document.getElementById('form');
+		if (!wrongAnswers) {
+			let form = document.getElementById('form');
 
-            let response = await fetch('/api/test/form', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json'
-                },
-                body: new FormData(form),
-            })
-            let response_json = await response.json();
-            correctAnswers = response_json.result;
-        }
+			let response = await fetch('/api/test/form', {
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+				},
+				body: new FormData(form),
+			});
+			let response_json = await response.json();
+			correctAnswers = response_json.result;
+		}
 
 		showError.value = wrongAnswers;
 		showGood.value = correctAnswers && !wrongAnswers;

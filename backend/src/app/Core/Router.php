@@ -23,7 +23,7 @@ class Router
         $controller = new $controllerClass;
 
         if (!method_exists($controller, $actionName)) {
-            die("Error: Method $actionName not found in controller $controllerClass");
+            die("Error: Method \"$actionName\" not found in controller \"$controllerClass\"");
         }
 
         $controller->$actionName();

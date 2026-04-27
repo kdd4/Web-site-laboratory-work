@@ -21,6 +21,10 @@ class GuestBookModel extends Model {
         $this->validator->setRule('feedback', 'isNotEmpty');
     }
 
+    public static function getFileName(): string {
+        return static::$fileName;
+    }
+
     public static function load(): array {
         if (!file_exists(static::$fileName)) {
             return [];
@@ -47,11 +51,25 @@ class GuestBookModel extends Model {
         );
     }
 
+    public static function loadFile(): string {
+        if (!file_exists(static::$fileName)) {
+            return "";
+        }
+
+        $file = file_get_contents(static::$fileName);
+
+        if ($file === false) {
+            throw new Exception('Error: file ' . static::$fileName . ' is not opened');
+        }
+
+        return $file;
+    }
+
     public function save(): void {
         $file = fopen(static::$fileName, 'a');
 
         if (!$file) {
-            throw new Exception('Error: file '.static::$fileName.' is not opened');
+            throw new Exception('Error: file ' . static::$fileName . ' is not opened');
         }
 
         $encodeFeedback = urlencode($this->feedback);

@@ -7,7 +7,7 @@ class ContactController extends Controller {
     
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(null, ['data' => 'Wrong method']);
+            $this->view->render(['data' => 'Wrong method']);
             return;
         }
 
@@ -15,6 +15,6 @@ class ContactController extends Controller {
 
         $data = $this->model->validator->ShowErrors();
 
-        $this->view->render(null, ['data' => $data]);
+        $this->view->render(['data' => $data]);
     }
 }
