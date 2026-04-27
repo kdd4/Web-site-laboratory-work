@@ -33,7 +33,7 @@ const { formSubmit } = guestBookStore;
 				<div
 					v-for="(elem, elem_ind) in feedback"
 					:key="elem_ind"
-					class="nth-3:w-60 w-30 min-w-25 border border-neutral-400 not-sm:text-sm"
+					class="nth-3:w-60 w-30 min-w-25 border border-neutral-400 not-sm:text-sm whitespace-normal"
 				>
 					{{ elem }}
 				</div>

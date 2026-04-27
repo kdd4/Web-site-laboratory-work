@@ -8,7 +8,7 @@ class GuestBookController extends Controller {
     
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render('layout.php', ['data' => 'Wrong method']);
+            $this->view->render(null, ['data' => 'Wrong method']);
             return;
         }
 

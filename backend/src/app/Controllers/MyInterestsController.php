@@ -7,7 +7,7 @@ class MyInterestsController extends Controller {
     
     public function interests() {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render('layout.php', ['data' => 'Wrong method']);
+            $this->view->render(null, ['data' => 'Wrong method']);
             return;
         }
 

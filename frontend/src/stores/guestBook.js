@@ -71,7 +71,7 @@ export const useGuestBookStore = defineStore('guest book', () => {
 			fields.value.email.hasError ||
 			fields.value.feedback.hasError;
 
-        errorHTML.value = 'Не заполнено поле'
+        errorHTML.value = 'Не заполнено поле';
 	}
 
 	watch(() => fields.value.fio.fieldValue, checkFIO);

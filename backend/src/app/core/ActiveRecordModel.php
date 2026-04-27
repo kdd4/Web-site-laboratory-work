@@ -3,7 +3,6 @@ namespace Core;
 
 use PDO;
 use PDOException;
-use Exception;
 
 class ActiveRecordModel extends Model {
     protected static PDO $pdo;
