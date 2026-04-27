@@ -10,10 +10,6 @@ class ContactController extends Controller {
             return;
         }
 
-        foreach ($_POST as $key => $value) {
-            $this->model->$key = $value;
-        }
-
         $this->model->validate();
 
         $data = $this->model->validator->ShowErrors();

@@ -25,6 +25,10 @@ services:
             - network-db
         depends_on:
             - database
+        env_file:
+            - db.env
+        environment:
+            DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
         develop:
             watch:
                 - path: ./backend

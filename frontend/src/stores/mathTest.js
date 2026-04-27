@@ -10,6 +10,15 @@ export const useMathTestStore = defineStore('mathTest', () => {
 
 	const formfields = ref([
 		{
+			label: 'ФИО',
+			type: 'text',
+			name: 'fio',
+			placeholder: 'Введите ФИО',
+			fieldValue: '',
+			hasError: false,
+			isCorrect: false,
+		},
+		{
 			header: '1-й вопрос',
 			text: 'Введите значение натурального логарифма с точностью до десятых',
 			type: 'text',
@@ -96,6 +105,8 @@ export const useMathTestStore = defineStore('mathTest', () => {
 		showError.value = wrongAnswers;
 		showGood.value = correctAnswers && !wrongAnswers;
 		showBad.value = !correctAnswers && !wrongAnswers;
+
+		await getTestResults();
 	}
 
 	function resetTest() {
@@ -109,5 +120,28 @@ export const useMathTestStore = defineStore('mathTest', () => {
 		}
 	}
 
-	return { formdata, formfields, messages, checkTest, resetTest };
+	async function getTestResults() {
+		let response = await fetch('/api/test/results', {
+			headers: {
+				Accept: 'application/json',
+			},
+		});
+
+		let list = await response.json();
+
+		if (!list.length) {
+			testResults.value = [];
+			return;
+		}
+
+		list = list.map((line) => [line.date, line.fio, line.result ? 'Good' : 'Bad']);
+
+		testResults.value = [['Дата', 'ФИО', 'Результат'], ...list];
+	}
+
+	getTestResults();
+
+	const testResults = ref([]);
+
+	return { formdata, formfields, messages, testResults, checkTest, resetTest };
 });

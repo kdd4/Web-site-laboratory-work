@@ -2,13 +2,14 @@
 namespace Core;
 
 use \Exception;
+use JsonSerializable;
 
-class Model
+class Model implements JsonSerializable
 {
-    public $validator;
+    protected $validator;
 
     protected static array $fields = [];
-    private array $data = [];
+    protected array $data = [];
 
     public function __construct()
     {
@@ -32,5 +33,17 @@ class Model
     public function validate()
     {
         return $this->validator->validate($this);
+    }
+
+    public function __toString(): string {
+        return implode(', ', array_map(
+            fn($key, $value) => "$key: $value",
+            array_keys($this->data),
+            $this->data
+        ));
+    }
+
+    public function jsonSerialize(): mixed {
+        return $this->data;
     }
 }

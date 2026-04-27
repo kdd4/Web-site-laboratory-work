@@ -1,10 +1,12 @@
 <?php
 namespace Models;
 
-use \Core\Model;
+use \Core\ActiveRecordModel;
 
-class TestModel extends Model {
-    protected static array $fields = ['question1', 'question2', 'question3'];
+class TestModel extends ActiveRecordModel {
+    protected static array $fields = ['fio', 'question1', 'question2', 'question3', 'result', 'date'];
+
+    protected static string $tablename = 'mathtest';
 
     public function __construct()
     {

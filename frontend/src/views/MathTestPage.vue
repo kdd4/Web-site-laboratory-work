@@ -5,7 +5,7 @@ import Form from '@/components/FormBlock.vue';
 
 const mathTestStore = useMathTestStore();
 
-const { formdata, formfields, messages } = storeToRefs(mathTestStore);
+const { formdata, formfields, messages, testResults } = storeToRefs(mathTestStore);
 const { checkTest, resetTest } = mathTestStore;
 </script>
 
@@ -30,6 +30,22 @@ const { checkTest, resetTest } = mathTestStore;
 			class="rounded-sm border-2 p-0.5 text-center"
 		>
 			<p>{{ message.text }}</p>
+		</div>
+		<div class="mt-6">
+			<div
+				v-for="(result, ind) in testResults"
+				:key="ind"
+				class="mx-1 flex justify-center"
+				:class="{ 'text-center font-bold': ind == 0 }"
+			>
+				<div
+					v-for="(elem, elem_ind) in result"
+					:key="elem_ind"
+					class="flex w-30 min-w-25 items-center justify-center border border-neutral-400 text-center whitespace-normal not-sm:text-sm"
+				>
+					{{ elem }}
+				</div>
+			</div>
 		</div>
 	</main>
 </template>

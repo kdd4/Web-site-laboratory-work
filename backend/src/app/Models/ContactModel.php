@@ -4,7 +4,7 @@ namespace Models;
 use \Core\Model;
 
 class ContactModel extends Model {
-    protected static array $fields = ['FIO', 'gender', 'age', 'email', 'number', 'birthday'];
+    protected static array $fields = ['fio', 'gender', 'age', 'email', 'number', 'birthday'];
 
     public function __construct()
     {

@@ -15,7 +15,7 @@ export const useContactStore = defineStore('contact', () => {
 		fio: {
 			label: 'ФИО',
 			type: 'text',
-			name: 'FIO',
+			name: 'fio',
 			placeholder: 'Введите ФИО',
 			fieldValue: '',
 			hasError: false,
