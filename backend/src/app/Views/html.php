@@ -2,6 +2,10 @@
 header('Content-Type: text/html; charset=utf-8');
 
 function HTMLparser(mixed $data): string {
+    if (is_bool($data)) {
+        return $data ? 'true' : 'false';
+    }
+
     if (is_scalar($data) || is_object($data)) {
         return htmlspecialchars($data);
     }

@@ -1,8 +1,8 @@
 <?php
 namespace Core;
 
-use PDO;
-use PDOException;
+use \PDO;
+use \PDOException;
 
 class ActiveRecordModel extends Model {
     protected static PDO $pdo;

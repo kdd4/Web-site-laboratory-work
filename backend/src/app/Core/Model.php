@@ -2,11 +2,11 @@
 namespace Core;
 
 use \Exception;
-use JsonSerializable;
+use \JsonSerializable;
 
 class Model implements JsonSerializable
 {
-    protected $validator;
+    public $validator;
 
     protected static array $fields = [];
     protected array $data = [];

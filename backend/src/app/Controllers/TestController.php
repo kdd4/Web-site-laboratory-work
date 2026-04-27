@@ -2,7 +2,7 @@
 namespace Controllers;
 
 use \Core\Controller;
-use Models\TestModel;
+use \Models\TestModel;
 
 class TestController extends Controller {
 

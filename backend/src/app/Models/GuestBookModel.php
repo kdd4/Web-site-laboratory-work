@@ -1,8 +1,8 @@
 <?php
 namespace Models;
 
-use \Core\Model;
 use \Exception;
+use \Core\Model;
 
 class GuestBookModel extends Model {
     protected static array $fields = ['date', 'fio', 'email', 'feedback'];
