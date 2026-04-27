@@ -1,9 +1,11 @@
-<?
+<?php
 namespace Models;
 
 use \Core\Model;
 
 class ContactModel extends Model {
+    protected static array $fields = ['fio', 'gender', 'age', 'email', 'number', 'birthday'];
+
     public function __construct()
     {
         parent::__construct();

@@ -1,5 +1,7 @@
-<?
+<?php
 namespace Core;
+
+use \Core\Model;
 
 class FormValidation
 {
@@ -195,12 +197,12 @@ class FormValidation
         ];
     }
 
-    public function validate(array $form): bool
+    public function validate(Model $model): bool
     {
         $this->errors = [];
 
         foreach ($this->rules as $fieldName => $fieldRules) {
-            $data = $form[$fieldName] ?? null;
+            $data = $model->$fieldName ?? null;
 
             foreach ($fieldRules as $rule) {
                 $validator = $rule['validator'];

@@ -15,7 +15,7 @@ export const useNavigationStore = defineStore('navigation', () => {
 
 	function checkBurgerMenu() {
 		isBurgerMenuOpened.value = false;
-		isBurgerMenu.value = window.innerWidth <= 650; // px
+		isBurgerMenu.value = window.innerWidth <= 720; // px
 	}
 	checkBurgerMenu();
 

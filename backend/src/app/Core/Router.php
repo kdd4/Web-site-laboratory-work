@@ -1,4 +1,4 @@
-<?
+<?php
 namespace Core;
 
 class Router
@@ -18,12 +18,12 @@ class Router
 
         $CamelCaseControllerName = implode('', $upperSplitedControllerName);
 
-        $controllerClass = 'Controllers\\' . $CamelCaseControllerName . 'Controller';
+        $controllerClass = "Controllers\\{$CamelCaseControllerName}Controller";
         
         $controller = new $controllerClass;
 
         if (!method_exists($controller, $actionName)) {
-            die("Error: Method $actionName not found in controller $controllerClass");
+            die("Error: Method \"$actionName\" not found in controller \"$controllerClass\"");
         }
 
         $controller->$actionName();

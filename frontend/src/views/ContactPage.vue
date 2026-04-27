@@ -15,11 +15,11 @@ const { formSubmit } = contactStore;
 		<Form id="form" :fields="fields" :formdata="formdata" @submit="formSubmit" />
 		<div
 			v-show="showError"
-			class="rounded-sm border-2  p-0.5 text-left"
-            :class="{
-                'border-red-500/30 bg-red-400': !errorHTML.includes('Ok'),
-                'border-green-500/30 bg-green-400': errorHTML.includes('Ok'),
-            }"
+			class="rounded-sm border-2 p-0.5 text-left"
+			:class="{
+				'border-red-500/30 bg-red-400': !errorHTML.includes('Ok'),
+				'border-green-500/30 bg-green-400': errorHTML.includes('Ok'),
+			}"
 			v-html="errorHTML"
 		></div>
 	</main>

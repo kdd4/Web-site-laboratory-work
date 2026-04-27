@@ -3,7 +3,7 @@
 For running site use:
 
 ```bash
-docker compose up
+docker compose up -d
 ```
 
 For running site for developing:

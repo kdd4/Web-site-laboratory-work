@@ -1,8 +1,10 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { ref, toValue, toRefs } from 'vue';
-import Calendar from '@/components/CalendarBlock.vue';
+
 import { useFormCalendar } from '@/stores/formCalendar';
+
+import Calendar from '@/components/CalendarBlock.vue';
 
 const { fields = ref([]), formdata = ref({}) } = defineProps({
 	fields: Object,
@@ -17,14 +19,24 @@ const formCalendarStore = useFormCalendar();
 
 const { calendarDate } = storeToRefs(formCalendarStore);
 const { useCalendar, closeCalendar } = formCalendarStore;
+
+function ChangeFile(event, field) {
+	if (field.change instanceof Function) {
+		field.change(event.target.files);
+	}
+
+	if (event.target.files.length != 0) {
+		field.filename = event.target.files[0].name;
+	} else {
+		field.filename = undefined;
+	}
+}
 </script>
 
 <template>
 	<form
 		class="flex flex-col space-y-3 rounded-lg border-2 border-neutral-400/30 bg-neutral-300 p-2 py-3"
-		action=""
-		method="Post"
-		enctype="text/plain"
+		enctype="multipart/form-data"
 		v-bind="$attrs"
 		@submit.prevent="$emit('submit')"
 		@reset.prevent="$emit('reset')"
@@ -41,6 +53,14 @@ const { useCalendar, closeCalendar } = formCalendarStore;
 					>{{ field.label }}:</label
 				>
 
+				<!--Type button-->
+				<button
+					v-if="field.type == 'button'"
+					v-html="field.buttonText"
+					@click.prevent="field.click"
+					class="w-full rounded-sm border border-neutral-400"
+				></button>
+
 				<!--Type text-->
 				<input
 					v-if="field.type == 'text'"
@@ -56,6 +76,21 @@ const { useCalendar, closeCalendar } = formCalendarStore;
 					class="w-full rounded-sm border border-neutral-400"
 					@click="closeCalendar"
 				/>
+
+				<!--Type textarea-->
+				<textarea
+					v-if="field.type == 'textarea'"
+					:name="field.name"
+					:placeholder="field.placeholder"
+					v-model.trim.lazy="field.fieldValue"
+					:class="{
+						'bg-neutral-400/30': !field.hasError && !field.isCorrect,
+						'bg-green-400': field.isCorrect && !field.hasError,
+						'bg-red-400': field.hasError,
+					}"
+					class="w-full rounded-sm border border-neutral-400"
+					@click="closeCalendar"
+				></textarea>
 
 				<!--Type radio-->
 				<div
@@ -105,6 +140,32 @@ const { useCalendar, closeCalendar } = formCalendarStore;
 						{{ option.text }}
 					</option>
 				</select>
+
+				<!--Type file-->
+				<div
+					v-if="field.type == 'file'"
+					:class="{
+						'bg-neutral-400/30': !field.hasError && !field.isCorrect,
+						'bg-green-400': field.isCorrect && !field.hasError,
+						'bg-red-400': field.hasError,
+					}"
+					@click="closeCalendar"
+				>
+					<label
+						:for="($attrs['id'] ?? 'form') + '_' + field.name"
+						class="w-full rounded-sm border border-neutral-400"
+					>
+						{{ field.filename ?? 'Выберите файл' }}
+					</label>
+					<input
+						:id="($attrs['id'] ?? 'form') + '_' + field.name"
+						type="file"
+						:name="field.name"
+						:accept="field.accept"
+						hidden="true"
+						@change="(e) => ChangeFile(e, field)"
+					/>
+				</div>
 
 				<!--Type date-->
 				<div

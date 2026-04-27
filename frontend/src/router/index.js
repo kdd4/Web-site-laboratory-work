@@ -48,6 +48,11 @@ const router = createRouter({
 			name: 'History',
 			component: () => import('@/views/HistoryPage.vue'),
 		},
+		{
+			path: '/guestbook',
+			name: 'GuestBook',
+			component: () => import('@/views/GuestBookPage.vue'),
+		},
 	],
 });
 
