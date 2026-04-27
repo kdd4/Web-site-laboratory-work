@@ -16,7 +16,11 @@ class GuestBookController extends Controller {
         }
         $this->model->date = date('d.m.y');
 
-        if ($this->model->validate($_POST)) {
+        foreach ($_POST as $key => $value) {
+            $this->model->$key = $value;
+        }
+
+        if ($this->model->validate()) {
             $this->model->save();
         }
 

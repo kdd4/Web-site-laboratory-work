@@ -4,6 +4,8 @@ namespace Models;
 use \Core\Model;
 
 class TestModel extends Model {
+    protected static array $fields = ['question1', 'question2', 'question3'];
+
     public function __construct()
     {
         parent::__construct();

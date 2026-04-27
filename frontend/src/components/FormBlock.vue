@@ -1,8 +1,10 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { ref, toValue, toRefs } from 'vue';
-import Calendar from '@/components/CalendarBlock.vue';
+
 import { useFormCalendar } from '@/stores/formCalendar';
+
+import Calendar from '@/components/CalendarBlock.vue';
 
 const { fields = ref([]), formdata = ref({}) } = defineProps({
 	fields: Object,

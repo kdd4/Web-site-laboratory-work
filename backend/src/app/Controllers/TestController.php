@@ -11,8 +11,12 @@ class TestController extends Controller {
             return;
         }
 
+        foreach ($_POST as $key => $value) {
+            $this->model->$key = $value;
+        }
+
         $result = [
-            'result' => $this->model->validate($_POST)
+            'result' => $this->model->validate()
         ];
 
         $this->view->render(['data' => $result]);

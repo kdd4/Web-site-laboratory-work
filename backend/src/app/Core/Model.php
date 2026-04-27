@@ -8,7 +8,7 @@ class Model
     public $validator;
 
     protected static array $fields = [];
-    protected array $data = [];
+    private array $data = [];
 
     public function __construct()
     {
@@ -29,8 +29,8 @@ class Model
         return $this->data[$name] ?? null;
     }
     
-    public function validate($form)
+    public function validate()
     {
-        return $this->validator->validate($form);
+        return $this->validator->validate($this);
     }
 }

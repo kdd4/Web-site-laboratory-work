@@ -4,6 +4,8 @@ namespace Models;
 use \Core\Model;
 
 class ContactModel extends Model {
+    protected static array $fields = ['FIO', 'gender', 'age', 'email', 'number', 'birthday'];
+
     public function __construct()
     {
         parent::__construct();
