@@ -10,8 +10,8 @@ class ContactModel extends Model {
     {
         parent::__construct();
 
-        $this->validator->setRule('FIO', 'isWordCountGreaterOrEqual', 2);
-        $this->validator->setRule('FIO', 'isWordCountLessOrEqual', 3);
+        $this->validator->setRule('fio', 'isWordCountGreaterOrEqual', 2);
+        $this->validator->setRule('fio', 'isWordCountLessOrEqual', 3);
 
         $this->validator->setRule('gender', 'isNotEmpty');
         

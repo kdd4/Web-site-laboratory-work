@@ -53,6 +53,11 @@ const router = createRouter({
 			name: 'GuestBook',
 			component: () => import('@/views/GuestBookPage.vue'),
 		},
+		{
+			path: '/blog',
+			name: 'Blog',
+			component: () => import('@/views/BlogPage.vue'),
+		},
 	],
 });
 

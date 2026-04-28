@@ -35,7 +35,7 @@ class GuestBookController extends Controller {
         }
 
         if (!isset($_FILES['feedbackFile']) || $_FILES['feedbackFile']['error'] !== UPLOAD_ERR_OK) {
-            $this->view->render(['data' => 'The file was not sent']);
+            $this->view->render(['data' => 'file not found or has upload error']);
             return;
         }
 

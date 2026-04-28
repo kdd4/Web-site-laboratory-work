@@ -9,7 +9,7 @@ class ActiveRecordModel extends Model {
 
     protected static string $tablename = '';
 
-    protected ?int $id = null;
+    public ?int $id = null;
 
     public function __construct() {
         parent::__construct();
@@ -86,10 +86,11 @@ class ActiveRecordModel extends Model {
     private function bindData(\PDOStatement $stmt, array $data): void {
         foreach ($data as $key => $value) {
             $type = match (true) {
-                is_bool($value)  => PDO::PARAM_BOOL,
-                is_int($value)   => PDO::PARAM_INT,
-                $value === null  => PDO::PARAM_NULL,
-                default          => PDO::PARAM_STR,
+                is_bool($value)     => PDO::PARAM_BOOL,
+                is_int($value)      => PDO::PARAM_INT,
+                is_resource($value) => PDO::PARAM_LOB,
+                $value === null     => PDO::PARAM_NULL,
+                default             => PDO::PARAM_STR,
             };
             $stmt->bindValue(":$key", $value, $type);
         }
@@ -104,19 +105,19 @@ class ActiveRecordModel extends Model {
         $fieldNames = array_keys($data);
 
         if (is_null($this->id)) {
-            $columns = implode(', ', array_map(fn($f) => "\"$f\"", $fieldNames));
+            $columns = implode(', ', $fieldNames);
             $placeholders = implode(', ', array_map(fn($f) => ":$f", $fieldNames));
 
-            $sql = "INSERT INTO \"$table\" ($columns) VALUES ($placeholders) RETURNING id";
+            $sql = "INSERT INTO $table ($columns) VALUES ($placeholders) RETURNING id";
             $stmt = static::$pdo->prepare($sql);
             $this->bindData($stmt, $data);
             $stmt->execute();
 
             $this->id = $stmt->fetchColumn();
         } else {
-            $setClauses = implode(', ', array_map(fn($f) => "\"$f\" = :$f", $fieldNames));
+            $setClauses = implode(', ', array_map(fn($f) => "$f = :$f", $fieldNames));
 
-            $sql = "UPDATE \"$table\" SET $setClauses WHERE id = :id";
+            $sql = "UPDATE $table SET $setClauses WHERE id = :id";
             $stmt = static::$pdo->prepare($sql);
             $this->bindData($stmt, $data);
             $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);

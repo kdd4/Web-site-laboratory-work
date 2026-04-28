@@ -17,6 +17,7 @@ export const usePagesStore = defineStore('pages', () => {
 		{ name: 'PhotoAlbum', text: 'Фотоальбом', isCurrentPage },
 		{ name: 'Contact', text: 'Контакт', isCurrentPage },
 		{ name: 'MathTest', text: 'Тест по дисциплине', isCurrentPage },
+		{ name: 'Blog', text: 'Блог', isCurrentPage },
 		{ name: 'GuestBook', text: 'Гостевая книга', isCurrentPage },
 		{ name: 'History', text: 'История просмотра', isCurrentPage },
 	]);

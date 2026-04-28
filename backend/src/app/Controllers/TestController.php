@@ -5,7 +5,6 @@ use \Core\Controller;
 use \Models\TestModel;
 
 class TestController extends Controller {
-
     public function form() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->view->render(['data' => 'Wrong method']);
@@ -33,8 +32,9 @@ class TestController extends Controller {
         $filteredData = array_map(
             function($result) {
                 $filtered = [];
+                $fields = ['date', 'fio', 'result'];
 
-                foreach (['date', 'fio', 'result'] as $value) {
+                foreach ($fields as $value) {
                     $filtered[$value] = $result->$value;
                 }
 

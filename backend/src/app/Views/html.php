@@ -2,12 +2,17 @@
 header('Content-Type: text/html; charset=utf-8');
 
 function HTMLparser(mixed $data): string {
-    if (is_bool($data)) {
-        return $data ? 'true' : 'false';
-    }
+    $result = match (true) {
+        $data === null => 'null',
+        is_bool($data) => $data ? 'true' : 'false',
+        is_resource($data) => 'resource',
+        is_scalar($data) || is_object($data) => htmlspecialchars($data),
+        is_callable($data) => $data(),
+        default => null,
+    };
 
-    if (is_scalar($data) || is_object($data)) {
-        return htmlspecialchars($data);
+    if ($result !== null) {
+        return $result;
     }
 
     if (is_array($data)) {
@@ -18,10 +23,6 @@ function HTMLparser(mixed $data): string {
             );
         $result = '<ul>'.implode($lines).'</ul>';
         return $result;
-    }
-
-    if (is_callable($data)) {
-        return $data();
     }
     
     return 'unknown';
