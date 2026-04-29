@@ -2,6 +2,7 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\RequireAuth;
 use Models\BlogModel;
 
 class BlogController extends Controller {
@@ -78,6 +79,7 @@ class BlogController extends Controller {
         $this->view->render(['data' => 'Ok']);
     }
 
+    #[RequireAuth]
     public function posts() {
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             $this->view->render(['data' => 'Wrong method']);

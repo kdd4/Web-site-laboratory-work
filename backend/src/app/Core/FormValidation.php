@@ -75,6 +75,23 @@ class FormValidation
         return null;
     }
 
+    public function isLengthGreaterOrEqual(mixed $data, int $value): ?string
+    {
+        if (!is_scalar($data)) {
+            return 'Value must be scalar';
+        }
+
+        $data = trim((string)$data);
+
+        $res = strlen($data);
+
+        if ($res < $value) {
+            return "Field must have length greater or equal {$value} (has {$res})";
+        }
+
+        return null;
+    }
+
     public function isInteger(mixed $data): ?string
     {
         if (!is_scalar($data)) {

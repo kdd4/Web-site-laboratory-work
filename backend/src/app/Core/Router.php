@@ -1,6 +1,9 @@
 <?php
 namespace Core;
 
+use ReflectionMethod;
+use Core\Attributes\RequireAuth;
+
 class Router
 {
     public static function route()
@@ -26,6 +29,10 @@ class Router
             die("Error: Method \"$actionName\" not found in controller \"$controllerClass\"");
         }
 
-        $controller->$actionName();
+        $middleware = new Middleware();
+
+        $middleware->buildPipeline($controller, $actionName);
+
+        $middleware->runPipeline();
     }
 }

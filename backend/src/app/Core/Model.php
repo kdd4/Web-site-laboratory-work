@@ -30,7 +30,7 @@ class Model implements JsonSerializable
         return $this->data[$name] ?? null;
     }
     
-    public function validate()
+    public function validate(): bool
     {
         return $this->validator->validate($this);
     }

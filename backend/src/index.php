@@ -8,6 +8,8 @@ spl_autoload_register(function ($class_name) {
 
     $basePath = '.' . DIRECTORY_SEPARATOR . 'app'. DIRECTORY_SEPARATOR;
     $path = (string)$basePath . $matches[1];
+    $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
+
     $name = "{$matches[2]}.php";
 
     $fullName = $path . DIRECTORY_SEPARATOR . $name;
