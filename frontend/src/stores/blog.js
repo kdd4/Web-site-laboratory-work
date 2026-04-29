@@ -151,6 +151,8 @@ export const useBlogStore = defineStore('blog', () => {
 		}
 
 		blogPosts.value = list;
+
+	    blogPosts.value.sort((a, b) => new Date(b.time) - new Date(a.time));
 	}
 
 	getBlogPosts();

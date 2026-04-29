@@ -31,7 +31,7 @@ const { checkTest, resetTest } = mathTestStore;
 		>
 			<p>{{ message.text }}</p>
 		</div>
-		<div class="mt-6">
+		<div class="mt-6 mb-6">
 			<div
 				v-for="(result, ind) in testResults"
 				:key="ind"

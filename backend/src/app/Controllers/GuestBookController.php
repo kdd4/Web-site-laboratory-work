@@ -39,9 +39,24 @@ class GuestBookController extends Controller {
             return;
         }
 
-        $result = move_uploaded_file($_FILES['feedbackFile']['tmp_name'], GuestBookModel::getFileName());
+        if (!is_uploaded_file($_FILES['feedbackFile']['tmp_name'])) {
+            $this->view->render(['data' => 'Error loading file']);
+            return;
+        }
 
-        $this->view->render(['data' => $result ? 'Ok' : 'Error loading file']);
+        $feedbacks = GuestBookModel::load($_FILES['feedbackFile']['tmp_name']);
+
+        foreach ($feedbacks as $feedback) {
+            $model = new GuestBookModel();
+
+            foreach ($feedback as $key => $value) {
+                $model->$key = $value;
+            }
+
+            $model->save();
+        }
+
+        $this->view->render(['data' => 'Ok']);
     }
 
     public function feedback() {

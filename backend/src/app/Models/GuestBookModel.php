@@ -25,15 +25,19 @@ class GuestBookModel extends Model {
         return static::$fileName;
     }
 
-    public static function load(): array {
-        if (!file_exists(static::$fileName)) {
+    public static function load(?string $fileName = null): array {
+        if ($fileName === null) {
+            $fileName = static::$fileName;
+        }
+
+        if (!file_exists($fileName)) {
             return [];
         }
 
-        $lines = file(static::$fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $lines = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         if ($lines === false) {
-            throw new Exception('Error: file ' . static::$fileName . ' is not opened');
+            throw new Exception("Error: file $fileName is not opened");
         }
 
         return array_map(
@@ -65,16 +69,52 @@ class GuestBookModel extends Model {
         return $file;
     }
 
-    public function save(): void {
-        $file = fopen(static::$fileName, 'a');
+    public static function findLineByFields(array $data): ?int {
+        $lines = static::load();
 
-        if (!$file) {
-            throw new Exception('Error: file ' . static::$fileName . ' is not opened');
+        $key = array_find_key($lines,
+            fn($line) => array_all($data,
+                fn($value, $key) => $line[$key] === $value
+            )
+        );
+
+        return $key;
+    }
+
+    public function save(?string $fileName = null): void {
+        if ($fileName === null) {
+            $fileName = static::$fileName;
         }
 
         $encodeFeedback = urlencode($this->feedback);
+        $data = "$this->date;$this->fio;$this->email;$encodeFeedback";
 
-        fwrite($file, "$this->date;$this->fio;$this->email;$encodeFeedback\n");
+        $key = static::findLineByFields([
+            'date'  => $this->date,
+            'fio'   => $this->fio,
+            'email' => $this->email,
+        ]);
+        
+        if ($key !== null) {
+            $lines = file($fileName, FILE_IGNORE_NEW_LINES);
+
+            if (!$lines) {
+                throw new Exception("Error: file $fileName is not opened");
+            }
+
+            $lines[$key] = $data;
+
+            file_put_contents($fileName, implode("\n", $lines) . "\n");
+            return;
+        }
+
+        $file = fopen($fileName, 'a');
+
+        if (!$file) {
+            throw new Exception("Error: file $fileName is not opened");
+        }
+
+        fwrite($file, "$data\n");
 
         fclose($file);
     }

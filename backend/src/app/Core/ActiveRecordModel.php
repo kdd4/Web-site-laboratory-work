@@ -83,6 +83,33 @@ class ActiveRecordModel extends Model {
         return $record;
     }
 
+    public static function findByFields(array $data): ?static {
+        static::connectDatabase();
+
+        $table = static::$tablename;
+
+        $fieldNames = array_keys($data);
+
+        $params = implode(' AND ', array_map(fn($key) => "$key = :$key", $fieldNames));
+
+        $sql = "SELECT * FROM \"$table\" WHERE $params";
+
+        $stmt = static::$pdo->prepare($sql);
+        $stmt->execute($data);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        $record = new static();
+
+        foreach ($row as $key => $value) {
+            $record->$key = $value;
+        }
+
+        return $record;
+    }
+
     private function bindData(\PDOStatement $stmt, array $data): void {
         foreach ($data as $key => $value) {
             $type = match (true) {
@@ -106,7 +133,7 @@ class ActiveRecordModel extends Model {
 
         if (is_null($this->id)) {
             $columns = implode(', ', $fieldNames);
-            $placeholders = implode(', ', array_map(fn($f) => ":$f", $fieldNames));
+            $placeholders = implode(', ', array_map(fn($key) => ":$key", $fieldNames));
 
             $sql = "INSERT INTO $table ($columns) VALUES ($placeholders) RETURNING id";
             $stmt = static::$pdo->prepare($sql);

@@ -59,7 +59,7 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 				<div class="self-end pt-1 text-xs">{{ post.time }}</div>
 			</div>
 		</div>
-		<div class="flex space-x-2 select-none">
+		<div class="flex space-x-2 select-none m-3">
 			<div v-if="firstPageShow" @click="goToFirstPage" class="cursor-pointer">Начало</div>
 			<div
 				v-for="(cur_page, ind) in pageList"

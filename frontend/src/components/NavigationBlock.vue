@@ -31,7 +31,7 @@ onBeforeUnmount(stopTime);
 			v-if="!isBurgerMenu"
 			class="mx-2 grow-0 font-serif text-3xl font-bold text-white transition-all duration-1000 ease-in-out select-none hover:rotate-30"
 		>
-			LW8
+			LW
 		</h1>
 		<ul
 			v-if="!isBurgerMenu || isBurgerMenuOpened"
