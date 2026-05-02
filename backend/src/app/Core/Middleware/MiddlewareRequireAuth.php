@@ -8,13 +8,24 @@ use function in_array, func_get_args;
 class MiddlewareRequireAuth implements MiddlewareInterface {
     public function __construct(public RequireAuth $attribute) {}
 
-    public function handle(?MiddlewareInterface $next): void {    
-        if (!in_array('login', $_SESSION) ) {
+    public function handle(?MiddlewareInterface $next): void {
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        if ($this->attribute->forMethods !== null && 
+            !in_array($method, $this->attribute->forMethods)) {
+            
+            $args = func_get_args();
+            array_shift($args);
+            $next->handle(...$args);
+            return;
+        }
+
+        if (!isset($_SESSION['login']) ) {
             http_response_code(401);
             exit('Unauthorized');
         }
 
-        if ($this->attribute->role != '' && 
+        if ($this->attribute->role !== '' && 
             !in_array(
                 $this->attribute->role, 
                 $_SESSION['roles']
@@ -23,6 +34,8 @@ class MiddlewareRequireAuth implements MiddlewareInterface {
             exit('Forbidden');
         }
 
-        $next->handle(...func_get_args());
+        $args = func_get_args();
+        array_shift($args);
+        $next->handle(...$args);
     }
 }

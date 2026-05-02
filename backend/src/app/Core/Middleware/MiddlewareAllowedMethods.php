@@ -18,6 +18,8 @@ class MiddlewareAllowedMethods implements MiddlewareInterface {
             exit('Method Not Allowed');
         }
 
-        $next->handle(...func_get_args());
+        $args = func_get_args();
+        array_shift($args);
+        $next->handle(...$args);
     }
 }

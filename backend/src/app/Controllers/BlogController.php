@@ -3,12 +3,14 @@ namespace Controllers;
 
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
+use \Core\Attributes\RequireAuth;
 use \Models\BlogModel;
 
 /** @property \Models\BlogModel $model */
 class BlogController extends Controller {
 
     #[AllowedMethods('POST')]
+    #[RequireAuth()]
     public function post() {
         if (!isset($_FILES['image'])) {
             $this->view->render(['data' => '"image" field not found'], code: 400);
@@ -38,6 +40,7 @@ class BlogController extends Controller {
     }
 
     #[AllowedMethods('POST')]
+    #[RequireAuth('admin')]
     public function postfile() {
         if (!isset($_FILES['posts'])) {
             $this->view->render(['data' => 'file not found'], code: 400);
@@ -76,6 +79,7 @@ class BlogController extends Controller {
     }
 
     #[AllowedMethods('GET')]
+    #[RequireAuth()]
     public function posts() {
         $data = BlogModel::findAll();
 
@@ -97,6 +101,7 @@ class BlogController extends Controller {
     }
 
     #[AllowedMethods('GET')]
+    #[RequireAuth()]
     public function image() {
         if (!isset($_GET['id'])) {
             $this->view->render(['data' => 'Parameter id not found'], code: 400);

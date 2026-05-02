@@ -58,6 +58,11 @@ const router = createRouter({
 			name: 'Blog',
 			component: () => import('@/views/BlogPage.vue'),
 		},
+		{
+			path: '/auth',
+			name: 'Auth',
+			component: () => import('@/views/AuthPage.vue'),
+		},
 	],
 });
 

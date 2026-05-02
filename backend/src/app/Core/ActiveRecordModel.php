@@ -91,7 +91,7 @@ class ActiveRecordModel extends Model {
 
         $fieldNames = array_keys($data);
 
-        $params = implode(' AND ', array_map(fn($key) => "$key = :$key", $fieldNames));
+        $params = implode(' AND ', array_map(fn($key) => "\"$key\" = :$key", $fieldNames));
 
         $sql = "SELECT * FROM \"$table\" WHERE $params";
 
@@ -136,14 +136,14 @@ class ActiveRecordModel extends Model {
             $columns = implode(', ', $fieldNames);
             $placeholders = implode(', ', array_map(fn($key) => ":$key", $fieldNames));
 
-            $sql = "INSERT INTO $table ($columns) VALUES ($placeholders) RETURNING id";
+            $sql = "INSERT INTO \"$table\" ($columns) VALUES ($placeholders) RETURNING id";
             $stmt = static::$pdo->prepare($sql);
             $this->bindData($stmt, $data);
             $stmt->execute();
 
             $this->id = $stmt->fetchColumn();
         } else {
-            $setClauses = implode(', ', array_map(fn($f) => "$f = :$f", $fieldNames));
+            $setClauses = implode(', ', array_map(fn($f) => "\"$f\" = :$f", $fieldNames));
 
             $sql = "UPDATE $table SET $setClauses WHERE id = :id";
             $stmt = static::$pdo->prepare($sql);

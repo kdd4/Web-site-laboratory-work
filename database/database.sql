@@ -18,9 +18,9 @@ CREATE TABLE blog (
     text        TEXT
 );
 
-CREATE TABLE user (
+CREATE TABLE "user" (
     id          SERIAL PRIMARY KEY,
     login       VARCHAR(50) UNIQUE,
-    password    VARCHAR(50),
-    roles       VARCHAR(50)
+    password    VARCHAR(80),
+    roles       VARCHAR(80)
 );

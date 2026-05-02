@@ -3,11 +3,13 @@ namespace Controllers;
 
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
+use \Core\Attributes\RequireAuth;
 
 /** @property \Models\ContactModel $model */
 class ContactController extends Controller {
     
     #[AllowedMethods('POST')]
+    #[RequireAuth()]
     public function form() {
         $res = $this->model->validate();
 

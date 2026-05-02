@@ -17,6 +17,14 @@ class AuthController extends Controller {
         ]]);
     }
 
+    #[AllowedMethods('GET')]
+    public function status() {
+        $this->view->render(['data' => [
+            'auth' => isset($_SESSION['login'])
+        ]]);
+    }
+
+
     #[AllowedMethods('POST')]
     #[RequireAuth()]
     public function logout() {
@@ -46,10 +54,13 @@ class AuthController extends Controller {
             return;
         }
 
-        $roles = array_map(
-            trim(...),
-            explode(',', $user->roles)
-            );
+        $roles = [];
+        if ($this->model->roles !== null) {
+            $roles = array_map(
+                trim(...),
+                explode(',', $this->model->roles)
+                );
+        }
 
         $_SESSION['login'] = $user->login;
         $_SESSION['roles'] = $roles;
@@ -71,15 +82,18 @@ class AuthController extends Controller {
             return;
         }
 
-        $this->model->password = password_hash($_POST['password']);
+        $this->model->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
         $this->model->save();
 
-        $roles = array_map(
-            trim(...),
-            explode(',', $this->model->roles)
-            );
-
+        $roles = [];
+        if ($this->model->roles !== null) {
+            $roles = array_map(
+                trim(...),
+                explode(',', $this->model->roles)
+                );
+        }
+    
         $_SESSION['login'] = $this->model->login;
         $_SESSION['roles'] = $roles;
 

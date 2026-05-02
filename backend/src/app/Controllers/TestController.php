@@ -3,12 +3,14 @@ namespace Controllers;
 
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
+use \Core\Attributes\RequireAuth;
 use \Models\TestModel;
 
 /** @property \Models\TestModel $model */
 class TestController extends Controller {
 
     #[AllowedMethods('POST')]
+    #[RequireAuth()]
     public function form() {
         $this->model->date = date('Y-m-d');
         $this->model->result = $this->model->validate();
@@ -21,6 +23,7 @@ class TestController extends Controller {
     }
 
     #[AllowedMethods('GET')]
+    #[RequireAuth()]
     public function results() {
         $data = TestModel::findAll();
 

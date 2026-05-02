@@ -3,12 +3,14 @@ namespace Controllers;
 
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
+use \Core\Attributes\RequireAuth;
 use \Models\GuestBookModel;
 
 /** @property \Models\GuestBookModel $model */
 class GuestBookController extends Controller {
 
     #[AllowedMethods('POST')]
+    #[RequireAuth()]
     public function form() {
         $this->model->date = date('d.m.y');
 
@@ -22,6 +24,8 @@ class GuestBookController extends Controller {
     }
 
     #[AllowedMethods('GET', 'POST')]
+    #[RequireAuth()]
+    #[RequireAuth('admin', ['POST'])]
     public function file() {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $file = GuestBookModel::loadFile();
@@ -55,6 +59,7 @@ class GuestBookController extends Controller {
     }
 
     #[AllowedMethods('GET')]
+    #[RequireAuth()]
     public function feedback() {
         $data = GuestBookModel::load();
 
