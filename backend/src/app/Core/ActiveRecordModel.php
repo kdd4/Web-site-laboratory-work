@@ -3,6 +3,7 @@ namespace Core;
 
 use \PDO;
 use \PDOException;
+use function is_int, is_bool, is_resource;
 
 class ActiveRecordModel extends Model {
     protected static PDO $pdo;

@@ -2,15 +2,14 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\AllowedMethods;
 use \Models\TestModel;
 
+/** @property \Models\TestModel $model */
 class TestController extends Controller {
-    public function form() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
 
+    #[AllowedMethods('POST')]
+    public function form() {
         $this->model->date = date('Y-m-d');
         $this->model->result = $this->model->validate();
 
@@ -21,12 +20,8 @@ class TestController extends Controller {
             ]]);
     }
 
+    #[AllowedMethods('GET')]
     public function results() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         $data = TestModel::findAll();
 
         $filteredData = array_map(

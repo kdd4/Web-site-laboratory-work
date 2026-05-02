@@ -4,7 +4,9 @@ namespace Models;
 use Core\ActiveRecordModel;
 
 class AuthModel extends ActiveRecordModel {
-    protected static array $fields = ['login', 'password'];
+    protected static array $fields = ['login', 'password', 'roles'];
+
+    protected static string $tablename = 'user';
 
     public function __construct()
     {
@@ -15,16 +17,11 @@ class AuthModel extends ActiveRecordModel {
         $this->validator->setRule('password', 'isLengthGreaterOrEqual', 8);
     }
 
-    // МЕНЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯТЬ
-    public function validate(): bool {
+    public function alreadyExists(): bool {
         $model = static::findByFields([
             'login' => $this->login
         ]);
 
-        if ($model !== null) {
-            return false;
-        }
-
-        return parent::validate();
+        return $model !== null;
     }
 }

@@ -17,3 +17,10 @@ CREATE TABLE blog (
     imgtype     VARCHAR(50),
     text        TEXT
 );
+
+CREATE TABLE user (
+    id          SERIAL PRIMARY KEY,
+    login       VARCHAR(50) UNIQUE,
+    password    VARCHAR(50),
+    roles       VARCHAR(50)
+);

@@ -2,14 +2,13 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\AllowedMethods;
 
+/** @property \Models\PhotoAlbumModel $model */
 class PhotoAlbumController extends Controller {
-    public function album() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
 
+    #[AllowedMethods('GET')]
+    public function album() {
         $album = $this->model->album;
 
         $this->view->render(['data' => $album]);

@@ -4,6 +4,8 @@ namespace Core;
 use \Exception;
 use \JsonSerializable;
 
+use function in_array;
+
 class Model implements JsonSerializable
 {
     public $validator;

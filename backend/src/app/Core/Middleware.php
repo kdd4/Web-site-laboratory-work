@@ -18,7 +18,9 @@ class Middleware {
                 continue;
             }
 
-            $middleware = new $attributeObject->middleware;
+            $middlewareClass = $attributeObject->middleware;
+
+            $middleware = new $middlewareClass($attributeObject);
             
             $this->pipeline[] = $middleware;
         }

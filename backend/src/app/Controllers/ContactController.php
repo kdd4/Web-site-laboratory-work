@@ -2,18 +2,17 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\AllowedMethods;
 
+/** @property \Models\ContactModel $model */
 class ContactController extends Controller {
+    
+    #[AllowedMethods('POST')]
     public function form() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
-        $this->model->validate();
+        $res = $this->model->validate();
 
         $data = $this->model->validator->ShowErrors();
 
-        $this->view->render(['data' => $data]);
+        $this->view->render(['data' => $data], code: $res ? null : 400);
     }
 }

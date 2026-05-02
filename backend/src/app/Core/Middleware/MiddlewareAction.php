@@ -2,7 +2,6 @@
 namespace Core\Middleware;
 
 class MiddlewareAction implements MiddlewareInterface {
-
     public function __construct(private object $controller, private string $action) {
 
     }

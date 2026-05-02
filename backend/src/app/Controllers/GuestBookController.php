@@ -2,15 +2,14 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\AllowedMethods;
 use \Models\GuestBookModel;
 
+/** @property \Models\GuestBookModel $model */
 class GuestBookController extends Controller {
-    public function form() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
 
+    #[AllowedMethods('POST')]
+    public function form() {
         $this->model->date = date('d.m.y');
 
         if ($this->model->validate()) {
@@ -22,6 +21,7 @@ class GuestBookController extends Controller {
         $this->view->render(['data' => $data]);
     }
 
+    #[AllowedMethods('GET', 'POST')]
     public function file() {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $file = GuestBookModel::loadFile();
@@ -29,18 +29,13 @@ class GuestBookController extends Controller {
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         if (!isset($_FILES['feedbackFile']) || $_FILES['feedbackFile']['error'] !== UPLOAD_ERR_OK) {
-            $this->view->render(['data' => 'file not found or has upload error']);
+            $this->view->render(['data' => 'file not found or has upload error'], code: 400);
             return;
         }
 
         if (!is_uploaded_file($_FILES['feedbackFile']['tmp_name'])) {
-            $this->view->render(['data' => 'Error loading file']);
+            $this->view->render(['data' => 'Error loading file'], code: 400);
             return;
         }
 
@@ -59,12 +54,8 @@ class GuestBookController extends Controller {
         $this->view->render(['data' => 'Ok']);
     }
 
+    #[AllowedMethods('GET')]
     public function feedback() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         $data = GuestBookModel::load();
 
         $this->view->render(['data' => $data]);

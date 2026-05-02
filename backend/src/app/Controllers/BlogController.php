@@ -2,18 +2,16 @@
 namespace Controllers;
 
 use \Core\Controller;
-use \Core\Attributes\RequireAuth;
-use Models\BlogModel;
+use \Core\Attributes\AllowedMethods;
+use \Models\BlogModel;
 
+/** @property \Models\BlogModel $model */
 class BlogController extends Controller {
-    public function post() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
 
+    #[AllowedMethods('POST')]
+    public function post() {
         if (!isset($_FILES['image'])) {
-            $this->view->render(['data' => '"image" field not found']);
+            $this->view->render(['data' => '"image" field not found'], code: 400);
             return;
         }
 
@@ -29,27 +27,25 @@ class BlogController extends Controller {
 
         $this->model->time = date('Y-m-d H:i:s');
 
-        if ($this->model->validate()) {
+        $validationResult = $this->model->validate();
+
+        if ($validationResult) {
             $this->model->save();
         }
 
         $data = $this->model->validator->ShowErrors();
-        $this->view->render(['data' => $data]);
+        $this->view->render(['data' => $data], code: $validationResult ? null : 400);
     }
 
+    #[AllowedMethods('POST')]
     public function postfile() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         if (!isset($_FILES['posts'])) {
-            $this->view->render(['data' => 'file not found']);
+            $this->view->render(['data' => 'file not found'], code: 400);
             return;
         }
 
         if (!is_uploaded_file($_FILES['posts']['tmp_name'])) {
-            $this->view->render(['data' => 'upload file error']);
+            $this->view->render(['data' => 'upload file error'], code: 400);
             return;
         }
 
@@ -79,13 +75,8 @@ class BlogController extends Controller {
         $this->view->render(['data' => 'Ok']);
     }
 
-    #[RequireAuth]
+    #[AllowedMethods('GET')]
     public function posts() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         $data = BlogModel::findAll();
 
         $filteredData = array_map(
@@ -103,17 +94,12 @@ class BlogController extends Controller {
         );
 
         $this->view->render(['data' => $filteredData]);
-        return;
     }
 
+    #[AllowedMethods('GET')]
     public function image() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
-
         if (!isset($_GET['id'])) {
-            $this->view->render(['data' => 'Parameter id not found']);
+            $this->view->render(['data' => 'Parameter id not found'], code: 400);
             return;
         }
 
@@ -122,14 +108,14 @@ class BlogController extends Controller {
         $model = BlogModel::find($id);
 
         if ($model === null) {
-            $this->view->render(['data' => "Blog id: $id not found"]);
+            $this->view->render(['data' => "Blog id: $id not found"], code: 404);
             return;
         }
 
         $this->model = $model;
 
         if ($this->model->image === null) {
-            $this->view->render(['data' => "Blog id: $id doesn't have image"]);
+            $this->view->render(['data' => "Blog id: $id doesn't have image"], code: 404);
             return;
         }
 
