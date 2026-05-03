@@ -21,6 +21,7 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 				class="flex flex-col items-center space-y-3"
 			>
 				<Form
+					v-if="form.show !== false"
 					:id="form.id"
 					:fields="form.fields"
 					:formdata="form.formdata"
@@ -28,6 +29,7 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 					@submit="form.submit"
 				/>
 				<div
+					v-if="form.show !== false"
 					v-show="form.showError"
 					class="w-3/4 rounded-sm border-2 p-0.5 text-left"
 					:class="{
@@ -59,7 +61,7 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 				<div class="self-end pt-1 text-xs">{{ post.time }}</div>
 			</div>
 		</div>
-		<div class="flex space-x-2 select-none m-3">
+		<div class="m-3 flex space-x-2 select-none">
 			<div v-if="firstPageShow" @click="goToFirstPage" class="cursor-pointer">Начало</div>
 			<div
 				v-for="(cur_page, ind) in pageList"

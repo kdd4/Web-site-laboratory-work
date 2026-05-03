@@ -79,7 +79,6 @@ class BlogController extends Controller {
     }
 
     #[AllowedMethods('GET')]
-    #[RequireAuth()]
     public function posts() {
         $data = BlogModel::findAll();
 
@@ -101,7 +100,6 @@ class BlogController extends Controller {
     }
 
     #[AllowedMethods('GET')]
-    #[RequireAuth()]
     public function image() {
         if (!isset($_GET['id'])) {
             $this->view->render(['data' => 'Parameter id not found'], code: 400);

@@ -1,11 +1,20 @@
 import { defineStore } from 'pinia';
-import { ref, watch, watchEffect } from 'vue';
+import { computed, ref, toRefs, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
 	const router = useRouter();
 
-	async function checkAuth() {
+	const isAuth = ref(false);
+	const isAdmin = ref(false);
+
+	async function updateIsAdmin() {
+		let res = await getRoles();
+
+		isAdmin.value = res.includes('admin');
+	}
+
+	async function updateStatus() {
 		let response = await fetch('/api/auth/status', {
 			headers: {
 				Accept: 'application/json',
@@ -20,10 +29,16 @@ export const useAuthStore = defineStore('auth', () => {
 
 		let result = jsonResponse.auth ?? false;
 
+		if (result) {
+			updateIsAdmin();
+		}
+
+		isAuth.value = result;
+
 		return result;
 	}
 
-	async function roles() {
+	async function getRoles() {
 		let response = await fetch('/api/auth/roles', {
 			headers: {
 				Accept: 'application/json',
@@ -39,6 +54,22 @@ export const useAuthStore = defineStore('auth', () => {
 		return jsonResponse.roles;
 	}
 
+	async function getInfo() {
+		let response = await fetch('/api/auth/info', {
+			headers: {
+				Accept: 'application/json',
+			},
+		});
+
+		if (!response.ok) {
+			return false;
+		}
+
+		let jsonResponse = await response.json();
+
+		return jsonResponse;
+	}
+
 	async function logout() {
 		let response = await fetch('/api/auth/logout', {
 			method: 'POST',
@@ -47,7 +78,10 @@ export const useAuthStore = defineStore('auth', () => {
 			},
 		});
 
-		router.push({ name: 'Auth' });
+		isAuth.value = false;
+		isAdmin.value = false;
+
+		router.push({ name: 'Main' });
 
 		return response.ok;
 	}
@@ -61,9 +95,10 @@ export const useAuthStore = defineStore('auth', () => {
 
 	const formdata = ref({
 		allowSubmit: allowSubmit,
+		submitText: computed(() => (register.value ? 'Зарегистрироваться' : 'Войти')),
 	});
 
-	const fields = ref({
+	const fieldsFull = ref({
 		login: {
 			label: 'Логин',
 			type: 'text',
@@ -75,37 +110,83 @@ export const useAuthStore = defineStore('auth', () => {
 		},
 		password: {
 			label: 'Пароль',
-			type: 'text',
+			type: 'password',
 			name: 'password',
 			placeholder: 'Введите пароль',
 			fieldValue: '',
 			hasError: false,
 			isCorrect: false,
 		},
+		fio: {
+			label: 'ФИО',
+			type: 'text',
+			name: 'fio',
+			placeholder: 'Введите ФИО',
+			fieldValue: '',
+			hasError: false,
+			isCorrect: false,
+		},
+		email: {
+			label: 'E-mail',
+			type: 'text',
+			name: 'email',
+			placeholder: 'Введите E-mail',
+			fieldValue: '',
+			hasError: false,
+			isCorrect: false,
+		},
+	});
+
+	const fields = computed(function () {
+		const { login, password, fio, email } = fieldsFull.value;
+
+		return register.value ? { login, password, fio, email } : { login, password };
 	});
 
 	function checkLogin() {
-		fields.value.login.hasError = !fields.value.login.fieldValue;
-		fields.value.login.isCorrect = !fields.value.login.hasError;
+		fieldsFull.value.login.hasError = !fieldsFull.value.login.fieldValue;
+		fieldsFull.value.login.isCorrect = !fieldsFull.value.login.hasError;
 	}
 
 	function checkPassword() {
-		fields.value.password.hasError = !fields.value.password.fieldValue;
-		fields.value.password.isCorrect = !fields.value.password.hasError;
+		fieldsFull.value.password.hasError = !fieldsFull.value.password.fieldValue;
+		fieldsFull.value.password.isCorrect = !fieldsFull.value.password.hasError;
+	}
+
+	function checkFIO() {
+		if (!register.value) return;
+
+		fieldsFull.value.fio.hasError = !fieldsFull.value.fio.fieldValue;
+		fieldsFull.value.fio.isCorrect = !fieldsFull.value.fio.hasError;
+	}
+
+	function checkEmail() {
+		if (!register.value) return;
+
+		fieldsFull.value.email.hasError = !fieldsFull.value.email.fieldValue;
+		fieldsFull.value.email.isCorrect = !fieldsFull.value.email.hasError;
 	}
 
 	function updateAllowSubmit() {
-		allowSubmit.value = fields.value.login.isCorrect && fields.value.password.isCorrect;
+		allowSubmit.value =
+			fieldsFull.value.login.isCorrect &&
+			fieldsFull.value.password.isCorrect &&
+			((fieldsFull.value.fio.isCorrect && fieldsFull.value.email.isCorrect) || !register.value);
 	}
 
 	function updateShowError() {
-		showError.value = fields.value.login.hasError || fields.value.password.hasError;
+		showError.value =
+			fieldsFull.value.login.hasError ||
+			fieldsFull.value.password.hasError ||
+			((fieldsFull.value.fio.hasError || fieldsFull.value.email.hasError) && register.value);
 
 		errorHTML.value = 'Заполните все поля';
 	}
 
-	watch(() => fields.value.login.fieldValue, checkLogin);
-	watch(() => fields.value.password.fieldValue, checkPassword);
+	watch(() => fieldsFull.value.login.fieldValue, checkLogin);
+	watch(() => fieldsFull.value.password.fieldValue, checkPassword);
+	watch(() => fieldsFull.value.fio.fieldValue, checkFIO);
+	watch(() => fieldsFull.value.email.fieldValue, checkEmail);
 	watchEffect(updateAllowSubmit);
 	watchEffect(updateShowError);
 
@@ -128,6 +209,8 @@ export const useAuthStore = defineStore('auth', () => {
 			return;
 		}
 
+		fields.value.password.fieldValue = '';
+
 		router.push({ name: 'Main' });
 	}
 
@@ -141,5 +224,5 @@ export const useAuthStore = defineStore('auth', () => {
 		register,
 	});
 
-	return { form, formSubmit, checkAuth, logout, roles };
+	return { form, formSubmit, logout, getRoles, getInfo, isAuth, isAdmin, updateStatus };
 });

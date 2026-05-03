@@ -24,6 +24,21 @@ class AuthController extends Controller {
         ]]);
     }
 
+    #[AllowedMethods('GET')]
+    #[RequireAuth()]
+    public function info() {
+        $user = AuthModel::findByFields(['login' => $_SESSION['login']]);
+
+        $data = [];
+        $fields = ['login', 'fio', 'email'];
+
+        foreach ($fields as $key) {
+            $data[$key] = $user->$key;
+        }
+
+        $this->view->render(['data' => $data]);
+    }
+
 
     #[AllowedMethods('POST')]
     #[RequireAuth()]
@@ -35,13 +50,6 @@ class AuthController extends Controller {
 
     #[AllowedMethods('POST')]
     public function login() {
-        if (!$this->model->validate()) {
-            $data = $this->model->validator->ShowErrors();
-
-            $this->view->render(['data' => $data], code: 400);
-            return;
-        }
-
         $user = AuthModel::findByFields(['login' => $_POST['login']]);
 
         if ($user === null) {
@@ -55,10 +63,10 @@ class AuthController extends Controller {
         }
 
         $roles = [];
-        if ($this->model->roles !== null) {
+        if ($user->roles !== null) {
             $roles = array_map(
                 trim(...),
-                explode(',', $this->model->roles)
+                explode(',', $user->roles)
                 );
         }
 

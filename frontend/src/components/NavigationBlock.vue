@@ -3,9 +3,11 @@ import { storeToRefs } from 'pinia';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useNavigationStore } from '@/stores/navigation';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 const navigationStore = useNavigationStore();
 const auth = useAuthStore();
+const router = useRouter();
 
 const { navigation_buttons, isBurgerMenu, isBurgerMenuOpened, time } = storeToRefs(navigationStore);
 const { runTime, stopTime } = navigationStore;
@@ -60,9 +62,9 @@ onBeforeUnmount(stopTime);
 			<button
 				:class="{ 'my-0.5': isBurgerMenu }"
 				class="mx-0.5 my-1 rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none hover:bg-neutral-500"
-				@click="auth.logout()"
+				@click="auth.isAuth ? auth.logout() : router.push({ name: 'Auth' })"
 			>
-				Выход
+				{{ auth.isAuth ? 'Выход' : 'Вход' }}
 			</button>
 		</ul>
 		<div v-if="!isBurgerMenu" class="mr-1 p-1 font-serif whitespace-break-spaces text-white">

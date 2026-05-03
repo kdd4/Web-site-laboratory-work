@@ -6,7 +6,7 @@ function HTMLparser(mixed $data): string {
         $data === null => 'null',
         is_bool($data) => $data ? 'true' : 'false',
         is_resource($data) => 'resource',
-        is_scalar($data) || is_object($data) => htmlspecialchars($data),
+        is_scalar($data) || is_object($data) => htmlspecialchars((string)$data),
         is_callable($data) => $data(),
         default => null,
     };

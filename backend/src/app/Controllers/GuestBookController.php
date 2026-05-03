@@ -24,8 +24,7 @@ class GuestBookController extends Controller {
     }
 
     #[AllowedMethods('GET', 'POST')]
-    #[RequireAuth()]
-    #[RequireAuth('admin', ['POST'])]
+    #[RequireAuth('admin')]
     public function file() {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $file = GuestBookModel::loadFile();
@@ -59,7 +58,6 @@ class GuestBookController extends Controller {
     }
 
     #[AllowedMethods('GET')]
-    #[RequireAuth()]
     public function feedback() {
         $data = GuestBookModel::load();
 

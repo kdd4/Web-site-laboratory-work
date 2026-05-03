@@ -1,7 +1,11 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { computed, ref, watch, watchEffect } from 'vue';
+import { useAuthStore } from './auth';
 
 export const useBlogStore = defineStore('blog', () => {
+	const auth = useAuthStore();
+	const { isAuth, isAdmin } = storeToRefs(auth);
+
 	const fileAllowSubmit = ref(false);
 	const fileShowError = ref(false);
 	const fileErrorHTML = ref('');
@@ -152,7 +156,7 @@ export const useBlogStore = defineStore('blog', () => {
 
 		blogPosts.value = list;
 
-	    blogPosts.value.sort((a, b) => new Date(b.time) - new Date(a.time));
+		blogPosts.value.sort((a, b) => new Date(b.time) - new Date(a.time));
 	}
 
 	getBlogPosts();
@@ -165,6 +169,7 @@ export const useBlogStore = defineStore('blog', () => {
 			showError: blogShowError,
 			errorHTML: blogErrorHTML,
 			submit: blogSubmit,
+			show: isAuth,
 		},
 		{
 			id: 'fileForm',
@@ -173,6 +178,7 @@ export const useBlogStore = defineStore('blog', () => {
 			showError: fileShowError,
 			errorHTML: fileErrorHTML,
 			submit: fileSubmit,
+			show: isAdmin,
 		},
 	]);
 
@@ -195,8 +201,10 @@ export const useBlogStore = defineStore('blog', () => {
 		return Array.from({ length }, (_, k) => Math.min(lowLimit, highLimit) + k);
 	});
 
-	const firstPageShow = computed(() => !pageList.value.includes(0));
-	const lastPageShow = computed(() => !pageList.value.includes(pageCount.value - 1));
+	const firstPageShow = computed(() => !pageList.value.includes(0) && pageList.value.length != 0);
+	const lastPageShow = computed(
+		() => !pageList.value.includes(pageCount.value - 1) && pageList.value.length != 0,
+	);
 
 	function goToFirstPage() {
 		page.value = 0;

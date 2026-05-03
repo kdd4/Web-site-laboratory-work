@@ -6,7 +6,7 @@ import { useGuestBookStore } from '@/stores/guestBook';
 
 const guestBookStore = useGuestBookStore();
 
-const { forms, feedbackList } = storeToRefs(guestBookStore);
+const { forms, feedbackList, isAdmin } = storeToRefs(guestBookStore);
 </script>
 
 <template>
@@ -19,6 +19,7 @@ const { forms, feedbackList } = storeToRefs(guestBookStore);
 				class="flex flex-col items-center space-y-3"
 			>
 				<Form
+					v-if="form.show !== false"
 					:id="form.id"
 					:fields="form.fields"
 					:formdata="form.formdata"
@@ -26,6 +27,7 @@ const { forms, feedbackList } = storeToRefs(guestBookStore);
 					@submit="form.submit"
 				/>
 				<div
+					v-if="form.show !== false"
 					v-show="form.showError"
 					class="w-3/4 rounded-sm border-2 p-0.5 text-left"
 					:class="{
@@ -37,6 +39,7 @@ const { forms, feedbackList } = storeToRefs(guestBookStore);
 			</div>
 		</div>
 		<a
+			v-if="isAdmin"
 			href="/api/guest-book/file"
 			download="messages.inc"
 			class="rounded-sm border border-neutral-400 bg-neutral-400/30"

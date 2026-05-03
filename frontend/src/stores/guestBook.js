@@ -1,7 +1,11 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref, watch, watchEffect } from 'vue';
+import { useAuthStore } from './auth';
 
 export const useGuestBookStore = defineStore('guest book', () => {
+	const auth = useAuthStore();
+	const { isAuth, isAdmin } = storeToRefs(auth);
+
 	const fileAllowSubmit = ref(false);
 	const fileShowError = ref(false);
 	const fileErrorHTML = ref('');
@@ -158,6 +162,7 @@ export const useGuestBookStore = defineStore('guest book', () => {
 			showError: feedbackShowError,
 			errorHTML: feedbackErrorHTML,
 			submit: feedbackSubmit,
+			show: isAuth,
 		},
 		{
 			id: 'fileForm',
@@ -166,6 +171,7 @@ export const useGuestBookStore = defineStore('guest book', () => {
 			showError: fileShowError,
 			errorHTML: fileErrorHTML,
 			submit: fileSubmit,
+			show: isAdmin,
 		},
 	]);
 
@@ -174,5 +180,6 @@ export const useGuestBookStore = defineStore('guest book', () => {
 	return {
 		forms,
 		feedbackList,
+		isAdmin,
 	};
 });

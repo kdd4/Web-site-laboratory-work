@@ -22,5 +22,16 @@ CREATE TABLE "user" (
     id          SERIAL PRIMARY KEY,
     login       VARCHAR(50) UNIQUE,
     password    VARCHAR(80),
+    fio         VARCHAR(70),
+    email       VARCHAR(70),
     roles       VARCHAR(80)
+);
+
+CREATE TABLE "visits" (
+    id          SERIAL PRIMARY KEY,
+    time        TIMESTAMP,
+    page        VARCHAR(20),
+    ip          VARCHAR(15),
+    host        VARCHAR(40),
+    browser     VARCHAR(50)
 );
