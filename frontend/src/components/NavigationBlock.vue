@@ -49,6 +49,7 @@ onBeforeUnmount(stopTime);
 				class="mx-0.5 my-1 p-0.5 text-white"
 			>
 				<RouterLink
+					v-if="button.show !== false"
 					:to="{ name: button.name }"
 					:class="{
 						'border-4': button.isCurrentPage(),
@@ -59,14 +60,14 @@ onBeforeUnmount(stopTime);
 					{{ button.text }}
 				</RouterLink>
 			</li>
-			<button
-				:class="{ 'my-0.5': isBurgerMenu }"
-				class="mx-0.5 my-1 rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none hover:bg-neutral-500"
-				@click="auth.isAuth ? auth.logout() : router.push({ name: 'Auth' })"
-			>
-				{{ auth.isAuth ? 'Выход' : 'Вход' }}
-			</button>
 		</ul>
+		<button
+			v-if="!isBurgerMenu || isBurgerMenuOpened"
+			class="m-1 rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none hover:bg-neutral-500"
+			@click="auth.isAuth ? auth.logout() : router.push({ name: 'Auth' })"
+		>
+			{{ auth.isAuth ? 'Выход' : 'Вход' }}
+		</button>
 		<div v-if="!isBurgerMenu" class="mr-1 p-1 font-serif whitespace-break-spaces text-white">
 			{{ time.hour }}:{{ time.min }}:{{ time.sec }} {{ time.month }} {{ time.year }}
 		</div>

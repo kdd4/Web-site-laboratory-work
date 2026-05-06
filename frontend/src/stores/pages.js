@@ -1,9 +1,13 @@
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';
+import { useAuthStore } from './auth';
 
 export const usePagesStore = defineStore('pages', () => {
 	const route = useRoute();
+	const auth = useAuthStore();
+
+	const { isAdmin } = storeToRefs(auth);
 
 	function isCurrentPage() {
 		return this.name === route.name;
@@ -20,6 +24,7 @@ export const usePagesStore = defineStore('pages', () => {
 		{ name: 'Blog', text: 'Блог', isCurrentPage },
 		{ name: 'GuestBook', text: 'Гостевая книга', isCurrentPage },
 		{ name: 'History', text: 'История просмотра', isCurrentPage },
+		{ name: 'Activities', text: 'Активность пользователей', isCurrentPage, show: isAdmin },
 	]);
 
 	return { pages };

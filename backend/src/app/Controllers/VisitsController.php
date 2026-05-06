@@ -4,7 +4,7 @@ namespace Controllers;
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
 use \Core\Attributes\RequireAuth;
-use Models\VisitsModel;
+use \Models\VisitsModel;
 
 /** @property \Models\VisitsModel $model */
 class VisitsController extends Controller {
@@ -36,7 +36,7 @@ class VisitsController extends Controller {
 
     #[AllowedMethods('GET')]
     #[RequireAuth('admin')]
-    public function visits() {
+    public function index() {
         $data = VisitsModel::findAll();
 
         $filteredData = array_map(
@@ -54,6 +54,10 @@ class VisitsController extends Controller {
         );
 
         $this->view->render(['data' => $filteredData]);
+    }
+
+    public function info() {
+        phpinfo();
     }
 
 }

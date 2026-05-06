@@ -63,6 +63,11 @@ const router = createRouter({
 			name: 'Auth',
 			component: () => import('@/views/AuthPage.vue'),
 		},
+		{
+			path: '/activities',
+			name: 'Activities',
+			component: () => import('@/views/UserActivitiesPage.vue'),
+		},
 	],
 });
 

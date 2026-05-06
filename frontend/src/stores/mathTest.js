@@ -122,6 +122,11 @@ export const useMathTestStore = defineStore('mathTest', () => {
 	}
 
 	async function getTestResults() {
+		if (!auth.isAuth) {
+			testResults.value = [];
+			return;
+		}
+
 		let response = await fetch('/api/test/results', {
 			headers: {
 				Accept: 'application/json',

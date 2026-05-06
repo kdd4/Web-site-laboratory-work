@@ -25,7 +25,7 @@ class MiddlewareRequireAuth implements MiddlewareInterface {
             exit('Unauthorized');
         }
 
-        if ($this->attribute->role !== '' && 
+        if ($this->attribute->role !== null && 
             !in_array(
                 $this->attribute->role, 
                 $_SESSION['roles']

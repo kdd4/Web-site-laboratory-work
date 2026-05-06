@@ -38,7 +38,7 @@ watch(isAuth, loadFIO);
 
 	<div
 		v-if="fio !== '' && route.name !== 'Auth'"
-		class="fixed bottom-0 rounded-tr-lg border bg-neutral-100 p-1"
+		class="fixed bottom-0 rounded-tr-lg border bg-neutral-100 p-1 not-sm:hidden"
 	>
 		Пользователь: {{ fio }}
 	</div>
