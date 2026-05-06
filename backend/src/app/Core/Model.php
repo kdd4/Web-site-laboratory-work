@@ -2,11 +2,13 @@
 namespace Core;
 
 use \Exception;
-use JsonSerializable;
+use \JsonSerializable;
+
+use function in_array;
 
 class Model implements JsonSerializable
 {
-    protected $validator;
+    public $validator;
 
     protected static array $fields = [];
     protected array $data = [];
@@ -30,7 +32,7 @@ class Model implements JsonSerializable
         return $this->data[$name] ?? null;
     }
     
-    public function validate()
+    public function validate(): bool
     {
         return $this->validator->validate($this);
     }

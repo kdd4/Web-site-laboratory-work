@@ -1,15 +1,16 @@
 <?php
 namespace Core;
 
-use PDO;
-use PDOException;
+use \PDO;
+use \PDOException;
+use function is_int, is_bool, is_resource;
 
 class ActiveRecordModel extends Model {
     protected static PDO $pdo;
 
     protected static string $tablename = '';
 
-    protected ?int $id = null;
+    public ?int $id = null;
 
     public function __construct() {
         parent::__construct();
@@ -83,13 +84,41 @@ class ActiveRecordModel extends Model {
         return $record;
     }
 
+    public static function findByFields(array $data): ?static {
+        static::connectDatabase();
+
+        $table = static::$tablename;
+
+        $fieldNames = array_keys($data);
+
+        $params = implode(' AND ', array_map(fn($key) => "\"$key\" = :$key", $fieldNames));
+
+        $sql = "SELECT * FROM \"$table\" WHERE $params";
+
+        $stmt = static::$pdo->prepare($sql);
+        $stmt->execute($data);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        $record = new static();
+
+        foreach ($row as $key => $value) {
+            $record->$key = $value;
+        }
+
+        return $record;
+    }
+
     private function bindData(\PDOStatement $stmt, array $data): void {
         foreach ($data as $key => $value) {
             $type = match (true) {
-                is_bool($value)  => PDO::PARAM_BOOL,
-                is_int($value)   => PDO::PARAM_INT,
-                $value === null  => PDO::PARAM_NULL,
-                default          => PDO::PARAM_STR,
+                is_bool($value)     => PDO::PARAM_BOOL,
+                is_int($value)      => PDO::PARAM_INT,
+                is_resource($value) => PDO::PARAM_LOB,
+                $value === null     => PDO::PARAM_NULL,
+                default             => PDO::PARAM_STR,
             };
             $stmt->bindValue(":$key", $value, $type);
         }
@@ -104,8 +133,8 @@ class ActiveRecordModel extends Model {
         $fieldNames = array_keys($data);
 
         if (is_null($this->id)) {
-            $columns = implode(', ', array_map(fn($f) => "\"$f\"", $fieldNames));
-            $placeholders = implode(', ', array_map(fn($f) => ":$f", $fieldNames));
+            $columns = implode(', ', $fieldNames);
+            $placeholders = implode(', ', array_map(fn($key) => ":$key", $fieldNames));
 
             $sql = "INSERT INTO \"$table\" ($columns) VALUES ($placeholders) RETURNING id";
             $stmt = static::$pdo->prepare($sql);
@@ -116,7 +145,7 @@ class ActiveRecordModel extends Model {
         } else {
             $setClauses = implode(', ', array_map(fn($f) => "\"$f\" = :$f", $fieldNames));
 
-            $sql = "UPDATE \"$table\" SET $setClauses WHERE id = :id";
+            $sql = "UPDATE $table SET $setClauses WHERE id = :id";
             $stmt = static::$pdo->prepare($sql);
             $this->bindData($stmt, $data);
             $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);

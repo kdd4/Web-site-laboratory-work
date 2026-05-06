@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useAuthStore } from './auth';
 
 export const useMathTestStore = defineStore('mathTest', () => {
 	const showError = ref(false);
@@ -121,6 +122,11 @@ export const useMathTestStore = defineStore('mathTest', () => {
 	}
 
 	async function getTestResults() {
+		if (!auth.isAuth) {
+			testResults.value = [];
+			return;
+		}
+
 		let response = await fetch('/api/test/results', {
 			headers: {
 				Accept: 'application/json',
@@ -139,7 +145,9 @@ export const useMathTestStore = defineStore('mathTest', () => {
 		testResults.value = [['Дата', 'ФИО', 'Результат'], ...list];
 	}
 
-	getTestResults();
+	const auth = useAuthStore();
+
+	watch(() => auth.isAuth, getTestResults);
 
 	const testResults = ref([]);
 

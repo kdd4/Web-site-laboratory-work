@@ -3,6 +3,8 @@ namespace Core;
 
 use \Core\Model;
 
+use function is_scalar, is_string, count, strlen;
+
 class FormValidation
 {
     private array $rules = [];
@@ -70,6 +72,23 @@ class FormValidation
 
         if ($wordsCount < $value) {
             return "Field must have count of words greater or equal {$value} (has {$wordsCount})";
+        }
+
+        return null;
+    }
+
+    public function isLengthGreaterOrEqual(mixed $data, int $value): ?string
+    {
+        if (!is_scalar($data)) {
+            return 'Value must be scalar';
+        }
+
+        $data = trim((string)$data);
+
+        $res = strlen($data);
+
+        if ($res < $value) {
+            return "Field must have length greater or equal {$value} (has {$res})";
         }
 
         return null;

@@ -56,6 +56,16 @@ export const useVisitsStore = defineStore('visits', () => {
 		}
 	}
 
+	async function postVisit(name) {
+		let data = new FormData();
+		data.append('page', name);
+
+		await fetch('/api/visits/visit', {
+			method: 'POST',
+			body: data,
+		});
+	}
+
 	function visitPage(name) {
 		let visitCnt = visits.value[name];
 		let sessionVisitCnt = visitsSession.value[name];
@@ -65,6 +75,8 @@ export const useVisitsStore = defineStore('visits', () => {
 
 		visits.value[name] = visitCnt + 1;
 		visitsSession.value[name] = sessionVisitCnt + 1;
+
+		postVisit(name);
 	}
 
 	function getVisits(name) {

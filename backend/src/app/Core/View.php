@@ -3,9 +3,9 @@ namespace Core;
 
 class View
 {
-    public function render(array $arguments = [], ?string $contentView = null)
+    public function render(array $arguments = [], ?string $contentView = null, ?int $code = null)
     {
-        if (is_null($contentView)) {
+        if ($contentView === null) {
             $acceptHeader = explode(',', $_SERVER['HTTP_ACCEPT'] ?? '');
 
             match(true) {
@@ -17,6 +17,10 @@ class View
 
         foreach ($arguments as $name => $value) {
             $$name = $value;
+        }
+
+        if ($code !== null) {
+            http_response_code($code);
         }
 
         include 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . $contentView;

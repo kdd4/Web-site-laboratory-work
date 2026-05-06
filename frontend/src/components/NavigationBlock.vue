@@ -2,8 +2,12 @@
 import { storeToRefs } from 'pinia';
 import { onMounted, onBeforeUnmount } from 'vue';
 import { useNavigationStore } from '@/stores/navigation';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 const navigationStore = useNavigationStore();
+const auth = useAuthStore();
+const router = useRouter();
 
 const { navigation_buttons, isBurgerMenu, isBurgerMenuOpened, time } = storeToRefs(navigationStore);
 const { runTime, stopTime } = navigationStore;
@@ -31,7 +35,7 @@ onBeforeUnmount(stopTime);
 			v-if="!isBurgerMenu"
 			class="mx-2 grow-0 font-serif text-3xl font-bold text-white transition-all duration-1000 ease-in-out select-none hover:rotate-30"
 		>
-			LW8
+			LW
 		</h1>
 		<ul
 			v-if="!isBurgerMenu || isBurgerMenuOpened"
@@ -45,6 +49,7 @@ onBeforeUnmount(stopTime);
 				class="mx-0.5 my-1 p-0.5 text-white"
 			>
 				<RouterLink
+					v-if="button.show !== false"
 					:to="{ name: button.name }"
 					:class="{
 						'border-4': button.isCurrentPage(),
@@ -56,6 +61,13 @@ onBeforeUnmount(stopTime);
 				</RouterLink>
 			</li>
 		</ul>
+		<button
+			v-if="!isBurgerMenu || isBurgerMenuOpened"
+			class="m-1 rounded-md border-emerald-700 bg-neutral-300 p-1 whitespace-nowrap text-black transition-all duration-200 ease-linear select-none hover:bg-neutral-500"
+			@click="auth.isAuth ? auth.logout() : router.push({ name: 'Auth' })"
+		>
+			{{ auth.isAuth ? 'Выход' : 'Вход' }}
+		</button>
 		<div v-if="!isBurgerMenu" class="mr-1 p-1 font-serif whitespace-break-spaces text-white">
 			{{ time.hour }}:{{ time.min }}:{{ time.sec }} {{ time.month }} {{ time.year }}
 		</div>

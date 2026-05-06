@@ -2,15 +2,13 @@
 namespace Controllers;
 
 use \Core\Controller;
+use \Core\Attributes\AllowedMethods;
 
+/** @property \Models\MyInterestsModel $model */
 class MyInterestsController extends Controller {
-    
-    public function interests() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            $this->view->render(['data' => 'Wrong method']);
-            return;
-        }
 
+    #[AllowedMethods('GET')]
+    public function interests() {
         $interests = $this->model->interests;
 
         $this->view->render(['data' => $interests]);

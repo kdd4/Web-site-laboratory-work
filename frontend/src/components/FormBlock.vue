@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia';
-import { ref, toValue, toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
 
 import { useFormCalendar } from '@/stores/formCalendar';
 
@@ -11,7 +11,11 @@ const { fields = ref([]), formdata = ref({}) } = defineProps({
 	formdata: Object,
 });
 
-const { allowSubmit = ref(true), reset = ref(false) } = toRefs(formdata);
+const {
+	allowSubmit = ref(true),
+	submitText = ref(undefined),
+	reset = ref(false),
+} = toRefs(formdata);
 
 defineEmits(['submit', 'reset']);
 
@@ -63,8 +67,8 @@ function ChangeFile(event, field) {
 
 				<!--Type text-->
 				<input
-					v-if="field.type == 'text'"
-					type="text"
+					v-if="field.type == 'text' || field.type == 'password'"
+					:type="field.type"
 					:name="field.name"
 					:placeholder="field.placeholder"
 					v-model.trim.lazy="field.fieldValue"
@@ -187,13 +191,14 @@ function ChangeFile(event, field) {
 		</div>
 		<div class="flex items-baseline justify-evenly">
 			<input
-				:disabled="!toValue(allowSubmit)"
+				:disabled="!allowSubmit"
 				type="submit"
 				:class="{
-					'cursor-not-allowed text-neutral-500': !toValue(allowSubmit),
-					'cursor-pointer': toValue(allowSubmit),
+					'cursor-not-allowed text-neutral-500': !allowSubmit,
+					'cursor-pointer': allowSubmit,
 				}"
 				class="w-min self-center rounded-sm border border-neutral-400 bg-neutral-400/30 px-1"
+				:value="submitText"
 			/>
 			<input
 				v-if="reset"

@@ -11,7 +11,7 @@ class Router
         $splitedControllerName = preg_split('/-/', $controllerName);
 
         if (!$splitedControllerName) {
-            die("Error: split '$controllerName' by '-' error");
+            exit("Error: split '$controllerName' by '-' error");
         }
 
         $upperSplitedControllerName = array_map('ucfirst', $splitedControllerName);
@@ -23,9 +23,13 @@ class Router
         $controller = new $controllerClass;
 
         if (!method_exists($controller, $actionName)) {
-            die("Error: Method \"$actionName\" not found in controller \"$controllerClass\"");
+            exit("Error: Method \"$actionName\" not found in controller \"$controllerClass\"");
         }
 
-        $controller->$actionName();
+        $middleware = new Middleware();
+
+        $middleware->buildPipeline($controller, $actionName);
+
+        $middleware->runPipeline();
     }
 }
