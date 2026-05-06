@@ -1,6 +1,8 @@
 <?php
 use \Core\Router;
 
+require __DIR__ . '/vendor/autoload.php';
+
 spl_autoload_register(function ($class_name) {
     $regexp = '/^(.*)\\\\(.*)$/';
 
@@ -18,7 +20,5 @@ spl_autoload_register(function ($class_name) {
         require_once $fullName;
     }
 });
-
-session_start();
 
 Router::route();

@@ -30,6 +30,10 @@ class Middleware {
     }
 
     public function runPipeline() {
-        $this->pipeline[0]->handle(...array_splice($this->pipeline, 1));
+        $first = array_shift($this->pipeline);
+
+        $first->handle($this->pipeline, []);
+
+        $this->pipeline = [];
     }
 }

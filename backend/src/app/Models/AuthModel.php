@@ -1,7 +1,9 @@
 <?php
 namespace Models;
 
-use Core\ActiveRecordModel;
+use \Core\ActiveRecordModel;
+use DateInterval;
+use DateTime;
 
 class AuthModel extends ActiveRecordModel {
     protected static array $fields = ['login', 'password', 'fio', 'email', 'roles'];
@@ -27,5 +29,23 @@ class AuthModel extends ActiveRecordModel {
         ]);
 
         return $model !== null;
+    }
+
+    public function getRoles() : array {
+        return explode(',', $this->roles ?? '');
+    }
+
+    public function getPayload(): array {
+        $now = new DateTime();
+        $livetime = new DateInterval('P2D');
+
+        $exp = new DateTime();
+        $exp->add($livetime);
+
+        return [
+            'sub' => $this->id,
+            'iat' => $now->getTimestamp(),
+            'exp' => $exp->getTimestamp()
+        ];
     }
 }

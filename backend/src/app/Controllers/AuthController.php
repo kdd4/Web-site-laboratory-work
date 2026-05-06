@@ -1,34 +1,36 @@
 <?php
 namespace Controllers;
 
+use \Firebase\JWT\JWT;
+
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
 use \Core\Attributes\RequireAuth;
-use Models\AuthModel;
+use \Core\Attributes\CheckAuth;
+use \Models\AuthModel;
 
 /** @property \Models\AuthModel $model */
 class AuthController extends Controller {
     
     #[AllowedMethods('GET')]
     #[RequireAuth()]
-    public function roles() {
+    public function roles(AuthModel $user) {
         $this->view->render(['data' => [
-            'roles' => $_SESSION['roles']
+            'roles' => $user->getRoles()
         ]]);
     }
 
     #[AllowedMethods('GET')]
-    public function status() {
+    #[CheckAuth()]
+    public function status($isAuthenticated) {
         $this->view->render(['data' => [
-            'auth' => isset($_SESSION['login'])
+            'auth' => $isAuthenticated
         ]]);
     }
 
     #[AllowedMethods('GET')]
     #[RequireAuth()]
-    public function info() {
-        $user = AuthModel::findByFields(['login' => $_SESSION['login']]);
-
+    public function info(AuthModel $user) {
         $data = [];
         $fields = ['login', 'fio', 'email'];
 
@@ -43,7 +45,7 @@ class AuthController extends Controller {
     #[AllowedMethods('POST')]
     #[RequireAuth()]
     public function logout() {
-        session_unset();
+        setcookie("JWT", "", time() - 3600, path: '/');
 
         $this->view->render(['data' => 'Ok']);
     }
@@ -62,16 +64,16 @@ class AuthController extends Controller {
             return;
         }
 
-        $roles = [];
-        if ($user->roles !== null) {
-            $roles = array_map(
-                trim(...),
-                explode(',', $user->roles)
-                );
-        }
+        $key = $_ENV['JWT_KEY'];
+        $payload = $user->getPayload();
 
-        $_SESSION['login'] = $user->login;
-        $_SESSION['roles'] = $roles;
+        $jwt = JWT::encode($payload, $key, 'HS256');
+
+        setcookie('JWT', $jwt, [
+            'path' => '/',
+            'expires' => $payload['exp'],
+            'httponly' => true
+        ]);
 
         $this->view->render(['data' => 'Ok']);
     }
@@ -94,16 +96,16 @@ class AuthController extends Controller {
 
         $this->model->save();
 
-        $roles = [];
-        if ($this->model->roles !== null) {
-            $roles = array_map(
-                trim(...),
-                explode(',', $this->model->roles)
-                );
-        }
-    
-        $_SESSION['login'] = $this->model->login;
-        $_SESSION['roles'] = $roles;
+        $key = $_ENV['JWT_KEY'];
+        $payload = $this->model->getPayload();
+
+        $jwt = JWT::encode($payload, $key, 'HS256');
+
+        setcookie('JWT', $jwt, [
+            'path' => '/',
+            'expires' => $payload['exp'],
+            'httponly' => true
+        ]);
 
         $this->view->render(['data' => 'Ok']);
     }

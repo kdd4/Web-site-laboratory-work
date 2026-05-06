@@ -2,17 +2,17 @@
 namespace Core\Middleware;
 
 use \Exception;
+
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\Key;
-use \Firebase\JWT\ExpiredException;
 
-use \Core\Attributes\RequireAuth;
+use \Core\Attributes\CheckAuth;
 use \Models\AuthModel;
 
 use function in_array;
 
-class MiddlewareRequireAuth implements MiddlewareInterface {
-    public function __construct(public RequireAuth $attribute) {}
+class MiddlewareCheckAuth implements MiddlewareInterface {
+    public function __construct(public CheckAuth $attribute) {}
 
     public function handle(array $next, array $params): void {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -27,9 +27,14 @@ class MiddlewareRequireAuth implements MiddlewareInterface {
             return;
         }
 
+        $params['isAuthenticated'] = false;
+
         if (!isset($_COOKIE['JWT'])) {
-            http_response_code(401);
-            exit('Unauthorized');
+            if (isset($next[0])) {
+                $current = array_shift($next);
+                $current->handle($next, $params);
+            }
+            return;
         }
 
         $key = $_ENV['JWT_KEY'];
@@ -37,23 +42,26 @@ class MiddlewareRequireAuth implements MiddlewareInterface {
 
         try {
             $decoded = JWT::decode($jwt, new Key($key, 'HS256'));
-        } catch (ExpiredException $e) {
-            http_response_code(401);
-            exit('Expired');
         } catch (Exception $e) {
-            http_response_code(401);
-            exit('Invalid token' . $e->getMessage());
+            if (isset($next[0])) {
+                $current = array_shift($next);
+                $current->handle($next, $params);
+            }
+            return;
         }
 
         $user = AuthModel::find($decoded->sub);
 
         if ($this->attribute->role !== null && 
             !in_array($this->attribute->role, $user->getRoles())) {
-            http_response_code(403);
-            exit('Forbidden');
+            if (isset($next[0])) {
+                $current = array_shift($next);
+                $current->handle($next, $params);
+            }
+            return;
         }
 
-        $params['user'] = $user;
+        $params['isAuthenticated'] = true;
 
         if (isset($next[0])) {
             $current = array_shift($next);

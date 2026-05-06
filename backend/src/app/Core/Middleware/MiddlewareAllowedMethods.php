@@ -8,7 +8,7 @@ use function in_array, func_get_args;
 class MiddlewareAllowedMethods implements MiddlewareInterface {
     public function __construct(public AllowedMethods $attribute) {}
 
-    public function handle(?MiddlewareInterface $next): void {    
+    public function handle(array $next, array $params): void {    
         $method = $_SERVER['REQUEST_METHOD'];
 
         header('Access-Control-Allow-Methods: ' . implode(', ', $this->attribute->methods));
@@ -18,8 +18,9 @@ class MiddlewareAllowedMethods implements MiddlewareInterface {
             exit('Method Not Allowed');
         }
 
-        $args = func_get_args();
-        array_shift($args);
-        $next->handle(...$args);
+        if (isset($next[0])) {
+            $current = array_shift($next);
+            $current->handle($next, $params);
+        }
     }
 }

@@ -18,7 +18,7 @@ class VisitsController extends Controller {
             return;
         }
 
-        $browserInfo = get_browser();
+        $browserInfo = @get_browser();
 
         $this->model->time = date('Y-m-d H:i:s');
         $this->model->ip = $_SERVER['REMOTE_ADDR'] ?? null;

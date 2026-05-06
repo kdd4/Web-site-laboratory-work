@@ -18,8 +18,6 @@ services:
         container_name: backend
         build: ./backend
         restart: unless-stopped
-        volumes:
-            - ./backend/src:/var/www/html
         networks:
             - network
             - network-db
@@ -27,13 +25,18 @@ services:
             - database
         env_file:
             - db.env
+            - backend.env
         environment:
             DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
         develop:
             watch:
                 - path: ./backend
-                  ignore: src/**
+                  ignore:
+                      - src/**
                   action: rebuild
+                - path: ./backend/src
+                  target: /var/www/html
+                  action: sync
 
     database:
         container_name: database
