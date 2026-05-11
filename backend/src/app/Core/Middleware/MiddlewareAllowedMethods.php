@@ -3,7 +3,7 @@ namespace Core\Middleware;
 
 use \Core\Attributes\AllowedMethods;
 
-use function in_array, func_get_args;
+use function in_array;
 
 class MiddlewareAllowedMethods implements MiddlewareInterface {
     public function __construct(public AllowedMethods $attribute) {}

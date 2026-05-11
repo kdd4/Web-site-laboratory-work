@@ -61,8 +61,9 @@ function ChangeFile(event, field) {
 				<button
 					v-if="field.type == 'button'"
 					v-html="field.buttonText"
-					@click.prevent="field.click"
 					class="w-full rounded-sm border border-neutral-400"
+					@blur="field.onBlur"
+					@click.prevent="field.click"
 				></button>
 
 				<!--Type text-->
@@ -78,6 +79,7 @@ function ChangeFile(event, field) {
 						'bg-red-400': field.hasError,
 					}"
 					class="w-full rounded-sm border border-neutral-400"
+					@blur="field.onBlur"
 					@click="closeCalendar"
 				/>
 
@@ -93,6 +95,7 @@ function ChangeFile(event, field) {
 						'bg-red-400': field.hasError,
 					}"
 					class="w-full rounded-sm border border-neutral-400"
+					@blur="field.onBlur"
 					@click="closeCalendar"
 				></textarea>
 
@@ -133,6 +136,7 @@ function ChangeFile(event, field) {
 						'bg-green-400': field.isCorrect && !field.hasError,
 					}"
 					class="rounded-sm border border-neutral-400"
+					@blur="field.onBlur"
 					@click="closeCalendar"
 				>
 					<option
@@ -167,6 +171,7 @@ function ChangeFile(event, field) {
 						:name="field.name"
 						:accept="field.accept"
 						hidden="true"
+						@blur="field.onBlur"
 						@change="(e) => ChangeFile(e, field)"
 					/>
 				</div>

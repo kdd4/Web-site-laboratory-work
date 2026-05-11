@@ -50,6 +50,15 @@ class AuthController extends Controller {
         $this->view->render(['data' => 'Ok']);
     }
 
+    #[AllowedMethods('GET')]
+    public function exists() {
+        $user = AuthModel::findByFields(['login' => $_GET['login']]);
+
+        $this->view->render(['data' => [
+            'exist' => $user !== null,
+        ]]);
+    }
+
     #[AllowedMethods('POST')]
     public function login() {
         $user = AuthModel::findByFields(['login' => $_POST['login']]);
