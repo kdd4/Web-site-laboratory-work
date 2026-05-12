@@ -15,38 +15,46 @@ class BlogController extends Controller {
     public function post(string $method) {
         $isUpdate = $method === 'PUT';
 
-        if ($isUpdate && $this->model->id === null) {
-            $this->view->render(['data' => '"id" not found'], code: 400);
-            return;
-        }
+        if ($isUpdate) {
+            $id = $this->model->id;
+            $model = BlogModel::find($id);
 
-        if (!isset($_FILES['image'])) {
-            $this->view->render(['data' => '"image" field not found'], code: 400);
-            return;
-        }
+            if ($model === null) {
+                $this->view->render(['data' => "Blog $id not found"], code: 400);
+                return;
+            }
 
-        $this->model->image = null;
-        $this->model->imgtype = null;
-
-        if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-            $stream = fopen($_FILES['image']['tmp_name'], 'rb');
-
-            $this->model->image = $stream;
-            $this->model->imgtype = $_FILES['image']['type'];
+            $this->model = $model;
+            $this->loadRequest();
         }
 
         if (!$isUpdate) {
+            if (!isset($_FILES['image'])) {
+                $this->view->render(['data' => '"image" field not found'], code: 400);
+                return;
+            }
+
+            $this->model->image = null;
+            $this->model->imgtype = null;
+
+            if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+                $stream = fopen($_FILES['image']['tmp_name'], 'rb');
+
+                $this->model->image = $stream;
+                $this->model->imgtype = $_FILES['image']['type'];
+            }
+
             $this->model->time = date('Y-m-d H:i:s');
         }
 
-        $validationResult = $this->model->validate();
+        $validateResult = $this->model->validate();
 
-        if ($validationResult) {
+        if ($validateResult) {
             $this->model->save();
         }
 
         $data = $this->model->validator->ShowErrors();
-        $this->view->render(['data' => $data], code: $validationResult ? null : 400);
+        $this->view->render(['data' => $data], code: $validateResult ? null : 400);
     }
 
     #[AllowedMethods('POST')]

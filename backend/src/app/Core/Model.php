@@ -31,6 +31,14 @@ class Model implements JsonSerializable
 
         return $this->data[$name] ?? null;
     }
+
+    public function __isset(string $name): bool {
+        return isset($this->data[$name]);
+    }
+
+    public function __unset(string $name) {
+        unset($this->data[$name]);
+    }
     
     public function validate(): bool
     {

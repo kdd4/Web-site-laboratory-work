@@ -1,6 +1,8 @@
 <?php
 namespace Core;
 
+use function in_array;
+
 class View
 {
     public function render(array $arguments = [], ?string $contentView = null, ?int $code = null)

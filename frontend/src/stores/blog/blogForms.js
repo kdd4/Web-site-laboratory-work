@@ -1,8 +1,11 @@
 import { defineStore, storeToRefs } from 'pinia';
-import { computed, ref, watch, watchEffect } from 'vue';
-import { useAuthStore } from './auth';
+import { ref, watch, watchEffect } from 'vue';
+import { useAuthStore } from '../auth';
+import { useBlogStore } from './blog';
 
-export const useBlogStore = defineStore('blog', () => {
+export const useBlogFormsStore = defineStore('blogForms', () => {
+	const blog = useBlogStore();
+
 	const auth = useAuthStore();
 	const { isAuth, isAdmin } = storeToRefs(auth);
 
@@ -40,7 +43,7 @@ export const useBlogStore = defineStore('blog', () => {
 		fileErrorHTML.value = await response.text();
 		fileShowError.value = true;
 
-		await getBlogPosts();
+		await blog.getBlogPosts();
 	}
 
 	const blogAllowSubmit = ref(false);
@@ -106,7 +109,7 @@ export const useBlogStore = defineStore('blog', () => {
 		blogErrorHTML.value = await response.text();
 		blogShowError.value = true;
 
-		await getBlogPosts();
+		await blog.getBlogPosts();
 	}
 
 	function checkFIO() {
@@ -140,27 +143,6 @@ export const useBlogStore = defineStore('blog', () => {
 	watchEffect(updateAllowSubmit);
 	watchEffect(updateShowError);
 
-	async function getBlogPosts() {
-		let response = await fetch('/api/blog/posts', {
-			headers: {
-				Accept: 'application/json',
-			},
-		});
-
-		let list = await response.json();
-
-		if (!list.length) {
-			blogPosts.value = [];
-			return;
-		}
-
-		blogPosts.value = list;
-
-		blogPosts.value.sort((a, b) => new Date(b.time) - new Date(a.time));
-	}
-
-	getBlogPosts();
-
 	const forms = ref([
 		{
 			id: 'blogForm',
@@ -182,51 +164,7 @@ export const useBlogStore = defineStore('blog', () => {
 		},
 	]);
 
-	const blogPosts = ref([]);
-
-	const pageSize = ref(5);
-	const page = ref(0);
-
-	const pageCount = computed(() => Math.ceil(blogPosts.value.length / pageSize.value));
-	const blogPage = computed(() =>
-		blogPosts.value.slice(page.value * pageSize.value, (page.value + 1) * pageSize.value),
-	);
-
-	const pageListSize = ref(5);
-	const pageList = computed(function () {
-		let lowLimit = Math.max(page.value - Math.floor(pageListSize.value / 2), 0);
-		let highLimit = Math.max(pageCount.value - pageListSize.value, 0);
-		let length = Math.min(pageCount.value, pageListSize.value);
-
-		return Array.from({ length }, (_, k) => Math.min(lowLimit, highLimit) + k);
-	});
-
-	const firstPageShow = computed(() => !pageList.value.includes(0) && pageList.value.length != 0);
-	const lastPageShow = computed(
-		() => !pageList.value.includes(pageCount.value - 1) && pageList.value.length != 0,
-	);
-
-	function goToFirstPage() {
-		page.value = 0;
-	}
-
-	function goToPage(newPage) {
-		page.value = newPage;
-	}
-
-	function goToLastPage() {
-		page.value = pageCount.value - 1;
-	}
-
 	return {
 		forms,
-		blogPage,
-		page,
-		pageList,
-		firstPageShow,
-		lastPageShow,
-		goToFirstPage,
-		goToPage,
-		goToLastPage,
 	};
 });

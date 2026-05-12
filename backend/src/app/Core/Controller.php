@@ -1,7 +1,7 @@
 <?php
 namespace Core;
 
-use function get_class;
+use function get_class, is_array;
 
 class Controller
 {
@@ -18,11 +18,17 @@ class Controller
 
         $this->model = new $modelClass;
 
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        $this->loadRequest();
+    }
 
+    protected function loadRequest() {
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    
         if (
-            $contentType === 'application/x-www-form-urlencoded' ||
-            str_starts_with($contentType, 'multipart/form-data')
+            $_SERVER['REQUEST_METHOD'] === 'POST' && (
+                $contentType === 'application/x-www-form-urlencoded' ||
+                str_starts_with($contentType, 'multipart/form-data')
+            )
         ) {
             foreach ($_POST as $key => $value) {
                 $this->model->$key = $value;
@@ -33,7 +39,7 @@ class Controller
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
 
-            if (\is_array($data)) {
+            if (is_array($data)) {
                 foreach ($data as $key => $value) {
                     $this->model->$key = $value;
                 }
@@ -49,6 +55,5 @@ class Controller
                 }
             }
         }
-
     }
 }
