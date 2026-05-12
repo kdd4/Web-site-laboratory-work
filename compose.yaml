@@ -45,7 +45,8 @@ services:
         ports:
             - 5434:5432
         volumes:
-            - "./database/database.sql:/docker-entrypoint-initdb.d/database.sql"
+            - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
+            - web-db:/var/lib/postgresql/data
         networks:
             - network-db
         env_file:
@@ -53,11 +54,14 @@ services:
         develop:
             watch:
                 - path: ./database
-                  action: sync+restart
                   target: /docker-entrypoint-initdb.d
+                  action: sync+restart
 
 networks:
     network:
         driver: bridge
     network-db:
         driver: bridge
+
+volumes:
+    web-db:

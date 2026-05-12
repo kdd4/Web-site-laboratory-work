@@ -9,9 +9,17 @@ use \Models\BlogModel;
 /** @property \Models\BlogModel $model */
 class BlogController extends Controller {
 
-    #[AllowedMethods('POST')]
+    #[AllowedMethods('POST', 'PUT')]
     #[RequireAuth()]
-    public function post() {
+    #[RequireAuth('admin', ['PUT'])]
+    public function post(string $method) {
+        $isUpdate = $method === 'PUT';
+
+        if ($isUpdate && $this->model->id === null) {
+            $this->view->render(['data' => '"id" not found'], code: 400);
+            return;
+        }
+
         if (!isset($_FILES['image'])) {
             $this->view->render(['data' => '"image" field not found'], code: 400);
             return;
@@ -27,7 +35,9 @@ class BlogController extends Controller {
             $this->model->imgtype = $_FILES['image']['type'];
         }
 
-        $this->model->time = date('Y-m-d H:i:s');
+        if (!$isUpdate) {
+            $this->model->time = date('Y-m-d H:i:s');
+        }
 
         $validationResult = $this->model->validate();
 

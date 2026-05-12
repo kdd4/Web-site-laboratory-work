@@ -46,7 +46,7 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 				:key="ind"
 				class="m-2 flex w-4/5 flex-col items-start rounded-lg bg-neutral-300 p-2"
 			>
-				<div class="flex w-full justify-between overflow-hidden">
+				<div class="flex w-full justify-between overflow-hidden not-sm:text-sm">
 					<div class="flex min-w-0 grow flex-col">
 						<div class="font-bold">ФИО: {{ post.fio }}</div>
 						<div class="font-bold">Тема: {{ post.theme }}</div>
@@ -57,8 +57,16 @@ const { goToFirstPage, goToPage, goToLastPage } = blogStore;
 						:src="'/api/blog/image?id=' + post.id"
 						class="w-1/5 flex-none self-center rounded-lg"
 					/>
+					<img
+						src="../assets/svg/edit.svg"
+						alt="edit"
+						class="w-4 cursor-pointer self-start pl-1 select-none sm:w-5"
+					/>
 				</div>
-				<div class="self-end pt-1 text-xs">{{ post.time }}</div>
+				<div class="flex w-full justify-between pt-2 text-xs">
+					<div class="cursor-pointer select-none">Коментарии</div>
+					<div>{{ post.time }}</div>
+				</div>
 			</div>
 		</div>
 		<div class="m-3 flex space-x-2 select-none">

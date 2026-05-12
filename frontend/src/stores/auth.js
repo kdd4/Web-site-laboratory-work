@@ -245,6 +245,7 @@ export const useAuthStore = defineStore('auth', () => {
 		}
 
 		fields.value.password.fieldValue = '';
+		register.value = false;
 
 		router.push({ name: 'Main' });
 	}

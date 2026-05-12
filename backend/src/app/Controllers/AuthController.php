@@ -22,7 +22,7 @@ class AuthController extends Controller {
 
     #[AllowedMethods('GET')]
     #[CheckAuth()]
-    public function status($isAuthenticated) {
+    public function status(bool $isAuthenticated) {
         $this->view->render(['data' => [
             'auth' => $isAuthenticated
         ]]);

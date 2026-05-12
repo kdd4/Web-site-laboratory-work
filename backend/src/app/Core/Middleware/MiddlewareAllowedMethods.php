@@ -18,6 +18,8 @@ class MiddlewareAllowedMethods implements MiddlewareInterface {
             exit('Method Not Allowed');
         }
 
+        $params['method'] = $method;
+
         if (isset($next[0])) {
             $current = array_shift($next);
             $current->handle($next, $params);
