@@ -27,7 +27,7 @@ class PrimeModel extends ActiveRecordModel {
         $bits = $this->length;
 
         $iteration = 0;
-        $maxIteration = 10000;
+        $maxIteration = 1000;
 
         while (true) {
             if ($iteration++ > $maxIteration) {
