@@ -53,3 +53,10 @@ CREATE TABLE "blogComment" (
     ON DELETE CASCADE
 	ON UPDATE CASCADE
 );
+
+CREATE TABLE "prime" (
+    "id"          SERIAL PRIMARY KEY,
+    "time"        TIMESTAMP,
+    "length"      INTEGER,
+    "result"      TEXT
+);

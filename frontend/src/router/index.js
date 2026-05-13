@@ -68,6 +68,11 @@ const router = createRouter({
 			name: 'Activities',
 			component: () => import('@/views/UserActivitiesPage.vue'),
 		},
+		{
+			path: '/prime',
+			name: 'Prime',
+			component: () => import('@/views/PrimeValuePage.vue'),
+		},
 	],
 });
 

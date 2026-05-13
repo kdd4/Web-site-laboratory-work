@@ -4,14 +4,16 @@ FROM php:${PHP_VERSION}
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get -y install git
+RUN apt-get update \
+    && apt-get -y install git libgmp-dev
 
 COPY --from=composer:2.9 /usr/bin/composer /usr/local/bin/composer
 
 RUN apt-get install -y libpq-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql \
     && sed -i 's/;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf
+
+RUN docker-php-ext-install pdo pdo_pgsql pgsql gmp
 
 COPY composer.json composer.lock ./
 RUN composer install

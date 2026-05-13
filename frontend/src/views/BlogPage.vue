@@ -5,12 +5,15 @@ import { useBlogStore } from '@/stores/blog/blog';
 import { useBlogCommentsStore } from '@/stores/blog/blogComments';
 import { useBlogEditStore } from '@/stores/blog/blogEdit';
 import { useBlogFormsStore } from '@/stores/blog/blogForms';
+import { onMounted } from 'vue';
 
 const auth = useAuthStore();
 const blog = useBlogStore();
 const blogForms = useBlogFormsStore();
 const blogEdit = useBlogEditStore();
 const blogComments = useBlogCommentsStore();
+
+onMounted(() => (blogComments.id.value = null));
 </script>
 
 <template>

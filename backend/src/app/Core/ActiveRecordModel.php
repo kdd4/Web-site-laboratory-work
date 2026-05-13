@@ -188,4 +188,13 @@ class ActiveRecordModel extends Model {
         return $stmt->rowCount() > 0;
     }
 
+    public static function deleteAll(): bool {
+        $table = static::$tablename;
+        $sql = "DELETE FROM \"$table\"";
+
+        $stmt = static::$pdo->prepare($sql);
+
+        return $stmt->rowCount() > 0;
+    }
+
 }

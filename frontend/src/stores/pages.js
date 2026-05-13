@@ -7,7 +7,7 @@ export const usePagesStore = defineStore('pages', () => {
 	const route = useRoute();
 	const auth = useAuthStore();
 
-	const { isAdmin } = storeToRefs(auth);
+	const { isAdmin, isAuth } = storeToRefs(auth);
 
 	function isCurrentPage() {
 		return this.name === route.name;
@@ -24,6 +24,7 @@ export const usePagesStore = defineStore('pages', () => {
 		{ name: 'Blog', text: 'Блог', isCurrentPage },
 		{ name: 'GuestBook', text: 'Гостевая книга', isCurrentPage },
 		{ name: 'History', text: 'История просмотра', isCurrentPage },
+		{ name: 'Prime', text: 'Генератор простых чисел', isCurrentPage, show: isAuth },
 		{ name: 'Activities', text: 'Активность пользователей', isCurrentPage, show: isAdmin },
 	]);
 
