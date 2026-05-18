@@ -10,6 +10,7 @@ services:
         depends_on:
             - backend
             - frontend-dev
+            - backend-laravel
         networks:
             - network
         develop:
@@ -27,6 +28,7 @@ services:
         restart: unless-stopped
         depends_on:
             - backend
+            - backend-laravel
         networks:
             - network
         develop:
@@ -38,6 +40,7 @@ services:
                       - Dockerfile.dev
                       - Dockerfile.nginx.dev
                       - nginx.conf.dev
+                      - nginx.conf
                 - path: ./frontend/Dockerfile.dev
                   action: rebuild
         profiles:
@@ -51,8 +54,6 @@ services:
             - "80:80"
         networks:
             - network
-        depends_on:
-            - backend
         develop:
             watch:
                 - path: ./frontend
@@ -67,6 +68,33 @@ services:
     backend:
         container_name: backend
         build: ./backend
+        restart: unless-stopped
+        depends_on:
+            - database
+        env_file:
+            - db.env
+            - backend.env
+        environment:
+            DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
+        networks:
+            - network
+            - network-db
+        develop:
+            watch:
+                - path: ./backend
+                  ignore:
+                      - src/**
+                  action: rebuild
+                - path: ./backend/src
+                  target: /var/www/html
+                  action: sync
+        profiles:
+            - dev
+            - release
+
+    backend-laravel:
+        container_name: backend-laravel
+        build: ./backend-laravel
         restart: unless-stopped
         depends_on:
             - database
