@@ -3,11 +3,11 @@
 For running site use:
 
 ```bash
-docker compose up -d
+docker compose --profile release up -d
 ```
 
 For running site for developing:
 
 ```bash
-docker compose watch
+docker compose --profile dev watch
 ```

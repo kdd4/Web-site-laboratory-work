@@ -45,11 +45,13 @@ onBeforeUnmount(stopTime);
 			<li
 				v-for="(button, ind) in navigation_buttons"
 				:key="ind"
-				:class="{ 'my-0.5': isBurgerMenu }"
+				:class="{
+					hidden: button.show === false,
+					'my-0.5': isBurgerMenu,
+				}"
 				class="mx-0.5 my-1 p-0.5 text-white"
 			>
 				<RouterLink
-					v-if="button.show !== false"
 					:to="{ name: button.name }"
 					:class="{
 						'border-4': button.isCurrentPage(),

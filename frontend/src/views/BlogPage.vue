@@ -13,7 +13,7 @@ const blogForms = useBlogFormsStore();
 const blogEdit = useBlogEditStore();
 const blogComments = useBlogCommentsStore();
 
-onMounted(() => (blogComments.id.value = null));
+onMounted(() => (blogComments.id = null));
 </script>
 
 <template>
@@ -104,9 +104,9 @@ onMounted(() => (blogComments.id.value = null));
 		<div class="m-3 flex space-x-2 select-none">
 			<div v-if="blog.firstPageShow" @click="goToFirstPage" class="cursor-pointer">Начало</div>
 			<div
-				v-for="(cur_page, ind) in pageList"
+				v-for="(cur_page, ind) in blog.pageList"
 				:key="ind"
-				:class="{ 'text-green-500': cur_page == page }"
+				:class="{ 'text-green-500': cur_page == blog.page }"
 				class="cursor-pointer"
 				@click="goToPage(cur_page)"
 			>

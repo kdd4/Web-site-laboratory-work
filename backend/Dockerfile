@@ -1,19 +1,18 @@
-ARG PHP_VERSION=8.5-fpm
+ARG PHP_VERSION=8.5-fpm-alpine
 
 FROM php:${PHP_VERSION}
 
 WORKDIR /var/www/html
 
-RUN apt-get update \
-    && apt-get -y install git libgmp-dev
+RUN apk update \
+    && apk add git
 
 COPY --from=composer:2.9 /usr/bin/composer /usr/local/bin/composer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && sed -i 's/;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf
+RUN sed -i 's/;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf
 
-RUN docker-php-ext-install pdo pdo_pgsql pgsql gmp
+RUN install-php-extensions pdo_pgsql gmp
 
 COPY composer.json composer.lock ./
 RUN composer install

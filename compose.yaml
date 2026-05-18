@@ -1,4 +1,48 @@
 services:
+    nginx-dev:
+        container_name: nginx-dev
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.nginx.dev
+        restart: unless-stopped
+        ports:
+            - "80:80"
+        depends_on:
+            - backend
+            - frontend-dev
+        networks:
+            - network
+        develop:
+            watch:
+                - path: ./frontend/nginx.conf.dev
+                  action: rebuild
+        profiles:
+            - dev
+
+    frontend-dev:
+        container_name: frontend-dev
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.dev
+        restart: unless-stopped
+        depends_on:
+            - backend
+        networks:
+            - network
+        develop:
+            watch:
+                - path: ./frontend
+                  action: sync
+                  target: /app
+                  ignore:
+                      - Dockerfile.dev
+                      - Dockerfile.nginx.dev
+                      - nginx.conf.dev
+                - path: ./frontend/Dockerfile.dev
+                  action: rebuild
+        profiles:
+            - dev
+
     frontend:
         container_name: frontend
         build: ./frontend
@@ -12,15 +56,18 @@ services:
         develop:
             watch:
                 - path: ./frontend
+                  ignore:
+                      - Dockerfile.dev
+                      - Dockerfile.nginx.dev
+                      - nginx.conf.dev
                   action: rebuild
+        profiles:
+            - release
 
     backend:
         container_name: backend
         build: ./backend
         restart: unless-stopped
-        networks:
-            - network
-            - network-db
         depends_on:
             - database
         env_file:
@@ -28,6 +75,9 @@ services:
             - backend.env
         environment:
             DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
+        networks:
+            - network
+            - network-db
         develop:
             watch:
                 - path: ./backend
@@ -37,6 +87,9 @@ services:
                 - path: ./backend/src
                   target: /var/www/html
                   action: sync
+        profiles:
+            - dev
+            - release
 
     database:
         container_name: database
@@ -56,6 +109,9 @@ services:
                 - path: ./database
                   target: /docker-entrypoint-initdb.d
                   action: sync+restart
+        profiles:
+            - dev
+            - release
 
 networks:
     network:

@@ -1,0 +1,13 @@
+ARG NODE_VERSION=25-alpine
+
+FROM node:${NODE_VERSION}
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN --mount=type=cache,target=/root/.npm npm clean-install
+
+COPY . .
+
+ENTRYPOINT npm run dev
