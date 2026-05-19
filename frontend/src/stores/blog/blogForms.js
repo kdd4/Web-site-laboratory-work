@@ -32,16 +32,15 @@ export const useBlogFormsStore = defineStore('blogForms', () => {
 	async function fileSubmit() {
 		let form = document.getElementById('fileForm');
 
-		let response = await fetch('/api/blog/postfile', {
+		let response = await fetch('/api-laravel/blog/file', {
 			method: 'POST',
-			headers: {
-				Accept: 'text/plain',
-			},
 			body: new FormData(form),
 		});
 
-		fileErrorHTML.value = await response.text();
-		fileShowError.value = true;
+		let responseJSON = await response.json();
+
+		blogErrorHTML.value = responseJSON.result ? 'Ok' : responseJSON.error;
+		blogShowError.value = true;
 
 		await blog.getBlogPosts();
 	}
@@ -98,7 +97,7 @@ export const useBlogFormsStore = defineStore('blogForms', () => {
 	async function blogSubmit() {
 		let form = document.getElementById('blogForm');
 
-		let response = await fetch('/api/blog/post', {
+		let response = await fetch('/api-laravel/blog', {
 			method: 'POST',
 			headers: {
 				Accept: 'text/plain',
@@ -106,7 +105,9 @@ export const useBlogFormsStore = defineStore('blogForms', () => {
 			body: new FormData(form),
 		});
 
-		blogErrorHTML.value = await response.text();
+		let responseJSON = await response.json();
+
+		blogErrorHTML.value = responseJSON.result ? 'Ok' : responseJSON.error;
 		blogShowError.value = true;
 
 		await blog.getBlogPosts();

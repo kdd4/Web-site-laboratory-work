@@ -6,7 +6,7 @@ services:
             dockerfile: Dockerfile.nginx.dev
         restart: unless-stopped
         ports:
-            - "80:80"
+            - "81:80"
         depends_on:
             - backend
             - frontend-dev
@@ -62,8 +62,6 @@ services:
                       - Dockerfile.nginx.dev
                       - nginx.conf.dev
                   action: rebuild
-        profiles:
-            - release
 
     backend:
         container_name: backend
@@ -88,9 +86,6 @@ services:
                 - path: ./backend/src
                   target: /var/www/html
                   action: sync
-        profiles:
-            - dev
-            - release
 
     backend-laravel:
         container_name: backend-laravel
@@ -98,26 +93,28 @@ services:
         restart: unless-stopped
         depends_on:
             - database
-        env_file:
-            - db.env
-            - backend.env
-        environment:
-            DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
         networks:
             - network
             - network-db
         develop:
             watch:
-                - path: ./backend
+                - path: ./backend-laravel
                   ignore:
-                      - src/**
+                      - app/**
+                      - routes/**
+                      - database/migrations/**
                   action: rebuild
-                - path: ./backend/src
-                  target: /var/www/html
+                - path: ./backend-laravel/app
+                  target: /var/www/html/app
                   action: sync
-        profiles:
-            - dev
-            - release
+                - path: ./backend-laravel/routes
+                  target: /var/www/html/routes
+                  action: sync+exec
+                  exec:
+                      command: php artisan route:clear
+                - path: ./backend-laravel/database/migrations
+                  target: /var/www/html/database/migrations
+                  action: sync
 
     database:
         container_name: database
@@ -137,9 +134,6 @@ services:
                 - path: ./database
                   target: /docker-entrypoint-initdb.d
                   action: sync+restart
-        profiles:
-            - dev
-            - release
 
 networks:
     network:

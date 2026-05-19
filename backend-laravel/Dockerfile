@@ -10,13 +10,15 @@ RUN apk update \
 COPY --from=composer:2.9 /usr/bin/composer /usr/local/bin/composer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions pdo_pgsql zip
+RUN --mount=type=cache,target=/tmp/ipe-cache \
+    install-php-extensions pdo_pgsql zip
 
 COPY . .
 
 RUN php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-RUN composer install --no-dev --optimize-autoloader \
+RUN --mount=type=cache,target=/root/.composer \
+    composer install --no-dev --optimize-autoloader \
     && php artisan config:cache \
     && php artisan route:cache \
     && php artisan key:generate

@@ -3,7 +3,7 @@
 For running site use:
 
 ```bash
-docker compose --profile release up -d
+docker compose up -d
 ```
 
 For running site for developing:

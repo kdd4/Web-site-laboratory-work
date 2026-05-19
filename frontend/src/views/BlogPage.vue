@@ -57,7 +57,7 @@ onMounted(() => (blogComments.id = null));
 						</div>
 						<img
 							v-if="post.imgtype !== null"
-							:src="'/api/blog/image?id=' + post.id"
+							:src="'/api-laravel/blog/image/' + post.id"
 							class="w-1/5 flex-none self-center rounded-lg"
 						/>
 						<img
@@ -102,17 +102,17 @@ onMounted(() => (blogComments.id = null));
 			</div>
 		</div>
 		<div class="m-3 flex space-x-2 select-none">
-			<div v-if="blog.firstPageShow" @click="goToFirstPage" class="cursor-pointer">Начало</div>
+			<div v-if="blog.firstPageShow" @click="blog.goToFirstPage" class="cursor-pointer">Начало</div>
 			<div
 				v-for="(cur_page, ind) in blog.pageList"
 				:key="ind"
 				:class="{ 'text-green-500': cur_page == blog.page }"
 				class="cursor-pointer"
-				@click="goToPage(cur_page)"
+				@click="blog.goToPage(cur_page)"
 			>
 				{{ cur_page + 1 }}
 			</div>
-			<div v-if="blog.lastPageShow" class="cursor-pointer" @click="goToLastPage">Конец</div>
+			<div v-if="blog.lastPageShow" class="cursor-pointer" @click="blog.goToLastPage">Конец</div>
 		</div>
 	</main>
 

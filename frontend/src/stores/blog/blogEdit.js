@@ -34,23 +34,23 @@ export const useBlogEditStore = defineStore('blogEdit', () => {
 			text: text.value,
 		});
 
-		let response = await fetch('/api/blog/post', {
+		let response = await fetch('/api-laravel/blog', {
 			method: 'PUT',
 			headers: {
-				Accept: 'text/plain',
 				'Content-Type': 'application/json',
 			},
 			body: json,
 		});
 
-		let result = await response.text();
+		let responseJSON = await response.json();
 
-		if (!result.includes('Ok')) {
-			errorHTML.value = result;
+		show.value = !responseJSON.result;
+
+		if (!responseJSON.result) {
+			errorHTML.value = responseJSON.error;
 			showError.value = true;
 		}
 
-		show.value = false;
 		await blog.getBlogPosts();
 	}
 

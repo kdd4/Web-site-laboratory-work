@@ -6,7 +6,7 @@ use \Core\ActiveRecordModel;
 class BlogCommentModel extends ActiveRecordModel {
     protected static array $fields = ['userID', 'blogID', 'text', 'time'];
 
-    protected static string $tablename = 'blogComment';
+    protected static string $tablename = 'blog_comments';
 
     public function __construct()
     {

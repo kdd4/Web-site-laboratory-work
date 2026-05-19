@@ -6,11 +6,7 @@ export const useBlogCommentsStore = defineStore('blogComments', () => {
 	const comments = ref([]);
 
 	async function update(curId) {
-		let response = await fetch(`/api/blog-comment/comments?id=${curId}`, {
-			headers: {
-				Accept: 'application/json',
-			},
-		});
+		let response = await fetch(`/api-laravel/blog/comments/${curId}`);
 
 		let list = await response.json();
 
@@ -46,11 +42,8 @@ export const useBlogCommentsStore = defineStore('blogComments', () => {
 
 		formdata.append('blogID', id.value);
 
-		await fetch('/api/blog-comment/post', {
+		await fetch('/api-laravel/blog/comment', {
 			method: 'POST',
-			headers: {
-				Accept: 'text/plain',
-			},
 			body: formdata,
 		});
 

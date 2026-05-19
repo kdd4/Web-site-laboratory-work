@@ -6,7 +6,7 @@ use \Core\ActiveRecordModel;
 class BlogModel extends ActiveRecordModel {
     protected static array $fields = ['fio', 'theme', 'image', 'imgtype', 'text', 'time'];
 
-    protected static string $tablename = 'blog';
+    protected static string $tablename = 'blogs';
 
     public function __construct()
     {

@@ -8,6 +8,7 @@ CREATE TABLE "mathtest" (
     "result"      BOOLEAN
 );
 
+/*
 CREATE TABLE "blog" (
     "id"          SERIAL PRIMARY KEY,
     "fio"         VARCHAR(50),
@@ -17,6 +18,8 @@ CREATE TABLE "blog" (
     "imgtype"     VARCHAR(50),
     "text"        TEXT
 );
+*/
+
 
 CREATE TABLE "user" (
     "id"          SERIAL PRIMARY KEY,
@@ -36,10 +39,11 @@ CREATE TABLE "visits" (
     "browser"     VARCHAR(50)
 );
 
+/*
 CREATE TABLE "blogComment" (
     "id"          SERIAL PRIMARY KEY,
-    "userID"     INTEGER,
-    "blogID"     INTEGER NOT NULL,
+    "userID"      INTEGER,
+    "blogID"      INTEGER NOT NULL,
     "text"        TEXT,
     "time"        TIMESTAMP,
 
@@ -49,10 +53,11 @@ CREATE TABLE "blogComment" (
 	ON UPDATE CASCADE,
 
     CONSTRAINT FK_blog FOREIGN KEY ("blogID")
-    REFERENCES "blog"("id")
+    REFERENCES "blogs"("id")
     ON DELETE CASCADE
 	ON UPDATE CASCADE
 );
+*/
 
 CREATE TABLE "prime" (
     "id"          SERIAL PRIMARY KEY,

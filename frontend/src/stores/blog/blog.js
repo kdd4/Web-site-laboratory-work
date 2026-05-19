@@ -3,11 +3,7 @@ import { computed, ref } from 'vue';
 
 export const useBlogStore = defineStore('blog', () => {
 	async function getBlogPosts() {
-		let response = await fetch('/api/blog/posts', {
-			headers: {
-				Accept: 'application/json',
-			},
-		});
+		let response = await fetch('/api-laravel/blog');
 
 		let list = await response.json();
 
