@@ -1,8 +1,6 @@
 <?php
 namespace Core;
 
-use \Core\Model;
-
 use function is_scalar, is_string, count, strlen;
 
 class FormValidation

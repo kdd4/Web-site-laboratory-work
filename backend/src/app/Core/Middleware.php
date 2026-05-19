@@ -1,8 +1,9 @@
 <?php
 namespace Core;
 
-use Core\Middleware\MiddlewareAction;
-use ReflectionMethod;
+use \ReflectionMethod;
+
+use \Core\Middleware\MiddlewareAction;
 
 class Middleware {
     private array $pipeline;
@@ -26,7 +27,6 @@ class Middleware {
         }
 
         $this->pipeline[] = new MiddlewareAction($controller, $action);
-        $this->pipeline[] = null;
     }
 
     public function runPipeline() {

@@ -9,5 +9,5 @@ docker compose up -d
 For running site for developing:
 
 ```bash
-docker compose watch
+docker compose --profile dev watch
 ```

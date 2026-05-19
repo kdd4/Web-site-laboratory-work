@@ -107,6 +107,7 @@ export const useAuthStore = defineStore('auth', () => {
 			fieldValue: '',
 			hasError: false,
 			isCorrect: false,
+			onBlur: checkLoginExists,
 		},
 		password: {
 			label: 'Пароль',
@@ -142,6 +143,37 @@ export const useAuthStore = defineStore('auth', () => {
 
 		return register.value ? { login, password, fio, email } : { login, password };
 	});
+
+	async function checkLoginExists() {
+		if (!register.value) {
+			checkLogin();
+			return;
+		}
+
+		const login = fieldsFull.value.login.fieldValue;
+
+		let response = await fetch(`/api/auth/exists?login=${login}`, {
+			headers: {
+				Accept: 'application/json',
+			},
+		});
+
+		if (!response.ok) {
+			errorHTML.value = 'Ошибка проверки логина';
+			showError.value = true;
+			return;
+		}
+
+		let responseJSON = await response.json();
+
+		if (responseJSON.exist) {
+			errorHTML.value = 'Логин уже занят';
+			showError.value = true;
+
+			fieldsFull.value.login.hasError = true;
+			fieldsFull.value.login.isCorrect = false;
+		}
+	}
 
 	function checkLogin() {
 		fieldsFull.value.login.hasError = !fieldsFull.value.login.fieldValue;
@@ -180,9 +212,12 @@ export const useAuthStore = defineStore('auth', () => {
 			fieldsFull.value.password.hasError ||
 			((fieldsFull.value.fio.hasError || fieldsFull.value.email.hasError) && register.value);
 
-		errorHTML.value = 'Заполните все поля';
+		if (!errorHTML.value) {
+			errorHTML.value = 'Заполните все поля';
+		}
 	}
 
+	watch(register, checkLoginExists);
 	watch(() => fieldsFull.value.login.fieldValue, checkLogin);
 	watch(() => fieldsFull.value.password.fieldValue, checkPassword);
 	watch(() => fieldsFull.value.fio.fieldValue, checkFIO);
@@ -210,6 +245,7 @@ export const useAuthStore = defineStore('auth', () => {
 		}
 
 		fields.value.password.fieldValue = '';
+		register.value = false;
 
 		router.push({ name: 'Main' });
 	}

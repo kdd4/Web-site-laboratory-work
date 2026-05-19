@@ -1,4 +1,51 @@
 services:
+    nginx-dev:
+        container_name: nginx-dev
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.nginx.dev
+        restart: unless-stopped
+        ports:
+            - "81:80"
+        depends_on:
+            - backend
+            - frontend-dev
+            - backend-laravel
+        networks:
+            - network
+        develop:
+            watch:
+                - path: ./frontend/nginx.conf.dev
+                  action: rebuild
+        profiles:
+            - dev
+
+    frontend-dev:
+        container_name: frontend-dev
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.dev
+        restart: unless-stopped
+        depends_on:
+            - backend
+            - backend-laravel
+        networks:
+            - network
+        develop:
+            watch:
+                - path: ./frontend
+                  action: sync
+                  target: /app
+                  ignore:
+                      - Dockerfile.dev
+                      - Dockerfile.nginx.dev
+                      - nginx.conf.dev
+                      - nginx.conf
+                - path: ./frontend/Dockerfile.dev
+                  action: rebuild
+        profiles:
+            - dev
+
     frontend:
         container_name: frontend
         build: ./frontend
@@ -7,20 +54,19 @@ services:
             - "80:80"
         networks:
             - network
-        depends_on:
-            - backend
         develop:
             watch:
                 - path: ./frontend
+                  ignore:
+                      - Dockerfile.dev
+                      - Dockerfile.nginx.dev
+                      - nginx.conf.dev
                   action: rebuild
 
     backend:
         container_name: backend
         build: ./backend
         restart: unless-stopped
-        networks:
-            - network
-            - network-db
         depends_on:
             - database
         env_file:
@@ -28,6 +74,9 @@ services:
             - backend.env
         environment:
             DB_DSN: "pgsql:host=database;port=5432;dbname=database;user=postgres;password=postgres"
+        networks:
+            - network
+            - network-db
         develop:
             watch:
                 - path: ./backend
@@ -38,6 +87,35 @@ services:
                   target: /var/www/html
                   action: sync
 
+    backend-laravel:
+        container_name: backend-laravel
+        build: ./backend-laravel
+        restart: unless-stopped
+        depends_on:
+            - database
+        networks:
+            - network
+            - network-db
+        develop:
+            watch:
+                - path: ./backend-laravel
+                  ignore:
+                      - app/**
+                      - routes/**
+                      - database/migrations/**
+                  action: rebuild
+                - path: ./backend-laravel/app
+                  target: /var/www/html/app
+                  action: sync
+                - path: ./backend-laravel/routes
+                  target: /var/www/html/routes
+                  action: sync+exec
+                  exec:
+                      command: php artisan route:clear
+                - path: ./backend-laravel/database/migrations
+                  target: /var/www/html/database/migrations
+                  action: sync
+
     database:
         container_name: database
         image: postgres:18-alpine
@@ -45,7 +123,8 @@ services:
         ports:
             - 5434:5432
         volumes:
-            - "./database/database.sql:/docker-entrypoint-initdb.d/database.sql"
+            - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
+            - web-db:/var/lib/postgresql/data
         networks:
             - network-db
         env_file:
@@ -53,11 +132,14 @@ services:
         develop:
             watch:
                 - path: ./database
-                  action: sync+restart
                   target: /docker-entrypoint-initdb.d
+                  action: sync+restart
 
 networks:
     network:
         driver: bridge
     network-db:
         driver: bridge
+
+volumes:
+    web-db:

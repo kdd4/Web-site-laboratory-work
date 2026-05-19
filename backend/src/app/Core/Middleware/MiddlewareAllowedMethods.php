@@ -3,7 +3,7 @@ namespace Core\Middleware;
 
 use \Core\Attributes\AllowedMethods;
 
-use function in_array, func_get_args;
+use function in_array;
 
 class MiddlewareAllowedMethods implements MiddlewareInterface {
     public function __construct(public AllowedMethods $attribute) {}
@@ -17,6 +17,8 @@ class MiddlewareAllowedMethods implements MiddlewareInterface {
             http_response_code(405);
             exit('Method Not Allowed');
         }
+
+        $params['method'] = $method;
 
         if (isset($next[0])) {
             $current = array_shift($next);

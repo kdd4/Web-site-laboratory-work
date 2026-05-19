@@ -3,6 +3,7 @@ namespace Core;
 
 use \PDO;
 use \PDOException;
+
 use function is_int, is_bool, is_resource;
 
 class ActiveRecordModel extends Model {
@@ -111,6 +112,25 @@ class ActiveRecordModel extends Model {
         return $record;
     }
 
+    public static function findAllByFields(array $data): array {
+        static::connectDatabase();
+
+        $table = static::$tablename;
+
+        $fieldNames = array_keys($data);
+
+        $params = implode(' AND ', array_map(fn($key) => "\"$key\" = :$key", $fieldNames));
+
+        $sql = "SELECT * FROM \"$table\" WHERE $params";
+
+        $stmt = static::$pdo->prepare($sql);
+        $stmt->execute($data);
+        
+        $objects = $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
+
+        return $objects;
+    }
+
     private function bindData(\PDOStatement $stmt, array $data): void {
         foreach ($data as $key => $value) {
             $type = match (true) {
@@ -131,9 +151,10 @@ class ActiveRecordModel extends Model {
         if (empty($data)) return $this;
 
         $fieldNames = array_keys($data);
+        $fieldNamesQuoted = array_map(fn($str) => "\"$str\"", $fieldNames);
 
         if (is_null($this->id)) {
-            $columns = implode(', ', $fieldNames);
+            $columns = implode(', ', $fieldNamesQuoted);
             $placeholders = implode(', ', array_map(fn($key) => ":$key", $fieldNames));
 
             $sql = "INSERT INTO \"$table\" ($columns) VALUES ($placeholders) RETURNING id";
@@ -163,6 +184,15 @@ class ActiveRecordModel extends Model {
 
         $stmt = static::$pdo->prepare($sql);
         $stmt->execute(['id' => $this->id]);
+
+        return $stmt->rowCount() > 0;
+    }
+
+    public static function deleteAll(): bool {
+        $table = static::$tablename;
+        $sql = "DELETE FROM \"$table\"";
+
+        $stmt = static::$pdo->prepare($sql);
 
         return $stmt->rowCount() > 0;
     }

@@ -22,7 +22,7 @@ class AuthController extends Controller {
 
     #[AllowedMethods('GET')]
     #[CheckAuth()]
-    public function status($isAuthenticated) {
+    public function status(bool $isAuthenticated) {
         $this->view->render(['data' => [
             'auth' => $isAuthenticated
         ]]);
@@ -48,6 +48,15 @@ class AuthController extends Controller {
         setcookie("JWT", "", time() - 3600, path: '/');
 
         $this->view->render(['data' => 'Ok']);
+    }
+
+    #[AllowedMethods('GET')]
+    public function exists() {
+        $user = AuthModel::findByFields(['login' => $_GET['login']]);
+
+        $this->view->render(['data' => [
+            'exist' => $user !== null,
+        ]]);
     }
 
     #[AllowedMethods('POST')]
