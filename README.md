@@ -6,7 +6,7 @@ For running site use:
 docker compose up -d
 ```
 
-For running site for developing:
+For developing site use:
 
 ```bash
 docker compose --profile dev watch
