@@ -1,7 +1,7 @@
 <?php
 namespace Core\Middleware;
 
-use ReflectionMethod;
+use \ReflectionMethod;
 
 class MiddlewareAction implements MiddlewareInterface {
     public function __construct(private object $controller, private string $action) {

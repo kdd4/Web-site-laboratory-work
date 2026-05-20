@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
 use Illuminate\Http\Request;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return response()->json(
             Blog::all()
@@ -16,7 +16,7 @@ class BlogController extends Controller
             );
     }
 
-    public function image(string $id) {
+    public function image(Request $request, string $id) {
         $blog = Blog::find($id);
 
         if ($blog === null) {

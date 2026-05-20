@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class BlogCommentController extends Controller
 {
-    public function index(string $id)
+    public function index(Request $request, string $id)
     {
         $comments = blogComment::where('blogID', $id)->get();
 

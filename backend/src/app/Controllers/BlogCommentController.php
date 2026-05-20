@@ -4,8 +4,8 @@ namespace Controllers;
 use \Core\Controller;
 use \Core\Attributes\AllowedMethods;
 use \Core\Attributes\RequireAuth;
-use Models\AuthModel;
-use Models\BlogCommentModel;
+use \Models\AuthModel;
+use \Models\BlogCommentModel;
 
 /** @property \Models\BlogCommentModel $model */
 class BlogCommentController extends Controller {

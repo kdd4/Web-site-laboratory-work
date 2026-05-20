@@ -18,7 +18,7 @@ class PrimeController extends Controller {
         }
 
         $this->model->result = null;
-        $this->model->time = date('Y-m-d');
+        $this->model->time = date('Y-m-d H:i:s');
 
         $this->model->save();
         
