@@ -15,11 +15,11 @@ docker compose down -v
 Для разработки:
 
 ```bash
-docker compose --profile=dev watch
+docker compose --profile dev watch
 ```
 
 Для остановки и удаления volumes:
 
 ```bash
-docker compose --profile=dev down -v
+docker compose --profile dev down -v
 ```
