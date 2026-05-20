@@ -1,9 +1,10 @@
 <?php
 namespace Models;
 
+use \DateInterval;
+use \DateTime;
+
 use \Core\ActiveRecordModel;
-use DateInterval;
-use DateTime;
 
 class AuthModel extends ActiveRecordModel {
     protected static array $fields = ['login', 'password', 'fio', 'email', 'roles'];

@@ -1,13 +1,25 @@
 # Web site - laboratory works
 
-For running site use:
+Для запуска используйте:
 
 ```bash
 docker compose up -d
 ```
 
-For running site for developing:
+Для остановки и удаления volumes:
 
 ```bash
-docker compose --profile dev watch
+docker compose down -v
+```
+
+Для разработки:
+
+```bash
+docker compose --profile=dev watch
+```
+
+Для остановки и удаления volumes:
+
+```bash
+docker compose --profile=dev down -v
 ```

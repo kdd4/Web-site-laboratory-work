@@ -12,10 +12,12 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN sed -i 's/;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf
 
-RUN install-php-extensions pdo_pgsql gmp
+RUN --mount=type=cache,target=/tmp/ipe-cache \
+    install-php-extensions pdo_pgsql gmp
 
 COPY composer.json composer.lock ./
-RUN composer install
+RUN --mount=type=cache,target=/root/.composer \
+    composer install
 
 COPY src .
 

@@ -2,6 +2,7 @@
 namespace Models;
 
 use \Exception;
+
 use \Core\Model;
 
 class GuestBookModel extends Model {

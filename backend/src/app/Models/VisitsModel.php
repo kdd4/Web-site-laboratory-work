@@ -1,7 +1,7 @@
 <?php
 namespace Models;
 
-use Core\ActiveRecordModel;
+use \Core\ActiveRecordModel;
 
 class VisitsModel extends ActiveRecordModel {
     protected static array $fields = ['time', 'page', 'ip', 'host', 'browser'];

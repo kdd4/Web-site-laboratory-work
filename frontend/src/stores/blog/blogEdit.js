@@ -35,7 +35,7 @@ export const useBlogEditStore = defineStore('blogEdit', () => {
 		});
 
 		let response = await fetch('/api-laravel/blog', {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 			},
